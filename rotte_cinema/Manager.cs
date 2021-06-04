@@ -10,15 +10,14 @@ namespace rotte_cinema
     {
         private static MySqlConnection connection = new MySqlConnection("Server = db.kumas.dev; port=3306; database=Cinema; uid=user; pwd=0000");
 
-        //Command - 영향받은 행 개수 반환
-        public int Input(string sql) {
+       static public int Input(string sql) {
             connection.Open();
             MySqlCommand input = new MySqlCommand(sql, connection);
             connection.Close();
             return input.ExecuteNonQuery();
         }
 
-        public int Delete(string sql)
+        static public int Delete(string sql)
         {
             connection.Open();
             MySqlCommand delete = new MySqlCommand(sql, connection);
@@ -27,7 +26,7 @@ namespace rotte_cinema
         }
 
 
-        public int Insert(string sql)
+        static public int Insert(string sql)
         {
             connection.Open();
             MySqlCommand insert = new MySqlCommand(sql, connection);
@@ -36,7 +35,7 @@ namespace rotte_cinema
         }
 
 
-        public int Update(string sql)
+        static public int Update(string sql)
         {
             connection.Open();
             MySqlCommand update = new MySqlCommand(sql, connection);
@@ -44,7 +43,7 @@ namespace rotte_cinema
             return update.ExecuteNonQuery();
         }
 
-        public int Select(string sql)
+        static public int Select(string sql)
         {
             connection.Open();
             MySqlCommand select = new MySqlCommand(sql, connection);
@@ -52,7 +51,7 @@ namespace rotte_cinema
             return select.ExecuteNonQuery();
         }
 
-        public DataTable AdapterRead(string sql) {
+        static public DataTable AdapterRead(string sql) {
             DataTable dt = new DataTable();
             connection.Open();
             MySqlDataAdapter adapter = new MySqlDataAdapter(sql, connection);
