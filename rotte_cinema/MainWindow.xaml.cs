@@ -28,6 +28,8 @@ namespace rotte_cinema
 	{
 		List<Cinema> cinema = new List<Cinema>();
 		List<Movie> movie = new List<Movie>();
+		List<Seat> seat = new List<Seat>();
+		
 		public MainWindow()
 		{
 			InitializeComponent();
@@ -39,7 +41,7 @@ namespace rotte_cinema
 		
 		private void Grid_Loaded(object sender, RoutedEventArgs e)
 		{
-
+			/*
 			// 영화관 정보 호출
 			Injection.ParserToObj(cinema, new Cinema(), "SELECT * FROM CINEMA");
 			for (int i = 0; i < cinema.Count; i++)
@@ -67,7 +69,33 @@ namespace rotte_cinema
 				Debug.WriteLine(movie[i].movie_info);
 				Debug.WriteLine(movie[i].movie_tags);
 			}
+			*/
+
+			cmb_index.Items.Add("1");
+			cmb_index.Items.Add("2");
+			cmb_index.Items.Add("3");
 			
+		}
+
+		void seatSet(int theater_index)
+		{
+			Injection.ParserToObj(seat, new Seat(), "SELECT * FROM SEAT");
+			for (int i = 0; i < seat.Count; i++)
+			{
+				grid.Children.Remove(seat[i].btn);
+				
+				if (seat[i].theater_index == theater_index)
+				{
+					seat[i].setSeatBtn();
+					grid.Children.Add(seat[i].btn);
+				}				
+			}
+		}
+
+		private void cmb_index_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			int theater_index = Convert.ToInt32(cmb_index.SelectedItem);
+			seatSet(theater_index);
 		}
 	}
 }

@@ -5,5 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:rotte_cinema"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" Loaded="Grid_Loaded">
+        Title="MainWindow" Height="504" Width="875" Loaded="Grid_Loaded">
+    <Grid x:Name="grid" HorizontalAlignment="Stretch">
+        <ComboBox x:Name="cmb_index" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="cmb_index_SelectionChanged"/>
+    </Grid>
 </Window>
