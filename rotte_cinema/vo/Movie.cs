@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace rotte_cinema.vo
 {
@@ -18,6 +20,26 @@ namespace rotte_cinema.vo
 		public string movie_poster { set; get; }
 		public string movie_info { set; get; }
 		public string movie_tags { set; get; }
+
+		public Label lbl { set; get; }
+
+
+
+
+		public void setMovie()
+		{
+			lbl = new Label();
+
+			lbl.Name = "movieName";
+
+			lbl.Content = movie_limit_age + movie_title;   // 버튼명
+											
+			lbl.FontSize = 14;
+
+			lbl.HorizontalAlignment = HorizontalAlignment.Left;   // 정렬 기준 좌측
+			lbl.VerticalAlignment = VerticalAlignment.Top;   // 정렬 기준 상측
+
+		}
 
 	}
 }

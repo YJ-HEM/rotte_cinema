@@ -5,8 +5,21 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:rotte_cinema"
         mc:Ignorable="d"
-        Title="MainWindow" Height="504" Width="875" Loaded="Grid_Loaded">
+        Title="MainWindow" Height="1080" Width="1920" Loaded="Grid_Loaded">
     <Grid x:Name="grid" HorizontalAlignment="Stretch">
-        <ComboBox x:Name="cmb_index" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="cmb_index_SelectionChanged"/>
+        <Rectangle HorizontalAlignment="Left" Height="5" Margin="0,53,0,0" Stroke="Black" VerticalAlignment="Top" Width="865" Fill="Black"/>
+        <Label Content="영화선택" HorizontalAlignment="Left" Height="27" Margin="23,78,0,0" VerticalAlignment="Top" Width="102"/>
+        <Label Content="극장선택" HorizontalAlignment="Left" Height="27" Margin="499,78,0,0" VerticalAlignment="Top" Width="102"/>
+        <Label Content="시간선택" HorizontalAlignment="Left" Height="27" Margin="716,81,0,0" VerticalAlignment="Top" Width="102"/>
+        <Label Content="날짜선택" HorizontalAlignment="Left" Height="27" Margin="257,78,0,0" VerticalAlignment="Top" Width="102"/>
+        <Button Content="예매 다시하기" HorizontalAlignment="Left" Height="29" Margin="730,12,0,0" VerticalAlignment="Top" Width="120"/>
+        <Button Content="좌석 선택" HorizontalAlignment="Left" Height="29" Margin="745,449,0,0" VerticalAlignment="Top" Width="120"/>
+        <ListBox x:Name="MNamebox"  HorizontalAlignment="Left" Height="340" Margin="10,124,0,0" VerticalAlignment="Top" Width="182"/>
+        <Grid x:Name="CalG" HorizontalAlignment="Left" Height="349" Margin="215,124,0,0" VerticalAlignment="Top" Width="186" Background="LightGray"/>
+        <Grid HorizontalAlignment="Left" Height="315" Margin="664,129,0,0" VerticalAlignment="Top" Width="186" Background="LightGray"/>
+        <Grid x:Name="cinemaG" HorizontalAlignment="Left" Height="349" Margin="432,129,0,0" VerticalAlignment="Top" Width="186" Background="LightGray"/>
+
+        <!-- <ComboBox x:Name="cmb_index" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="cmb_index_SelectionChanged"/>-->
+
     </Grid>
 </Window>
