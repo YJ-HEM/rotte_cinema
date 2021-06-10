@@ -20,26 +20,8 @@ namespace rotte_cinema.vo
 		public string movie_poster { set; get; }
 		public string movie_info { set; get; }
 		public string movie_tags { set; get; }
-
-		public Label lbl { set; get; }
-
-
-
-
-		public void setMovie()
-		{
-			lbl = new Label();
-
-			lbl.Name = "movieName";
-
-			lbl.Content = movie_limit_age + movie_title;   // 버튼명
-											
-			lbl.FontSize = 14;
-
-			lbl.HorizontalAlignment = HorizontalAlignment.Left;   // 정렬 기준 좌측
-			lbl.VerticalAlignment = VerticalAlignment.Top;   // 정렬 기준 상측
-
-		}
-
+		public int showing_index { set; get; }
+		public string movie_age_path { set; get; }
+		public double movie_opacity { set; get; }
 	}
 }

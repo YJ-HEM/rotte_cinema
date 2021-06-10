@@ -78,7 +78,8 @@ namespace rotte_cinema
 			//cmb_index.Items.Add("동대구");
 
 			movieSet();
-
+			SDI_Movie f = new SDI_Movie();
+			f.Show();
 		}
 		/*
 		void seatSet(int theater_index)
@@ -106,6 +107,7 @@ namespace rotte_cinema
 
 		void movieSet()
 		{
+			/*
 			Injection.ParserToObj(movie, new Movie(), "SELECT * FROM MOVIE");
 			List<Label> movieLbl = new List<Label>();
 			for (int i = 0; i < movie.Count; i++)
@@ -115,7 +117,7 @@ namespace rotte_cinema
 			}
 			MNamebox.ItemsSource = movieLbl;
 			MNamebox.SelectionChanged += listbox_selectionchaged;
-
+			*/
 
 		}
 
