@@ -112,11 +112,11 @@ namespace rotte_cinema
 
         void dateSelect(object sender, MouseButtonEventArgs e)
         {
-
             TextBlock txb = (TextBlock)sender;
-            reserve.rDate = txb.Uid;
+			//txb.Background = Brushes.White;
+			reserve.rDate = txb.Uid;
 
-
+            txb.Background = Brushes.LightGray; //다른 날짜 선택하면 색상 원래대로 돌려야함
             MessageBox.Show(txb.Uid);
         }
 
@@ -157,11 +157,11 @@ namespace rotte_cinema
                 //int a = setCinema(makeCombo(), 0);
                 //setCinema(makeCombo(), a);
 
-                setCinema(makeCombo());
+                setLocal(makeLabel()); //for문 돌려야함??
                 setCinema(makeCombo());
 
                 setLocal(makeLabel());
-                setLocal(makeLabel());
+                setCinema(makeCombo());
 
             }
         }
@@ -170,8 +170,8 @@ namespace rotte_cinema
         {
             ComboBox cmb = new ComboBox();
             cmb.VerticalAlignment = VerticalAlignment.Top;
-            cmb.Height = 30;
-            cmb.Margin = new Thickness(0, 60 * idxCinema + 30, 0, 0);
+            //cmb.Height = 30;
+            //cmb.Margin = new Thickness(0, 60 * idxCinema + 30, 0, 0);
             return cmb;
         }
 
@@ -186,9 +186,7 @@ namespace rotte_cinema
 
         void setLocal(Label labl)
         {
-
-
-            labl.Margin = new Thickness(0, idxLocal * 60, 0, 0);
+            //labl.Margin = new Thickness(0, idxLocal * 60, 0, 0);
             DataTable result = MySqlManager.AdapterRead("SELECT CATEGORY_LOCAL.LOCAL_NAME from CATEGORY_LOCAL, CINEMA where CINEMA.LOCAL_INDEX = CATEGORY_LOCAL.LOCAL_INDEX");
 
 
@@ -210,14 +208,12 @@ namespace rotte_cinema
         //int setCinema(ComboBox combo, int index)
         ComboBox setCinema(ComboBox combo)
         {
-
+            combo.FontSize = 16;
             for (int i = idxCinema; i < cinema.Count; i++)
             {
                 idxCinema++;
 
                 combo.Items.Add(cinema[i].cinema_title);
-
-
 
                 if (i != cinema.Count - 1 && !cinema[i].local_index.Equals(cinema[i + 1].local_index))
                 {
