@@ -85,13 +85,16 @@
                         </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
+                <Grid Height="391" Width="282"/>
             </ListBox>
-            
-            
+
+
         </Grid>
         <Grid Grid.Row="1" Grid.Column="1">
-            
+
         </Grid>
+        <ListBox x:Name="lsbCinemaList" Grid.Column="1" HorizontalAlignment="Center" Height="564" Grid.Row="2" VerticalAlignment="Center" Width="400" RenderTransformOrigin="0.494,0.495"/>
+        <ListBox x:Name="lsbShowing" Grid.Column="2" HorizontalAlignment="Left" Height="574" Grid.Row="2" VerticalAlignment="Top" Width="590"/>
 
 
     </Grid>
