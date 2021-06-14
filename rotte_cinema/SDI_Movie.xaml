@@ -95,7 +95,9 @@
         </Grid>
         <ListBox x:Name="lsbCinemaList" Grid.Column="1"  Grid.Row="2"  />
         <ListBox x:Name="lsbShowing"  Grid.Column="2" Grid.Row="2" />
-
+        <TextBlock x:Name="selectedMovie"  Grid.Row="3" Grid.Column ="0" />
+        <TextBlock x:Name="selectedCinema"  Grid.Row="3" Grid.Column="1" />
+        <TextBlock x:Name="selectedTime"  Grid.Row="3" Grid.Column="2" />
 
     </Grid>
 </Window>

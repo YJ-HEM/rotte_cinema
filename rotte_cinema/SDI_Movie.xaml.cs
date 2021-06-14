@@ -153,6 +153,7 @@ namespace rotte_cinema
             if (lsbMovieList.SelectedItem != null)
             {
                 MessageBox.Show($"선택된 영화는 {((Movie)lsbMovieList.SelectedItem).movie_title } 입니다 ");
+                selectedMovie.Text = ((Movie)lsbMovieList.SelectedItem).movie_title;
                 lsbCinemaList.Items.Clear();
                 //int a = setCinema(makeCombo(), 0);
                 //setCinema(makeCombo(), a);
@@ -225,13 +226,18 @@ namespace rotte_cinema
             combo.SelectedIndex = 0;
             lsbCinemaList.Items.Add(combo);
             //return idxCinema + 1;
-            index = combo.SelectedItem.ToString(); 
+            index = combo.SelectedItem.ToString();
+            
             combo.SelectionChanged += combo_SelectedIndexChanged;
             return combo;
         }
 
+
         void combo_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (reserve.rDate == null) {
+                MessageBox.Show("날짜를 선택하세요");
+            }
             List<Showing> showing = new List<Showing>();
 
             int movieIndex = ((Movie)lsbMovieList.SelectedItem).movie_index;
@@ -241,10 +247,18 @@ namespace rotte_cinema
             Injection.ParserToObj(showing, new Showing(), sql);
 
 
+            if (showing.Count==0)
+            {
+                lsbShowing.Items.Add(string.Format($"{reserve.rDate}의 {((Movie)lsbMovieList.SelectedItem).movie_title} 상영 정보 없음"));
+            }
+
+
             foreach (var items in showing) {
+                
+
                 lsbShowing.Items.Add("상영관" + items.theater_index);
                 lsbShowing.Items.Add(items.show_starttime);
-                
+                selectedCinema.Text = index;
             }
 
 
