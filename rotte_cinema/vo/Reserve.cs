@@ -8,6 +8,7 @@ namespace rotte_cinema.vo
 	{
 		public string rDate{set; get;}
 		public int rMovieIdx { set; get; }
+		public int rLocalIdx { set; get; }
 		public int rTheaterIdx { set; get; }
 		public int rShowingIdx { set; get; }
 	}

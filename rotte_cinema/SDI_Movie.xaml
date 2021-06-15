@@ -15,11 +15,12 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="400"/>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="200"/>
             <ColumnDefinition Width="600"/>
         </Grid.ColumnDefinitions>
 
-        <Grid Grid.Row="0" Grid.ColumnSpan="3">
+        <Grid Grid.Row="0" Grid.ColumnSpan="4">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="20"/>
                 <ColumnDefinition Width="*"/>
@@ -65,10 +66,10 @@
         <TextBlock Grid.Column="1" Grid.Row="1" Text="극장"
                    FontSize="24" Margin="10,0,0,0"
                    />
-        <TextBlock Grid.Column="2" Grid.Row="1" Text="시간"
+        <TextBlock Grid.Column="3" Grid.Row="1" Text="시간"
                    FontSize="24" Margin="10,0,0,0"
                    />
-        <Grid Grid.Row="2">
+        <Grid Grid.Column="0" Grid.Row="2">
             <ListBox x:Name="lsbMovieList" HorizontalContentAlignment="Stretch" SelectionChanged="lsbMovieList_SelectionChanged" BorderBrush="{x:Null}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
@@ -85,16 +86,44 @@
                         </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
-                <Grid Height="391" Width="282"/>
             </ListBox>
-
-
         </Grid>
-        <Grid Grid.Row="1" Grid.Column="1">
+        
+        <Grid Grid.Column="1" Grid.Row="2">
+            <ListBox x:Name="lsbLocalList" HorizontalContentAlignment="Stretch" BorderBrush="{x:Null}" SelectionChanged="lsbLocalList_SelectionChanged">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Opacity="{Binding Path=local_opacity}" MaxWidth="130">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
 
+                            <TextBlock Grid.Column="0"
+                                       Text="{Binding Path=local_name}" FontSize="16"/>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
         </Grid>
-        <ListBox x:Name="lsbCinemaList" Grid.Column="1"  Grid.Row="2"  />
-        <ListBox x:Name="lsbShowing"  Grid.Column="2" Grid.Row="2" />
+
+        <Grid Grid.Column="2" Grid.Row="2">
+            <ListBox x:Name="lsbTheaterList" HorizontalContentAlignment="Stretch" BorderBrush="{x:Null}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Opacity="{Binding Path=cinema_opacity}" MaxWidth="130">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0"
+                                       Text="{Binding Path=cinema_title}" FontSize="16"/>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Grid>
+        
+        
         <TextBlock x:Name="selectedMovie"  Grid.Row="3" Grid.Column ="0" />
         <TextBlock x:Name="selectedCinema"  Grid.Row="3" Grid.Column="1" />
         <TextBlock x:Name="selectedTime"  Grid.Row="3" Grid.Column="2" />

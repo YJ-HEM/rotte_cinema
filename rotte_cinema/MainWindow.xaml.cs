@@ -195,7 +195,7 @@ namespace rotte_cinema
 
 		int setCinema(ComboBox combo,int index)
         {
-
+			/*
 			for (int i = idxCinema; i<cinema.Count ; i++)
 			{
 				idxCinema++;
@@ -210,7 +210,7 @@ namespace rotte_cinema
 				}
 				if (i == cinema.Count - 1) { idxCinema = 0; }
 			}
-
+			*/
 			combo.SelectedIndex = 0;
 			cinemaG.Children.Add(combo);
 			return idxCinema+1;

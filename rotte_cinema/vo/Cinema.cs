@@ -6,10 +6,9 @@ namespace rotte_cinema.vo
 {
 	class Cinema
 	{
-		public string cinema_index { set; get; }
-		public int local_index { set; get; }
+		public int cinema_index { set; get; }
 		public string cinema_title { set; get; }
-		public string cinema_address { set; get; }
-		public string cinema_info { set; get; }
+		public int cinema_count { get; set; }
+		public double cinema_opacity { set; get; }
 	}
 }

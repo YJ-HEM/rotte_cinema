@@ -3,6 +3,7 @@ using rotte_cinema.vo;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -20,11 +21,12 @@ namespace rotte_cinema
     /// </summary>
     public partial class SDI_Movie : Window
     {
-        List<Cinema> cinema = new List<Cinema>();
+        //List<Cinema> cinema = new List<Cinema>();
         enum WEEK { 일, 월, 화, 수, 목, 금, 토 }
         DateTime reserveDate = DateTime.Today;
-
+        TextBlock[] textBlocks = new TextBlock[14];
         Reserve reserve = new Reserve();
+
         public SDI_Movie()
         {
             InitializeComponent();
@@ -37,16 +39,13 @@ namespace rotte_cinema
 
             lsbMovieList.Items.Clear();
 
-            // 리스트를 리트스박스에 연결
-            lsbMovieList.ItemsSource = getMovieData();
-
-            Injection.ParserToObj(cinema, new Cinema(), "SELECT * FROM CINEMA");
+            //Injection.ParserToObj(cinema, new Cinema(), "SELECT * FROM CINEMA");
         }
 
-        List<Movie> getMovieData()
+        List<Movie> getMovieData(Reserve reserve)
         {
             List<Movie> _movies = new List<Movie>();
-            Injection.ParserToObj(_movies, new Movie(), "SELECT *,IFNULL((SELECT SHOWING_INDEX FROM SHOWING B WHERE B.MOVIE_INDEX = A.MOVIE_INDEX limit 1),0) AS 'SHOWING_INDEX' FROM MOVIE A ORDER BY MOVIE_TITLE;;");
+            Injection.ParserToObj(_movies, new Movie(), $"SELECT *,IFNULL((SELECT SHOWING_INDEX FROM SHOWING B WHERE B.MOVIE_INDEX = A.MOVIE_INDEX AND B.SHOW_DATE = '{reserve.rDate}' limit 1),0) AS 'SHOWING_INDEX' FROM MOVIE A WHERE IFNULL(MOVIE_END_DATE,'{DateTime.Now.ToString("yyyy-MM-dd")}') >= '{DateTime.Now.ToString("yyyy-MM-dd")}' ORDER BY MOVIE_TITLE");
 
             foreach (var _movie in _movies)
             {
@@ -66,58 +65,133 @@ namespace rotte_cinema
             return _movies;
         }
 
+        List<Local> getLocalData(Reserve reserve)
+		{
+            string query = string.Empty;
+            query += "SELECT D.LOCAL_INDEX,CONCAT(D.LOCAL_NAME,'(',COUNT(B.COUNT),')') AS LOCAL_NAME, COUNT(B.COUNT) AS LOCAL_COUNT FROM THEATER AS A ";
+            query += "LEFT OUTER JOIN ( ";
+            query += "SELECT THEATER_INDEX, COUNT(SHOWING_INDEX) AS COUNT FROM SHOWING ";
+            query += $"WHERE MOVIE_INDEX = {reserve.rMovieIdx} AND SHOW_DATE = '{reserve.rDate}' GROUP BY THEATER_INDEX ";
+            query += ") AS B ON A.THEATER_INDEX = B.THEATER_INDEX ";
+            query += "INNER JOIN CINEMA C ON A.CINEMA_INDEX = C.CINEMA_INDEX INNER JOIN CATEGORY_LOCAL D ON C.LOCAL_INDEX = D.LOCAL_INDEX ";
+            query += "GROUP BY D.LOCAL_NAME,D.LOCAL_INDEX ORDER BY D.LOCAL_INDEX;";
+
+
+            List<Local> _locals = new List<Local>();
+            Injection.ParserToObj(_locals, new Local(), query);
+
+
+			foreach (var local in _locals)
+			{
+                // 상영하지 않는 영화는 흐리게 표시
+                if (local.local_count == 0)
+                {
+                    local.local_opacity = 0.5;
+                }
+                else
+                {
+                    local.local_opacity = 1;
+                }
+            }
+            return _locals;
+
+        }
+
+
+        List<Cinema> getCinemaData(Reserve reserve)
+        {
+            string query = string.Empty;
+            query += "SELECT C.CINEMA_TITLE,COUNT(B.COUNT) AS CINEMA_COUNT FROM THEATER AS A ";
+            query += "LEFT OUTER JOIN ( ";
+            query += "SELECT THEATER_INDEX, COUNT(SHOWING_INDEX) AS COUNT FROM SHOWING ";
+            query += $"WHERE MOVIE_INDEX = {reserve.rMovieIdx} AND SHOW_DATE = '{reserve.rDate}' GROUP BY THEATER_INDEX ";
+            query += ") AS B ON A.THEATER_INDEX = B.THEATER_INDEX ";
+            query += "INNER JOIN CINEMA C ON A.CINEMA_INDEX = C.CINEMA_INDEX ";
+            query += $"WHERE C.LOCAL_INDEX = {reserve.rLocalIdx} GROUP BY C.CINEMA_TITLE,C.CINEMA_INDEX ORDER BY C.CINEMA_INDEX;";
+
+            List<Cinema> _cinema = new List<Cinema>();
+            Injection.ParserToObj(_cinema, new Cinema(), query);
+
+
+            foreach (var cinema in _cinema)
+            {
+                // 상영하지 않는 영화는 흐리게 표시
+                if (cinema.cinema_count == 0)
+                {
+                    cinema.cinema_opacity = 0.5;
+                }
+                else
+                {
+                    cinema.cinema_opacity = 1;
+                }
+            }
+            return _cinema;
+
+        }
         void gridDateSet()
         {
             gridDate.Children.Clear(); // 새로운 내용을 입력하기전에 그리드를 비워줌.
                                        //요일 생성
             for (int i = 0; i < 14; i++)
             {
-                TextBlock txb = new TextBlock();
+                textBlocks[i] = new TextBlock();
 
-                txb.Text = $"{reserveDate.AddDays(i).Month}/{reserveDate.AddDays(i).Day} • {(WEEK)reserveDate.AddDays(i).DayOfWeek}";
-                txb.FontSize = 16;
-                Grid.SetColumn(txb, i);
-                Grid.SetRow(txb, 0);
-                txb.VerticalAlignment = VerticalAlignment.Center;
-                txb.HorizontalAlignment = HorizontalAlignment.Center;
-                txb.Uid = reserveDate.AddDays(i).ToShortDateString();
+                textBlocks[i].Text = $"{reserveDate.AddDays(i).Month}/{reserveDate.AddDays(i).Day} • {(WEEK)reserveDate.AddDays(i).DayOfWeek}";
+                textBlocks[i].FontSize = 16;
+                Grid.SetColumn(textBlocks[i], i);
+                Grid.SetRow(textBlocks[i], 0);
+                textBlocks[i].VerticalAlignment = VerticalAlignment.Center;
+                textBlocks[i].HorizontalAlignment = HorizontalAlignment.Center;
+                textBlocks[i].Uid = reserveDate.AddDays(i).ToShortDateString();
 
                 // 요일별 색상 표시
                 if (reserveDate.AddDays(i).DayOfWeek == DayOfWeek.Sunday)
                 {
-                    txb.Foreground = Brushes.Red;
+                    textBlocks[i].Foreground = Brushes.Red;
                 }
                 else if (reserveDate.AddDays(i).DayOfWeek == DayOfWeek.Saturday)
                 {
-                    txb.Foreground = Brushes.Blue;
+                    textBlocks[i].Foreground = Brushes.Blue;
                 }
                 else
                 {
-                    txb.Foreground = Brushes.Black;
+                    textBlocks[i].Foreground = Brushes.Black;
                 }
 
                 // 오늘 이전의 날짜는 흐리게 표시.
                 if (reserveDate.AddDays(i) < DateTime.Today)
                 {
-                    txb.Opacity = 0.5;
+                    textBlocks[i].Opacity = 0.5;
                 }
                 else
                 {
-                    txb.MouseDown += dateSelect;
+                    textBlocks[i].MouseDown += dateSelect;
                 }
 
-                gridDate.Children.Add(txb);
+                gridDate.Children.Add(textBlocks[i]);
             }
         }
 
         void dateSelect(object sender, MouseButtonEventArgs e)
         {
+
+            lsbMovieList.ItemsSource = null; // 출력하기전 내용 초기화
+            lsbLocalList.ItemsSource = null;
+            lsbTheaterList.ItemsSource = null;
+            
             TextBlock txb = (TextBlock)sender;
-			//txb.Background = Brushes.White;
 			reserve.rDate = txb.Uid;
 
-            txb.Background = Brushes.LightGray; //다른 날짜 선택하면 색상 원래대로 돌려야함
-            MessageBox.Show(txb.Uid);
+			foreach (var textBlock in textBlocks) // 저장해놓은 버튼의 색상의 초기화함.
+			{
+                textBlock.Background = Brushes.White;
+            }
+
+            txb.Background = Brushes.LightGray; // 선택된 날짜의 색상을 변경.
+
+            
+            reserve.rDate = txb.Uid; // 예약 클래스에 선택한 날짜의 정보를 담음
+            lsbMovieList.ItemsSource = getMovieData(reserve); // 리스트를 리트스박스에 연결
         }
 
         private void imgLeft_MouseDown(object sender, MouseButtonEventArgs e)
@@ -152,19 +226,40 @@ namespace rotte_cinema
         {
             if (lsbMovieList.SelectedItem != null)
             {
-                MessageBox.Show($"선택된 영화는 {((Movie)lsbMovieList.SelectedItem).movie_title } 입니다 ");
+                lsbLocalList.ItemsSource = null; // 출력하기전 내용 초기화
+                lsbTheaterList.ItemsSource = null;
+
                 selectedMovie.Text = ((Movie)lsbMovieList.SelectedItem).movie_title;
-                lsbCinemaList.Items.Clear();
+
+                reserve.rMovieIdx = ((Movie)lsbMovieList.SelectedItem).movie_index; // 예약 클래스에 선택한 영화의 정보를 담음
+
+                lsbLocalList.ItemsSource = getLocalData(reserve); // 영화를 상영하고 있는 지역 표시
+
+                //lsbCinemaList.Items.Clear();
                 //int a = setCinema(makeCombo(), 0);
                 //setCinema(makeCombo(), a);
 
-                setLocal(makeLabel()); //for문 돌려야함??
-                setCinema(makeCombo());
 
-                setLocal(makeLabel());
-                setCinema(makeCombo());
+
+                //setLocal(makeLabel()); //for문 돌려야함??
+                //setCinema(makeCombo());
+
+                //setLocal(makeLabel());
+                //setCinema(makeCombo());
 
             }
+        }
+
+        private void lsbLocalList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (lsbLocalList.SelectedItem != null)
+            {
+                lsbTheaterList.ItemsSource = null; // 출력하기전 내용 초기화
+
+                reserve.rLocalIdx = ((Local)lsbLocalList.SelectedItem).local_index; // 예약 클래스에 선택한 영화의 정보를 담음
+                lsbTheaterList.ItemsSource = getCinemaData(reserve); // 영화를 상영하고 있는 지역 표시
+            }
+
         }
 
         ComboBox makeCombo()
@@ -199,7 +294,7 @@ namespace rotte_cinema
 
             }
 
-            lsbCinemaList.Items.Add((Label)labl);
+            //lsbCinemaList.Items.Add((Label)labl);
         }
 
 
@@ -209,6 +304,7 @@ namespace rotte_cinema
         //int setCinema(ComboBox combo, int index)
         ComboBox setCinema(ComboBox combo)
         {
+            /*
             combo.FontSize = 16;
             for (int i = idxCinema; i < cinema.Count; i++)
             {
@@ -224,12 +320,14 @@ namespace rotte_cinema
             }
 
             combo.SelectedIndex = 0;
-            lsbCinemaList.Items.Add(combo);
+            //lsbCinemaList.Items.Add(combo);
             //return idxCinema + 1;
             index = combo.SelectedItem.ToString();
             
             combo.SelectionChanged += combo_SelectedIndexChanged;
+            */
             return combo;
+            
         }
 
 
@@ -246,7 +344,7 @@ namespace rotte_cinema
             string sql = string.Format("SELECT * FROM SHOWING WHERE SHOWING.MOVIE_INDEX = {0} AND SHOWING.SHOW_DATE = '{1}' AND   (select THEATER.CINEMA_INDEX from THEATER where SHOWING.THEATER_INDEX= THEATER.THEATER_INDEX)  = (select CINEMA.CINEMA_INDEX from CINEMA where CINEMA_TITLE= '{2}')", movieIndex, reserve.rDate, index);
             Injection.ParserToObj(showing, new Showing(), sql);
 
-
+            /*
             if (showing.Count==0)
             {
                 lsbShowing.Items.Add(string.Format($"{reserve.rDate}의 {((Movie)lsbMovieList.SelectedItem).movie_title} 상영 정보 없음"));
@@ -260,8 +358,8 @@ namespace rotte_cinema
                 lsbShowing.Items.Add(items.show_starttime);
                 selectedCinema.Text = index;
             }
-
+            */
 
         }
-    } 
+	} 
 }
