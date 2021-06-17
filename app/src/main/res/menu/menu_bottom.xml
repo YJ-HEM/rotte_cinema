@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/tab1"
+        android:enabled="true"
+        android:icon="@android:drawable/ic_menu_call"
+        android:title="바로예매"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/tab2"
+        android:enabled="true"
+        android:icon="@android:drawable/ic_dialog_email"
+        android:title="상영시간표"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/tab3"
+        android:enabled="true"
+        android:icon="@android:drawable/ic_menu_camera"
+        android:title="마이"
+        app:showAsAction="always" />
+</menu>
