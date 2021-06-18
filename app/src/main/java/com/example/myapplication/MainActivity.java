@@ -95,17 +95,20 @@ public class MainActivity extends AppCompatActivity {
         switch (n)
         {
             case 0:
-               mWebView.loadUrl("https://lesslate.github.io/android/안드로이드-하단-네비게이션(Bottom-Navigation)-추가하기/");
+                //ft.replace(R.id.webView,fragment1);
+                mWebView.loadUrl("https://lesslate.github.io/android/안드로이드-하단-네비게이션(Bottom-Navigation)-추가하기/");
                 break;
 
             case 1:
-                ft.replace(R.id.webView,fragment1);
-                ft.commit();
+                mWebView.loadUrl("https://linsoo.co.kr/archives/10687");
+
                 break;
 
             case 2:
-                ft.replace(R.id.webView,fragment2);
-                ft.commit();
+//                ft.replace(R.id.webView,fragment2);
+//                ft.commit();
+                mWebView.loadUrl("https://www.google.com/search?q=w&oq=w&aqs=chrome..69i60j69i57j69i60j69i61j69i60l2.2911j0j4&sourceid=chrome&ie=UTF-8");
+
                 break;
 
 
