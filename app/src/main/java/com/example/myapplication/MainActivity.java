@@ -77,6 +77,12 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.tab3:
                         setFrag(2);
                         break;
+                    case R.id.tab4:
+                        setFrag(3);
+                        break;
+                    case R.id.tab5:
+                        setFrag(4);
+                        break;
                 }
                 return true;
             }
@@ -110,7 +116,15 @@ public class MainActivity extends AppCompatActivity {
                 mWebView.loadUrl("https://www.google.com/search?q=w&oq=w&aqs=chrome..69i60j69i57j69i60j69i61j69i60l2.2911j0j4&sourceid=chrome&ie=UTF-8");
 
                 break;
+            case 3:
+                mWebView.loadUrl("https://www.google.com/search?q=%EC%A7%91%EC%97%90%EA%B0%80%EC%9E%90&oq=%EC%A7%91%EC%97%90%EA%B0%80%EC%9E%90&aqs=chrome..69i57.2344j0j1&sourceid=chrome&ie=UTF-8");
 
+                break;
+            case 4:
+
+                mWebView.loadUrl("https://www.google.com/search?q=%EB%AC%B4%EC%8A%A8%ED%8E%98%EC%9D%B4%EC%A7%80%EB%A5%BC%EB%84%A3%EC%9C%BC%EA%B9%8C&oq=%EB%AC%B4%EC%8A%A8%ED%8E%98%EC%9D%B4%EC%A7%80%EB%A5%BC%EB%84%A3%EC%9C%BC%EA%B9%8C&aqs=chrome..69i57.6768j0j9&sourceid=chrome&ie=UTF-8");
+
+                break;
 
         }
     }

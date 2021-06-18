@@ -22,15 +22,17 @@
     </WebView>
 
 
-
+    <!--아이템 선택 됐을때, 안됐을 때 둘다 색상 검정으로(menu_selector_color.xml)-->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        app:itemBackground="@drawable/ic_launcher_background"
+        app:itemBackground="@color/white"
         app:labelVisibilityMode="labeled"
-        app:menu="@menu/menu_bottom" />
+        app:menu="@menu/menu_bottom"
+        app:itemIconTint="@drawable/menu_selector_color"
+        app:itemTextColor="@drawable/menu_selector_color"/>
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

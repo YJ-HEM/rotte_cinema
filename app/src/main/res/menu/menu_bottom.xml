@@ -5,19 +5,33 @@
     <item
         android:id="@+id/tab1"
         android:enabled="true"
-        android:icon="@android:drawable/ic_menu_call"
-        android:title="바로예매"
+        android:icon="@drawable/i"
+        android:title="홈"
         app:showAsAction="always" />
     <item
         android:id="@+id/tab2"
         android:enabled="true"
-        android:icon="@android:drawable/ic_dialog_email"
+        android:icon="@drawable/ic_baseline_access_time_24"
         android:title="상영시간표"
         app:showAsAction="always" />
     <item
         android:id="@+id/tab3"
         android:enabled="true"
-        android:icon="@android:drawable/ic_menu_camera"
+        android:icon="@drawable/ic_ticket"
+        android:title="바로예매"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/tab4"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_person_24"
         android:title="마이"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/tab5"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_menu_24"
+        android:title="메뉴"
         app:showAsAction="always" />
 </menu>
