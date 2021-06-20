@@ -12,6 +12,8 @@ import android.webkit.WebViewClient;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
 import android.os.Bundle;
@@ -28,6 +30,7 @@ import android.widget.FrameLayout;
 
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationView;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -81,6 +84,9 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.tab5:
                         setFrag(4);
                         break;
+                    case R.id.fragment3:
+                        setFrag(5);
+                        break;
                 }
                 return true;
             }
@@ -91,36 +97,72 @@ public class MainActivity extends AppCompatActivity {
         //setFrag(0); // 첫 프래그먼트 화면 지정
     }
 
-    // 프레그먼트 교체
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId())
+        {
+            case android.R.id.home:  {
+                fe.openDrawer(GravityCompat.START);
+                return true;
+            }
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+
     private void setFrag(int n) {
         fm = getSupportFragmentManager();
         ft = fm.beginTransaction();
         switch (n) {
             case 0:
                 //ft.replace(R.id.webView,fragment1);
+                ft.hide(fragment1);
+                ft.commit();
+
                 mWebView.loadUrl("https://lesslate.github.io/android/안드로이드-하단-네비게이션(Bottom-Navigation)-추가하기/");
                 break;
 
             case 1:
+                ft.hide(fragment1);
+                ft.commit();
+
                 mWebView.loadUrl("https://linsoo.co.kr/archives/10687");
 
                 break;
 
             case 2:
+                ft.hide(fragment1);
+                ft.commit();
+
 //                ft.replace(R.id.webView,fragment2);
-//                ft.commit();
+                ft.commit();
                 mWebView.loadUrl("https://www.google.com/search?q=w&oq=w&aqs=chrome..69i60j69i57j69i60j69i61j69i60l2.2911j0j4&sourceid=chrome&ie=UTF-8");
 
                 break;
             case 3:
+                ft.hide(fragment1);
+                ft.commit();
+
                 mWebView.loadUrl("https://www.google.com/search?q=%EC%A7%91%EC%97%90%EA%B0%80%EC%9E%90&oq=%EC%A7%91%EC%97%90%EA%B0%80%EC%9E%90&aqs=chrome..69i57.2344j0j1&sourceid=chrome&ie=UTF-8");
 
                 break;
             case 4:
 
-                mWebView.loadUrl("https://www.google.com/search?q=%EB%AC%B4%EC%8A%A8%ED%8E%98%EC%9D%B4%EC%A7%80%EB%A5%BC%EB%84%A3%EC%9C%BC%EA%B9%8C&oq=%EB%AC%B4%EC%8A%A8%ED%8E%98%EC%9D%B4%EC%A7%80%EB%A5%BC%EB%84%A3%EC%9C%BC%EA%B9%8C&aqs=chrome..69i57.6768j0j9&sourceid=chrome&ie=UTF-8");
+
+            ft.show(fragment1);
+                ft.commit();
+                break;
+            case 5:
+                DrawerLayout.close
+                ft.hide(fragment1);
+                ft.commit();
 
                 break;
+
+
 
         }
     }
