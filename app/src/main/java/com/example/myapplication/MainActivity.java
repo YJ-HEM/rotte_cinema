@@ -5,11 +5,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.net.http.SslError;
 import android.os.Bundle;
+import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.PermissionRequest;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -24,12 +27,17 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
 
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
 
+import com.example.myapplication.databinding.ActivityMain3Binding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
@@ -40,14 +48,35 @@ public class MainActivity extends AppCompatActivity {
     private FragmentManager fm;
     private FragmentTransaction ft;
 
-//    Fragment1 fragment1;
+    //    Fragment1 fragment1;
 //    Fragment2 fragment2;
+//    private AppBarConfiguration mAppBarConfiguration;
+//    private ActivityMain3Binding binding;
+    Main3Activity main3Activity = new Main3Activity();
 
-    //수정
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+//        binding = ActivityMain3Binding.inflate(getLayoutInflater());
+//        setContentView(binding.getRoot());
+//
+//        setSupportActionBar(binding.appBarMain3.toolbar);
+//
+//        DrawerLayout drawer = binding.drawerLayout;
+//        NavigationView navigationView = binding.navView;
+//        // Passing each menu ID as a set of Ids because each
+//        // menu should be considered as top level destinations.
+//        mAppBarConfiguration = new AppBarConfiguration.Builder(
+//                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
+//                .setDrawerLayout(drawer)
+//                .build();
+//        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main3);
+//        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
+//        NavigationUI.setupWithNavController(navigationView, navController);
+
 
         // 웹뷰 셋팅
         mWebView = (WebView) findViewById(R.id.webView);//xml 자바코드 연결
@@ -96,10 +125,25 @@ public class MainActivity extends AppCompatActivity {
 //        fragment1 = new Fragment1();
 //        fragment2 = new Fragment2();
         //setFrag(0); // 첫 프래그먼트 화면 지정
+
+//        Button butttt = findViewById(R.id.button100);
+//        butttt.setOnClickListener(new Button.OnClickListener() {
+//            @Override
+//          public void onClick(View view) {
+//               // TODO : click event
+//                main3Activity.onSupportNavigateUp();
+//            }
+//        });
+
+
+
     }
 
 
-  //  DrawerLayout drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+
+    //  DrawerLayout drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+
+
 
 
     private void setFrag(int n) {
@@ -108,48 +152,54 @@ public class MainActivity extends AppCompatActivity {
         switch (n) {
             case 0:
                 //ft.replace(R.id.webView,fragment1);
-            //    drawerLayout.close();
+                //    drawerLayout.close();
 
                 mWebView.loadUrl("https://lesslate.github.io/android/안드로이드-하단-네비게이션(Bottom-Navigation)-추가하기/");
                 break;
 
             case 1:
-          //      drawerLayout.close();
+                //      drawerLayout.close();
 
                 mWebView.loadUrl("https://linsoo.co.kr/archives/10687");
 
                 break;
 
             case 2:
-          //      drawerLayout.close();
+                //      drawerLayout.close();
 
 //                ft.replace(R.id.webView,fragment2);
                 mWebView.loadUrl("https://www.google.com/search?q=w&oq=w&aqs=chrome..69i60j69i57j69i60j69i61j69i60l2.2911j0j4&sourceid=chrome&ie=UTF-8");
 
                 break;
             case 3:
-           //     drawerLayout.close();
+                //     drawerLayout.close();
 
                 mWebView.loadUrl("https://www.google.com/search?q=%EC%A7%91%EC%97%90%EA%B0%80%EC%9E%90&oq=%EC%A7%91%EC%97%90%EA%B0%80%EC%9E%90&aqs=chrome..69i57.2344j0j1&sourceid=chrome&ie=UTF-8");
 
                 break;
             case 4:
 
-               // Intent intent = new Intent(MainActivity.this,MainActivity2.class);
-              //  startActivity(intent);
+                main3Activity.onSupportNavigateUp();
 
-
-               // drawerLayout.open();
                 break;
-//            case 5:
+            // Intent intent = new Intent(MainActivity.this,MainActivity2.class);
+            //  startActivity(intent);
+
+
+            // drawerLayout.open();
+
+            case 5:
+
 //                drawerLayout.close();
 
 //                break;
 
 
-
         }
     }
+
+
+
 
 
     public class SslWebViewConnect extends WebViewClient {
@@ -199,6 +249,13 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+    //   @Override
+//    public boolean onSupportNavigateUp() {
+//        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main3);
+//        return NavigationUI.navigateUp(navController, mAppBarConfiguration)
+//                || super.onSupportNavigateUp();
+//    }
 
 
 }
