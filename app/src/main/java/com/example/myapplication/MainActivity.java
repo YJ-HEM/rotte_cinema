@@ -135,7 +135,9 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case 4:
 
-                Intent intent = new Intent(getApplicationContext(), MainActivity2.class); startActivity(intent);
+               // Intent intent = new Intent(MainActivity.this,MainActivity2.class);
+              //  startActivity(intent);
+
 
                // drawerLayout.open();
                 break;
