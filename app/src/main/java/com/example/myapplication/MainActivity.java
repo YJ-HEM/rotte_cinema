@@ -2,6 +2,7 @@ package com.example.myapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.net.http.SslError;
 import android.os.Bundle;
 import android.webkit.PermissionRequest;
@@ -39,8 +40,8 @@ public class MainActivity extends AppCompatActivity {
     private FragmentManager fm;
     private FragmentTransaction ft;
 
-    Fragment1 fragment1;
-    Fragment2 fragment2;
+//    Fragment1 fragment1;
+//    Fragment2 fragment2;
 
     //수정
     @Override
@@ -84,33 +85,21 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.tab5:
                         setFrag(4);
                         break;
-                    case R.id.fragment3:
-                        setFrag(5);
-                        break;
+//                    case R.id.fragment3:
+//                        setFrag(5);
+//                        break;
                 }
                 return true;
             }
         });
-
-        fragment1 = new Fragment1();
-        fragment2 = new Fragment2();
+//
+//        fragment1 = new Fragment1();
+//        fragment2 = new Fragment2();
         //setFrag(0); // 첫 프래그먼트 화면 지정
     }
 
 
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId())
-        {
-            case android.R.id.home:  {
-                fe.openDrawer(GravityCompat.START);
-                return true;
-            }
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
+  //  DrawerLayout drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
 
 
     private void setFrag(int n) {
@@ -119,48 +108,41 @@ public class MainActivity extends AppCompatActivity {
         switch (n) {
             case 0:
                 //ft.replace(R.id.webView,fragment1);
-                ft.hide(fragment1);
-                ft.commit();
+            //    drawerLayout.close();
 
                 mWebView.loadUrl("https://lesslate.github.io/android/안드로이드-하단-네비게이션(Bottom-Navigation)-추가하기/");
                 break;
 
             case 1:
-                ft.hide(fragment1);
-                ft.commit();
+          //      drawerLayout.close();
 
                 mWebView.loadUrl("https://linsoo.co.kr/archives/10687");
 
                 break;
 
             case 2:
-                ft.hide(fragment1);
-                ft.commit();
+          //      drawerLayout.close();
 
 //                ft.replace(R.id.webView,fragment2);
-                ft.commit();
                 mWebView.loadUrl("https://www.google.com/search?q=w&oq=w&aqs=chrome..69i60j69i57j69i60j69i61j69i60l2.2911j0j4&sourceid=chrome&ie=UTF-8");
 
                 break;
             case 3:
-                ft.hide(fragment1);
-                ft.commit();
+           //     drawerLayout.close();
 
                 mWebView.loadUrl("https://www.google.com/search?q=%EC%A7%91%EC%97%90%EA%B0%80%EC%9E%90&oq=%EC%A7%91%EC%97%90%EA%B0%80%EC%9E%90&aqs=chrome..69i57.2344j0j1&sourceid=chrome&ie=UTF-8");
 
                 break;
             case 4:
 
+                Intent intent = new Intent(getApplicationContext(), MainActivity2.class); startActivity(intent);
 
-            ft.show(fragment1);
-                ft.commit();
+               // drawerLayout.open();
                 break;
-            case 5:
-                DrawerLayout.close
-                ft.hide(fragment1);
-                ft.commit();
+//            case 5:
+//                drawerLayout.close();
 
-                break;
+//                break;
 
 
 
