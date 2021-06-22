@@ -195,8 +195,8 @@ public class MainActivity extends AppCompatActivity
 
                 break;
             case 4:
-                binding.drawerLayout.closeDrawer(Gravity.LEFT);
-                binding.drawerLayout.openDrawer(Gravity.LEFT);
+                binding.drawerLayout.closeDrawer(Gravity.RIGHT);
+                binding.drawerLayout.openDrawer(Gravity.RIGHT);
 //                onSupportNavigateUp();
 //                main3Activity.onSupportNavigateUp();
 
