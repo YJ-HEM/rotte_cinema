@@ -43,14 +43,6 @@
 //        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
 //        NavigationUI.setupWithNavController(navigationView, navController);
 //
-//        Button b = findViewById(R.id.button100);
-//        b.setOnClickListener(new Button.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                // TODO : click event
-//                onSupportNavigateUp();
-//            }
-//        });
 //
 //    }
 //

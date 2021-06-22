@@ -6,24 +6,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:openDrawer="end">
+    tools:openDrawer="start"
+    tools:context=".MainActivity">
 
-    <include
-        android:id="@+id/app_bar_main3"
-        layout="@layout/app_bar_main3"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-    <com.google.android.material.navigation.NavigationView
-        android:id="@+id/nav_view"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="end"
-        android:fitsSystemWindows="true"
-
-        app:headerLayout="@layout/nav_header_main3"
-        app:menu="@menu/activity_main3_drawer"
-        />
 
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -32,6 +17,7 @@
         tools:context=".MainActivity"
 
         >
+
         <WebView
             android:id="@+id/webView"
             android:layout_width="match_parent"
@@ -53,5 +39,8 @@
             app:menu="@menu/menu_bottom" />
 
 
+
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    <include
+        layout="@layout/content_main3"/>
 </androidx.drawerlayout.widget.DrawerLayout>

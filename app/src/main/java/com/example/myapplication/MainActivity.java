@@ -1,16 +1,9 @@
 package com.example.myapplication;
 
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Context;
-import android.content.Intent;
 import android.net.http.SslError;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.webkit.PermissionRequest;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebChromeClient;
@@ -20,36 +13,20 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
-
-import android.os.Bundle;
-import android.view.MenuItem;
-
-import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-
-import android.os.Bundle;
-import android.view.MenuItem;
-import android.widget.FrameLayout;
 
 import com.example.myapplication.databinding.ActivityMainBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
-import org.jetbrains.annotations.NotNull;
 
-
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity {
 
 
     private WebView mWebView;
@@ -62,6 +39,7 @@ public class MainActivity extends AppCompatActivity
     NavigationView navigationView;
     ActionBarDrawerToggle drawerToggle;
     Toolbar toolbar;
+    private View drawerView;
 
 
     private AppBarConfiguration mAppBarConfiguration;
@@ -75,22 +53,33 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_main);
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-        setSupportActionBar(binding.appBarMain3.toolbar);
+        setContentView(R.layout.activity_main);
+//        binding = ActivityMainBinding.inflate(getLayoutInflater());
+//        setContentView(binding.getRoot());
+        //    setSupportActionBar(binding.appBarMain3.toolbar);
 
-        drawerLayout = binding.drawerLayout;
-        NavigationView navigationView = binding.navView;
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
-                .setDrawerLayout(drawerLayout)
-                .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main3);
-        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
-        NavigationUI.setupWithNavController(navigationView, navController);
+//        drawerLayout = binding.drawerLayout;
+//        navigationView = binding.navView;
+//        // Passing each menu ID as a set of Ids because each
+//        // menu should be considered as top level destinations.
+//        mAppBarConfiguration = new AppBarConfiguration.Builder(
+//                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
+//                .setDrawerLayout(drawerLayout)
+//                .build();
+//
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawerView = (View) findViewById(R.id.drawer);
+
+        Button btn_open = (Button) findViewById(R.id.button1);
+        btn_open.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawerLayout.closeDrawer(drawerView);
+                mWebView.loadUrl("https://duckssi.tistory.com/10?category=328338");
+
+            }
+        });
+
 
         // 웹뷰 셋팅
         mWebView = (WebView) findViewById(R.id.webView);//xml 자바코드 연결
@@ -109,6 +98,7 @@ public class MainActivity extends AppCompatActivity
 
 
         mBottomNV = findViewById(R.id.bottom);
+
         mBottomNV.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -128,9 +118,8 @@ public class MainActivity extends AppCompatActivity
                     case R.id.tab5:
                         setFrag(4);
                         break;
-//                    case R.id.fragment3:
-//                        setFrag(5);
-//                        break;
+
+
                 }
                 return true;
             }
@@ -140,27 +129,16 @@ public class MainActivity extends AppCompatActivity
 //        fragment2 = new Fragment2();
         //setFrag(0); // 첫 프래그먼트 화면 지정
 
-//        Button butttt = findViewById(R.id.button100);
-//        butttt.setOnClickListener(new Button.OnClickListener() {
-//            @Override
-//          public void onClick(View view) {
-//               // TODO : click event
-//                main3Activity.onSupportNavigateUp();
-//            }
-//        });
+
+        //  navigationView1.setNavigationItemSelectedListener(this);
+        //  navigationView.setNavigationItemSelectedListener(this);
+        //  navigationView.setNavigationItemSelectedListener(this);
 
 
     }
 
 
     //  DrawerLayout drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
-
-    @Override
-    public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main3);
-        return NavigationUI.navigateUp(navController, mAppBarConfiguration)
-                || super.onSupportNavigateUp();
-    }
 
 
     private void setFrag(int n) {
@@ -172,6 +150,7 @@ public class MainActivity extends AppCompatActivity
                 //    drawerLayout.close();
 
                 mWebView.loadUrl("https://lesslate.github.io/android/안드로이드-하단-네비게이션(Bottom-Navigation)-추가하기/");
+
                 break;
 
             case 1:
@@ -195,33 +174,48 @@ public class MainActivity extends AppCompatActivity
 
                 break;
             case 4:
-                binding.drawerLayout.closeDrawer(Gravity.RIGHT);
-                binding.drawerLayout.openDrawer(Gravity.RIGHT);
-//                onSupportNavigateUp();
-//                main3Activity.onSupportNavigateUp();
+                drawerLayout.closeDrawer(drawerView);
+
+                drawerLayout.openDrawer(drawerView);
+
+//                 NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main3);
+//               // NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
+//                NavigationUI.setupWithNavController(mBottomNV,navController);
+//                  NavigationUI.setupWithNavController(navigationView, navController);
+//                // binding.drawerLayout.closeDrawer(Gravity.RIGHT);
+//                // binding.drawerLayout.openDrawer(Gravity.RIGHT);
+//               onSupportNavigateUp();
+////                main3Activity.onSupportNavigateUp();
 
                 break;
+
+
             // Intent intent = new Intent(MainActivity.this,MainActivity2.class);
             //  startActivity(intent);
 
 
             // drawerLayout.open();
 
-            case 5:
-
-//                drawerLayout.close();
-
-//                break;
-
 
         }
     }
 
-
-    @Override
-    public boolean onNavigationItemSelected(@NonNull @NotNull MenuItem item) {
-        return false;
-    }
+//            @Override
+//            public boolean onNavigationItemSelected(@NonNull @NotNull MenuItem item) {
+//            Log.v("test","test");
+//                switch (item.getItemId()){
+//                    case R.id.nav_homee:
+//                        Toast.makeText(this, "item1 clicked..", Toast.LENGTH_SHORT).show();
+//
+//
+//                        mWebView.loadUrl("https://duzi077.tistory.com/167");
+//                        break;
+//
+//
+//                }
+//
+//                return false;
+//            }
 
 
     public class SslWebViewConnect extends WebViewClient {
