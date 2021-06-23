@@ -70,22 +70,31 @@ public class MainActivity extends AppCompatActivity {
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerView = (View) findViewById(R.id.drawer);
 
-        Button btn_open = (Button) findViewById(R.id.button1);
-        btn_open.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                drawerLayout.closeDrawer(drawerView);
-                mWebView.loadUrl("https://duckssi.tistory.com/10?category=328338");
+        Button btn_login = (Button) findViewById(R.id.btn_login);
+        Button btnMovie = (Button) findViewById(R.id.btnMovie);
+        Button btnReserve = (Button) findViewById(R.id.btnReserve);
+        Button btnSchedule = (Button) findViewById(R.id.btnSchedule);
+        Button btnCuration = (Button) findViewById(R.id.btnCuration);
+        Button btnEvent = (Button) findViewById(R.id.btnEvent);
+        Button btnCinemaInfo = (Button) findViewById(R.id.btnCinemaInfo);
+        Button btn_reserve = (Button) findViewById(R.id.btn_reserve);
 
-            }
-        });
+
+        navigationMenu(btn_login,"https://kumas.dev/rotte_cinema/login.do");
+        navigationMenu(btnMovie,"https://kumas.dev/rotte_cinema/movie.do");
+        navigationMenu(btnReserve,"https://kumas.dev/rotte_cinema/ticketing.do");
+        navigationMenu(btnSchedule,"https://kumas.dev/rotte_cinema/schedule.do");
+        navigationMenu(btnCuration,"https://kumas.dev/rotte_cinema/qration.do");
+        navigationMenu(btnEvent,"https://kumas.dev/rotte_cinema/event.do");
+        navigationMenu(btnCinemaInfo,"https://kumas.dev/rotte_cinema/about.do");
+        navigationMenu(btn_reserve,"https://kumas.dev/rotte_cinema/ticketing.do");
 
 
         // 웹뷰 셋팅
         mWebView = (WebView) findViewById(R.id.webView);//xml 자바코드 연결
         mWebView.getSettings().setJavaScriptEnabled(true);//자바스크립트 허용
 
-        mWebView.loadUrl("https://commin.tistory.com/63");//웹뷰 실행
+        mWebView.loadUrl("https://kumas.dev/rotte_cinema");//웹뷰 실행
         mWebView.setWebViewClient(new WebViewClientClass());//새창열기 없이 웹뷰 내에서 다시 열기//페이지 이동 원활히 하기위해 사용
         mWebView.setWebViewClient(new SslWebViewConnect());
         //ssl 인증이 없는 경우 해결을 위한 부분
@@ -136,7 +145,15 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-
+    void navigationMenu(Button button, String url){
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawerLayout.closeDrawer(drawerView);
+                mWebView.loadUrl(url);
+            }
+        });
+    }
 
     //  DrawerLayout drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
 
@@ -149,14 +166,14 @@ public class MainActivity extends AppCompatActivity {
                 //ft.replace(R.id.webView,fragment1);
                 //    drawerLayout.close();
 
-                mWebView.loadUrl("https://lesslate.github.io/android/안드로이드-하단-네비게이션(Bottom-Navigation)-추가하기/");
+                mWebView.loadUrl("https://kumas.dev/rotte_cinema");
 
                 break;
 
             case 1:
                 //      drawerLayout.close();
 
-                mWebView.loadUrl("https://linsoo.co.kr/archives/10687");
+                mWebView.loadUrl("https://kumas.dev/rotte_cinema/schedule.do");
 
                 break;
 
@@ -164,13 +181,13 @@ public class MainActivity extends AppCompatActivity {
                 //      drawerLayout.close();
 
 //                ft.replace(R.id.webView,fragment2);
-                mWebView.loadUrl("https://www.google.com/search?q=w&oq=w&aqs=chrome..69i60j69i57j69i60j69i61j69i60l2.2911j0j4&sourceid=chrome&ie=UTF-8");
+                mWebView.loadUrl("https://kumas.dev/rotte_cinema/ticketing.do");
 
                 break;
             case 3:
                 //     drawerLayout.close();
 
-                mWebView.loadUrl("https://www.google.com/search?q=%EC%A7%91%EC%97%90%EA%B0%80%EC%9E%90&oq=%EC%A7%91%EC%97%90%EA%B0%80%EC%9E%90&aqs=chrome..69i57.2344j0j1&sourceid=chrome&ie=UTF-8");
+                mWebView.loadUrl("https://kumas.dev/rotte_cinema/login.do");
 
                 break;
             case 4:
