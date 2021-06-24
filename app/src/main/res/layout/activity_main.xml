@@ -18,6 +18,7 @@
 
         >
 
+        <!--아이템 선택 됐을때, 안됐을 때 둘다 색상 검정으로(menu_selector_color.xml)-->
         <WebView
             android:id="@+id/webView"
             android:layout_width="match_parent"
@@ -26,7 +27,6 @@
             tools:layout_editor_absoluteX="1dp"
             tools:layout_editor_absoluteY="1dp"></WebView>
 
-        <!--아이템 선택 됐을때, 안됐을 때 둘다 색상 검정으로(menu_selector_color.xml)-->
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottom"
             android:layout_width="match_parent"

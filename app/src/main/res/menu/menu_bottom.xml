@@ -5,9 +5,10 @@
     <item
         android:id="@+id/tab1"
         android:enabled="true"
-        android:icon="@drawable/i"
+        android:icon="@drawable/ic_iconfinder_2124252_home_essential_app_icon"
         android:title="홈"
-        app:showAsAction="always" />
+        app:showAsAction="always"
+        />
     <item
         android:id="@+id/tab2"
         android:enabled="true"
@@ -17,14 +18,14 @@
     <item
         android:id="@+id/tab3"
         android:enabled="true"
-        android:icon="@drawable/ic_ticket"
+        android:icon="@drawable/ic_iconfinder_2315959_cinema_movie_ticket_icon"
         android:title="바로예매"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/tab4"
         android:enabled="true"
-        android:icon="@drawable/ic_baseline_person_24"
+        android:icon="@drawable/ic_iconfinder_4092564_profile_about_mobile_ui_user_icon"
         android:title="마이"
         app:showAsAction="always" />
 

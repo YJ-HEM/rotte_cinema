@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import android.content.Intent;
 import android.net.http.SslError;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -43,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private AppBarConfiguration mAppBarConfiguration;
-    private ActivityMainBinding binding;
+   // private ActivityMainBinding binding;
     //    Fragment1 fragment1;
 //    Fragment2 fragment2;
 //    private AppBarConfiguration mAppBarConfiguration;
@@ -70,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerView = (View) findViewById(R.id.drawer);
 
-        Button btn_login = (Button) findViewById(R.id.btn_login);
+        Button btn_login = (Button) findViewById(R.id.btn_signin);
         Button btnMovie = (Button) findViewById(R.id.btnMovie);
         Button btnReserve = (Button) findViewById(R.id.btnReserve);
         Button btnSchedule = (Button) findViewById(R.id.btnSchedule);
@@ -80,7 +81,19 @@ public class MainActivity extends AppCompatActivity {
         Button btn_reserve = (Button) findViewById(R.id.btn_reserve);
 
 
-        navigationMenu(btn_login,"https://kumas.dev/rotte_cinema/login.do");
+        btn_login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                    Intent intent = new Intent(getApplicationContext(), signin.class);
+                    startActivity(intent);
+
+            }
+        });
+
+
+
+       // navigationMenu(btn_login,"https://kumas.dev/rotte_cinema/login.do");
         navigationMenu(btnMovie,"https://kumas.dev/rotte_cinema/movie.do");
         navigationMenu(btnReserve,"https://kumas.dev/rotte_cinema/ticketing.do");
         navigationMenu(btnSchedule,"https://kumas.dev/rotte_cinema/schedule.do");
@@ -88,6 +101,11 @@ public class MainActivity extends AppCompatActivity {
         navigationMenu(btnEvent,"https://kumas.dev/rotte_cinema/event.do");
         navigationMenu(btnCinemaInfo,"https://kumas.dev/rotte_cinema/about.do");
         navigationMenu(btn_reserve,"https://kumas.dev/rotte_cinema/ticketing.do");
+
+
+
+
+
 
 
         // 웹뷰 셋팅
@@ -145,6 +163,9 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+
+
     void navigationMenu(Button button, String url){
         button.setOnClickListener(new View.OnClickListener() {
             @Override
