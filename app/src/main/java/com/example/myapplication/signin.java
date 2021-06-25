@@ -78,7 +78,7 @@ public class signin extends AppCompatActivity {
 
 
     }
-
+//
     public void AutoSinIn(View view) {
         Log.v("test","test");
         Toast.makeText(this, "아이디/암호를 입력해주세요", Toast.LENGTH_SHORT).show();
