@@ -1,8 +1,11 @@
 package com.example.myapplication;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.http.SslError;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.PermissionRequest;
@@ -11,6 +14,9 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -34,17 +40,22 @@ public class MainActivity extends AppCompatActivity {
     BottomNavigationView mBottomNV;
     private FragmentManager fm;
     private FragmentTransaction ft;
-
+    static Button btn_login;
 
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     ActionBarDrawerToggle drawerToggle;
     Toolbar toolbar;
     private View drawerView;
-
-
+    static String loginId, loginPwd;
+    EditText et_id;
+    EditText et_pw;
+    CheckBox cb_save;
+    Button btnlogin;
+    SharedPreferences.Editor autoLogin;
+    TextView loginText;
     private AppBarConfiguration mAppBarConfiguration;
-   // private ActivityMainBinding binding;
+    // private ActivityMainBinding binding;
     //    Fragment1 fragment1;
 //    Fragment2 fragment2;
 //    private AppBarConfiguration mAppBarConfiguration;
@@ -71,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerView = (View) findViewById(R.id.drawer);
 
-        Button btn_login = (Button) findViewById(R.id.btn_signin);
+        btn_login = (Button) findViewById(R.id.btn_signin);
         Button btnMovie = (Button) findViewById(R.id.btnMovie);
         Button btnReserve = (Button) findViewById(R.id.btnReserve);
         Button btnSchedule = (Button) findViewById(R.id.btnSchedule);
@@ -81,31 +92,60 @@ public class MainActivity extends AppCompatActivity {
         Button btn_reserve = (Button) findViewById(R.id.btn_reserve);
 
 
-        btn_login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        //로그인구현
+        et_id = (EditText) findViewById(R.id.inputId);
+        et_pw = (EditText) findViewById(R.id.inputPwd);
+        cb_save = (CheckBox) findViewById(R.id.check1);
+        btnlogin = (Button) findViewById(R.id.btn_signin);
+        loginText = (TextView) findViewById(R.id.textviewlogin);
 
-                    Intent intent = new Intent(getApplicationContext(), signin.class);
-                    startActivity(intent);
+        SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
+        autoLogin = auto.edit();
+        //처음에는 SharedPreferences에 아무런 정보도 없으므로 값을 저장할 키들을 생성한다.
+        // getString의 첫 번째 인자는 저장될 키, 두 번쨰 인자는 값입니다.
+        // 첨엔 값이 없으므로 키값은 원하는 것으로 하시고 값을 ""을 줍니다.
+        loginId = auto.getString("inputId", "");
+        loginPwd = auto.getString("inputPwd", "");
 
+
+        if(btn_login.getText().equals("로그인")) {
+
+            if ((!loginId.equals("") && !loginPwd.equals(""))) {
+                et_id.setVisibility(View.GONE);
+                et_pw.setVisibility(View.GONE);
+                cb_save.setVisibility(View.GONE);
+                btn_login.setText("로그아웃");
+                loginText.setText(loginId + "님 환영합니다");
+                Toast.makeText(MainActivity.this, loginId + "님 자동로그인완료", Toast.LENGTH_SHORT).show();
             }
-        });
 
 
-
-       // navigationMenu(btn_login,"https://kumas.dev/rotte_cinema/login.do");
-        navigationMenu(btnMovie,"https://kumas.dev/rotte_cinema/movie.do");
-        navigationMenu(btnReserve,"https://kumas.dev/rotte_cinema/ticketing.do");
-        navigationMenu(btnSchedule,"https://kumas.dev/rotte_cinema/schedule.do");
-        navigationMenu(btnCuration,"https://kumas.dev/rotte_cinema/qration.do");
-        navigationMenu(btnEvent,"https://kumas.dev/rotte_cinema/event.do");
-        navigationMenu(btnCinemaInfo,"https://kumas.dev/rotte_cinema/about.do");
-        navigationMenu(btn_reserve,"https://kumas.dev/rotte_cinema/ticketing.do");
+            btn_login.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
 
+                    //첫로그인
+                    if ((loginId.equals("") && loginPwd.equals(""))) {
+                        AutoSinIn();
 
+                    }
+                }
+            });
+        }
 
+        if(btn_login.getText().equals("로그아웃")){
 
+        }
+
+        // navigationMenu(btn_login,"https://kumas.dev/rotte_cinema/login.do");
+        navigationMenu(btnMovie, "https://kumas.dev/rotte_cinema/movie.do");
+        navigationMenu(btnReserve, "https://kumas.dev/rotte_cinema/ticketing.do");
+        navigationMenu(btnSchedule, "https://kumas.dev/rotte_cinema/schedule.do");
+        navigationMenu(btnCuration, "https://kumas.dev/rotte_cinema/qration.do");
+        navigationMenu(btnEvent, "https://kumas.dev/rotte_cinema/event.do");
+        navigationMenu(btnCinemaInfo, "https://kumas.dev/rotte_cinema/about.do");
+        navigationMenu(btn_reserve, "https://kumas.dev/rotte_cinema/ticketing.do");
 
 
         // 웹뷰 셋팅
@@ -165,8 +205,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-    void navigationMenu(Button button, String url){
+    void navigationMenu(Button button, String url) {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -304,7 +343,40 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    //   @Override
+
+    public void AutoSinIn() {
+
+        if (TextUtils.isEmpty(et_id.getText()) || TextUtils.isEmpty(et_pw.getText())) {
+            //아이디나 암호 둘 중 하나가 비어있으면 토스트메시지를 띄운다
+            Toast.makeText(MainActivity.this, "이메일/암호를 입력해주세요", Toast.LENGTH_SHORT).show();
+        }
+
+
+        //아이디 비번이 다 입력 되었을 때, 첫 로그인
+        if ((!TextUtils.isEmpty(et_id.getText()) && !TextUtils.isEmpty(et_pw.getText())) && loginId.equals("") && loginPwd.equals("")) {
+            et_id.setVisibility(View.GONE);
+            et_pw.setVisibility(View.GONE);
+            cb_save.setVisibility(View.GONE);
+            btn_login.setText("로그아웃");
+            loginText.setText(loginId+"님 환영합니다");
+            Toast.makeText(MainActivity.this, loginId + "님 자동로그인설정완료", Toast.LENGTH_SHORT).show();
+
+            boolean boo = cb_save.isChecked(); //자동로그인 체크 유무 확인
+            if (boo) { //자동로그인 체크 되어 있으면
+                //입력한 아이디와 비밀번호를 SharedPreferences.Editor를 통해
+                //auto파일의 loginId와 loginPwd에 값을 저장해 줍니다.
+
+                autoLogin.putString("inputId", et_id.getText().toString());
+                autoLogin.putString("inputPwd", et_pw.getText().toString());
+                autoLogin.putBoolean("SAVE_LOGIN_DATA", cb_save.isChecked()); //현재 체크박스 상태 값 저장
+                //꼭 commit()을 해줘야 값이 저장됩니다 ㅎㅎ
+                autoLogin.commit();
+
+            }
+
+        }
+
+        //   @Override
 //    public boolean onSupportNavigateUp() {
 //        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main3);
 //        return NavigationUI.navigateUp(navController, mAppBarConfiguration)
@@ -312,4 +384,5 @@ public class MainActivity extends AppCompatActivity {
 //    }
 
 
+    }
 }
