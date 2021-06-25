@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     EditText et_pw;
     CheckBox cb_save;
     Button btnlogin;
+    Button btnsignup;
     SharedPreferences.Editor autoLogin;
     TextView loginText;
     private AppBarConfiguration mAppBarConfiguration;
@@ -98,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
         cb_save = (CheckBox) findViewById(R.id.check1);
         btnlogin = (Button) findViewById(R.id.btn_signin);
         loginText = (TextView) findViewById(R.id.textviewlogin);
-
+        btnsignup = (Button) findViewById(R.id.btn_signup);
         SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
         autoLogin = auto.edit();
         //처음에는 SharedPreferences에 아무런 정보도 없으므로 값을 저장할 키들을 생성한다.
@@ -114,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
                 et_id.setVisibility(View.GONE);
                 et_pw.setVisibility(View.GONE);
                 cb_save.setVisibility(View.GONE);
+                btnsignup.setVisibility(View.GONE);
                 btn_login.setText("로그아웃");
                 loginText.setText(loginId + "님 환영합니다");
                 Toast.makeText(MainActivity.this, loginId + "님 자동로그인완료", Toast.LENGTH_SHORT).show();
@@ -135,7 +137,21 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if(btn_login.getText().equals("로그아웃")){
+            btn_login.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    autoLogin.clear();
+                    autoLogin.commit();
+                    et_id.setVisibility(View.VISIBLE);
+                    et_pw.setVisibility(View.VISIBLE);
+                    cb_save.setVisibility(View.VISIBLE);
+                    btnsignup.setVisibility(View.VISIBLE);
 
+                    btn_login.setText("로그인");
+                    loginText.setText("로그인 하시고 다양한 혜택을 확인하세요");
+                    Toast.makeText(MainActivity.this, "로그아웃", Toast.LENGTH_SHORT).show();
+                }
+            });
         }
 
         // navigationMenu(btn_login,"https://kumas.dev/rotte_cinema/login.do");
@@ -357,6 +373,8 @@ public class MainActivity extends AppCompatActivity {
             et_id.setVisibility(View.GONE);
             et_pw.setVisibility(View.GONE);
             cb_save.setVisibility(View.GONE);
+            btnsignup.setVisibility(View.GONE);
+
             btn_login.setText("로그아웃");
             loginText.setText(loginId+"님 환영합니다");
             Toast.makeText(MainActivity.this, loginId + "님 자동로그인설정완료", Toast.LENGTH_SHORT).show();
