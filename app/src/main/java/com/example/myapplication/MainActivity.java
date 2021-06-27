@@ -11,6 +11,7 @@ import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.PermissionRequest;
@@ -180,13 +181,16 @@ public class MainActivity extends AppCompatActivity {
         if(getTime.equals("06-27")){showNoti();}
 
 
-        Button testbutton = (Button) findViewById(R.id.btnWriteReview);
-        testbutton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showNoti();
-            }
-        });
+//        Button testbutton = (Button) findViewById(R.id.btnWriteReview);
+//        testbutton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                showNoti();
+//            }
+//        });
+
+
+
 
         // navigationMenu(btn_login,"https://kumas.dev/rotte_cinema/login.do");
         navigationMenu(btnMovie, "https://kumas.dev/rotte_cinema/movie.do");
