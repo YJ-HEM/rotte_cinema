@@ -11,7 +11,7 @@ import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.Gravity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,11 +37,37 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.ui.AppBarConfiguration;
 
+import com.google.android.gms.common.internal.ApiExceptionUtil;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
+import java.io.BufferedWriter;
+import java.io.OutputStreamWriter;
+import java.net.URLEncoder;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -72,12 +98,45 @@ public class MainActivity extends AppCompatActivity {
     SharedPreferences.Editor autoLogin;
     TextView loginText;
     private AppBarConfiguration mAppBarConfiguration;
+    private EditText etMessage;
+
+    OkHttpClient client = new OkHttpClient();
+    public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+
+    String post(String url, String json) throws IOException {
+        RequestBody body = RequestBody.create(JSON, json);
+        Request request = new Request.Builder().url(url).post(body).build();
+        Response response = client.newCall(request).execute();
+        return response.body().string();
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        MainActivity ex = new MainActivity();
+
+
+        String rootAddr = "https://kumas.dev/rotte_cinema/test.do";
+        final String Queuesource = rootAddr;
+
+
+        new Thread() {
+
+            public void run() {
+                SSLConnect ssl = new SSLConnect();
+                String response = null;
+                try {
+                    response = ex.post(ssl.httpsGet(rootAddr),null);
+                    Log.v("log2", response);
+
+                } catch (Exception e) {
+                    Log.v("log2", e.toString());
+                }
+            }
+        }.start;
 
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -112,9 +171,8 @@ public class MainActivity extends AppCompatActivity {
         loginPwd = auto.getString("inputPwd", "");
 
 
-        //자동로그인 된 상태로 앱을 켰을 때
         if (btn_login.getText().equals("로그인")) {
-
+            //자동로그인 된 상태로 앱을 켰을 때
             if ((!loginId.equals("") && !loginPwd.equals(""))) {
                 et_id.setVisibility(View.GONE);
                 et_pw.setVisibility(View.INVISIBLE);
@@ -123,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
 
 
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                params.setMargins(260,00,0,0);  // 왼쪽, 위, 오른쪽, 아래 순서입니다.
+                params.setMargins(260, 00, 0, 0);  // 왼쪽, 위, 오른쪽, 아래 순서입니다.
                 btn_login.setLayoutParams(params);
 
 
@@ -133,12 +191,12 @@ public class MainActivity extends AppCompatActivity {
             }
 
 
+            //첫로그인
             btn_login.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
 
-                    //첫로그인
                     if ((loginId.equals("") && loginPwd.equals(""))) {
                         AutoSinIn();
 
@@ -160,7 +218,7 @@ public class MainActivity extends AppCompatActivity {
                     btnsignup.setVisibility(View.VISIBLE);
 
                     LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                    params.setMargins(40,00,0,0);  // 왼쪽, 위, 오른쪽, 아래 순서입니다.
+                    params.setMargins(40, 00, 0, 0);  // 왼쪽, 위, 오른쪽, 아래 순서입니다.
                     btn_login.setLayoutParams(params);
 
                     btn_login.setText("로그인");
@@ -179,7 +237,7 @@ public class MainActivity extends AppCompatActivity {
 
         //notification 설정
         //오늘날짜가 며칠이면 알람뜨게하기
-        if (getTime.equals("06-27")) {
+        if (getTime.equals("06-28")) {
             showNoti();
         }
 
@@ -267,7 +325,7 @@ public class MainActivity extends AppCompatActivity {
         //알림창 메시지
         builder.setContentText("알림 메시지");
         //알림창 아이콘
-        builder.setSmallIcon(R.drawable.ic_iconfinder_185038_home_house_icon);
+        builder.setSmallIcon(R.drawable.ic_logo_r);
         //알림창 터치시 상단 알림상태창에서 알림이 자동으로 삭제되게 합니다.
         builder.setAutoCancel(true);
         //pendingIntent를 builder에 설정 해줍니다. //알림창 터치시 인텐트가 전달할 수 있도록 해줍니다.
@@ -354,7 +412,7 @@ public class MainActivity extends AppCompatActivity {
             btnsignup.setVisibility(View.GONE);
 
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            params.setMargins(260,00,0,0);  // 왼쪽, 위, 오른쪽, 아래 순서입니다.
+            params.setMargins(260, 00, 0, 0);  // 왼쪽, 위, 오른쪽, 아래 순서입니다.
             btn_login.setLayoutParams(params);
 
             btn_login.setText("로그아웃");
@@ -372,9 +430,98 @@ public class MainActivity extends AppCompatActivity {
                 //꼭 commit()을 해줘야 값이 저장됩니다 ㅎㅎ
                 autoLogin.commit();
 
+                //로그인 정보 서버에 보내기
+
+
             }
 
         }
 
     }
+
+
 }
+
+
+class SSLConnect {
+    public static String httpsGet(String strURL) throws Exception {
+        URL url = null;
+        HttpsURLConnection con = null;
+        String ret = new String();
+
+        try {
+            url = new URL(strURL);
+            ignoreSsl();
+            con = (HttpsURLConnection) url.openConnection();
+
+
+            BufferedReader br = null;
+            br = new BufferedReader(new InputStreamReader(con.getInputStream()));
+
+            String input = null;
+
+            while ((input = br.readLine()) != null) {
+                ret += input;
+            }
+
+            br.close();
+        } catch (IOException e) {
+            e.getStackTrace();
+        } finally {
+            if (con != null) {
+                con.disconnect();
+            }
+        }
+
+        return ret;
+
+    }
+
+    public static void ignoreSsl() throws Exception {
+        HostnameVerifier hv = new HostnameVerifier() {
+            public boolean verify(String urlHostName, SSLSession session) {
+                return true;
+            }
+        };
+        trustAllHttpsCertificates();
+        HttpsURLConnection.setDefaultHostnameVerifier(hv);
+    }
+
+
+    private static void trustAllHttpsCertificates() throws Exception {
+        TrustManager[] trustAllCerts = new TrustManager[1];
+        TrustManager tm = new miTM();
+        trustAllCerts[0] = tm;
+        SSLContext sc = SSLContext.getInstance("SSL");
+        sc.init(null, trustAllCerts, null);
+        HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+    }
+
+    static class miTM implements TrustManager, X509TrustManager {
+        public X509Certificate[] getAcceptedIssuers() {
+            return null;
+        }
+
+        public boolean isServerTrusted(X509Certificate[] certs) {
+            return true;
+        }
+
+        public boolean isClientTrusted(X509Certificate[] certs) {
+            return true;
+        }
+
+        public void checkServerTrusted(X509Certificate[] certs, String authType)
+                throws CertificateException {
+            return;
+        }
+
+        public void checkClientTrusted(X509Certificate[] certs, String authType)
+                throws CertificateException {
+            return;
+        }
+    }
+
+
+}
+
+
