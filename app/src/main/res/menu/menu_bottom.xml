@@ -20,7 +20,8 @@
         android:enabled="true"
         android:icon="@drawable/ic_iconfinder_2315959_cinema_movie_ticket_icon"
         android:title="바로예매"
-        app:showAsAction="always" />
+        app:showAsAction="always"
+        app:itemIconTint="#CC1338"/>
 
     <item
         android:id="@+id/tab4"

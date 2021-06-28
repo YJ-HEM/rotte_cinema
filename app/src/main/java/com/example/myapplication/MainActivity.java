@@ -78,6 +78,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerView = (View) findViewById(R.id.drawer);
 
@@ -89,7 +91,8 @@ public class MainActivity extends AppCompatActivity {
         Button btnEvent = (Button) findViewById(R.id.btnEvent);
         Button btnCinemaInfo = (Button) findViewById(R.id.btnCinemaInfo);
         Button btn_reserve = (Button) findViewById(R.id.btn_reserve);
-
+        Button btn_myPage = (Button) findViewById(R.id.btnMypage);
+        Button btnReview = (Button) findViewById(R.id.btnReview);
 
         //로그인구현
         et_id = (EditText) findViewById(R.id.inputId);
@@ -188,6 +191,9 @@ public class MainActivity extends AppCompatActivity {
         navigationMenu(btnEvent, "https://kumas.dev/rotte_cinema/event.do");
         navigationMenu(btnCinemaInfo, "https://kumas.dev/rotte_cinema/about.do");
         navigationMenu(btn_reserve, "https://kumas.dev/rotte_cinema/ticketing.do");
+        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!마이페이지와 리뷰 로그인 했을때와 안했을 때로 나눠서 다시 링크적어주기!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        navigationMenu(btn_myPage, "https://kumas.dev/rotte_cinema/login.do");
+        navigationMenu(btnReview, "https://kumas.dev/rotte_cinema/login.do");
 
 
         // 웹뷰 셋팅
