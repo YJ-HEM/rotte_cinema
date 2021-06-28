@@ -90,7 +90,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="10dp"
-        android:text="로그인 하시고 다양한 혜택을 확인하세요"
+        android:text="로그인 하시고 다양한 혜택을 받아가세요"
         android:textColor="@color/black"
         android:id="@+id/textviewlogin"/>
 

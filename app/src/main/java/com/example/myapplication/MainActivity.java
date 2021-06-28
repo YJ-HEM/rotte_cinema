@@ -93,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
         Button btn_reserve = (Button) findViewById(R.id.btn_reserve);
         Button btn_myPage = (Button) findViewById(R.id.btnMypage);
         Button btnReview = (Button) findViewById(R.id.btnReview);
+        Button btn_signup = (Button) findViewById(R.id.btn_signup);
 
         //로그인구현
         et_id = (EditText) findViewById(R.id.inputId);
@@ -191,6 +192,8 @@ public class MainActivity extends AppCompatActivity {
         navigationMenu(btnEvent, "https://kumas.dev/rotte_cinema/event.do");
         navigationMenu(btnCinemaInfo, "https://kumas.dev/rotte_cinema/about.do");
         navigationMenu(btn_reserve, "https://kumas.dev/rotte_cinema/ticketing.do");
+        navigationMenu(btn_signup, "https://kumas.dev/rotte_cinema/registration.do");
+
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!마이페이지와 리뷰 로그인 했을때와 안했을 때로 나눠서 다시 링크적어주기!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         navigationMenu(btn_myPage, "https://kumas.dev/rotte_cinema/login.do");
         navigationMenu(btnReview, "https://kumas.dev/rotte_cinema/login.do");
