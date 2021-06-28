@@ -13,7 +13,8 @@
     android:layout_height="310dp"
     android:orientation="vertical"
     android:background="@color/white"
-    android:paddingBottom="30dp">
+    android:paddingBottom="0dp"
+    android:id="@+id/topLayout">
 
     <EditText
         android:layout_width="200dp"
@@ -51,7 +52,8 @@
 <LinearLayout
     android:layout_width="wrap_content"
     android:layout_height="45dp"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:layout_marginTop="10dp">
         <Button
             android:id="@+id/btn_signin"
             android:layout_width="100dp"
@@ -82,11 +84,12 @@
         />
 
 </LinearLayout>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="10dp"
         android:text="로그인 하시고 다양한 혜택을 확인하세요"
         android:textColor="@color/black"
         android:id="@+id/textviewlogin"/>
@@ -97,7 +100,7 @@
         android:layout_width="220dp"
         android:layout_height="40dp"
         android:layout_gravity="center"
-        android:layout_marginTop="0dp"
+        android:layout_marginTop="10dp"
         android:layout_marginBottom="30dp"
 
         android:background="@drawable/redroundshape"
@@ -112,7 +115,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingTop="10dp">
+        android:paddingTop="0dp">
 
         <Button
             android:id="@+id/btnMovie"

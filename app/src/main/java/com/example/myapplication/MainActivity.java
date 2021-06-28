@@ -11,9 +11,10 @@ import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.PermissionRequest;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebChromeClient;
@@ -22,6 +23,7 @@ import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,7 +37,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.ui.AppBarConfiguration;
 
-import com.example.myapplication.databinding.ActivityMainBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
@@ -71,30 +72,12 @@ public class MainActivity extends AppCompatActivity {
     SharedPreferences.Editor autoLogin;
     TextView loginText;
     private AppBarConfiguration mAppBarConfiguration;
-    // private ActivityMainBinding binding;
-    //    Fragment1 fragment1;
-//    Fragment2 fragment2;
-//    private AppBarConfiguration mAppBarConfiguration;
-//    private ActivityMain3Binding binding;
-//    Main3Activity main3Activity = new Main3Activity();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        binding = ActivityMainBinding.inflate(getLayoutInflater());
-//        setContentView(binding.getRoot());
-        //    setSupportActionBar(binding.appBarMain3.toolbar);
 
-//        drawerLayout = binding.drawerLayout;
-//        navigationView = binding.navView;
-//        // Passing each menu ID as a set of Ids because each
-//        // menu should be considered as top level destinations.
-//        mAppBarConfiguration = new AppBarConfiguration.Builder(
-//                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
-//                .setDrawerLayout(drawerLayout)
-//                .build();
-//
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerView = (View) findViewById(R.id.drawer);
 
@@ -115,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
         btnlogin = (Button) findViewById(R.id.btn_signin);
         loginText = (TextView) findViewById(R.id.textviewlogin);
         btnsignup = (Button) findViewById(R.id.btn_signup);
+
         SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
         autoLogin = auto.edit();
         //처음에는 SharedPreferences에 아무런 정보도 없으므로 값을 저장할 키들을 생성한다.
@@ -124,13 +108,21 @@ public class MainActivity extends AppCompatActivity {
         loginPwd = auto.getString("inputPwd", "");
 
 
+        //자동로그인 된 상태로 앱을 켰을 때
         if (btn_login.getText().equals("로그인")) {
 
             if ((!loginId.equals("") && !loginPwd.equals(""))) {
                 et_id.setVisibility(View.GONE);
-                et_pw.setVisibility(View.GONE);
-                cb_save.setVisibility(View.GONE);
-                btnsignup.setVisibility(View.GONE);
+                et_pw.setVisibility(View.INVISIBLE);
+                cb_save.setVisibility(View.INVISIBLE);
+                btnsignup.setVisibility(View.INVISIBLE);
+
+
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                params.setMargins(260,00,0,0);  // 왼쪽, 위, 오른쪽, 아래 순서입니다.
+                btn_login.setLayoutParams(params);
+
+
                 btn_login.setText("로그아웃");
                 loginText.setText(loginId + "님 환영합니다");
                 Toast.makeText(MainActivity.this, loginId + "님 자동로그인완료", Toast.LENGTH_SHORT).show();
@@ -151,6 +143,7 @@ public class MainActivity extends AppCompatActivity {
             });
         }
 
+        //로그아웃 했을 때
         if (btn_login.getText().equals("로그아웃")) {
             btn_login.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -161,6 +154,10 @@ public class MainActivity extends AppCompatActivity {
                     et_pw.setVisibility(View.VISIBLE);
                     cb_save.setVisibility(View.VISIBLE);
                     btnsignup.setVisibility(View.VISIBLE);
+
+                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    params.setMargins(40,00,0,0);  // 왼쪽, 위, 오른쪽, 아래 순서입니다.
+                    btn_login.setLayoutParams(params);
 
                     btn_login.setText("로그인");
                     loginText.setText("로그인 하시고 다양한 혜택을 확인하세요");
@@ -178,18 +175,9 @@ public class MainActivity extends AppCompatActivity {
 
         //notification 설정
         //오늘날짜가 며칠이면 알람뜨게하기
-        if(getTime.equals("06-27")){showNoti();}
-
-
-//        Button testbutton = (Button) findViewById(R.id.btnWriteReview);
-//        testbutton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                showNoti();
-//            }
-//        });
-
-
+        if (getTime.equals("06-27")) {
+            showNoti();
+        }
 
 
         // navigationMenu(btn_login,"https://kumas.dev/rotte_cinema/login.do");
@@ -225,19 +213,21 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
                     case R.id.tab1:
-                        setFrag(0);
+                        mWebView.loadUrl("https://kumas.dev/rotte_cinema");
                         break;
                     case R.id.tab2:
-                        setFrag(1);
+                        mWebView.loadUrl("https://kumas.dev/rotte_cinema/schedule.do");
                         break;
                     case R.id.tab3:
-                        setFrag(2);
+                        mWebView.loadUrl("https://kumas.dev/rotte_cinema/ticketing.do");
                         break;
                     case R.id.tab4:
-                        setFrag(3);
+                        mWebView.loadUrl("https://kumas.dev/rotte_cinema/login.do");
                         break;
                     case R.id.tab5:
-                        setFrag(4);
+                        drawerLayout.closeDrawer(drawerView);
+
+                        drawerLayout.openDrawer(drawerView);
                         break;
 
 
@@ -245,15 +235,6 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-//
-//        fragment1 = new Fragment1();
-//        fragment2 = new Fragment2();
-        //setFrag(0); // 첫 프래그먼트 화면 지정
-
-
-        //  navigationView1.setNavigationItemSelectedListener(this);
-        //  navigationView.setNavigationItemSelectedListener(this);
-        //  navigationView.setNavigationItemSelectedListener(this);
 
 
     }
@@ -266,7 +247,9 @@ public class MainActivity extends AppCompatActivity {
             manager.createNotificationChannel(new NotificationChannel(CHANNEL_ID, CHANEL_NAME, NotificationManager.IMPORTANCE_DEFAULT));
             builder = new NotificationCompat.Builder(this, CHANNEL_ID);
             //하위 버전일 경우
-            }else{ builder = new NotificationCompat.Builder(this); }
+        } else {
+            builder = new NotificationCompat.Builder(this);
+        }
         Intent intent = new Intent(this, MainActivity.class);
         //intent.putExtra("name",name);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 101, intent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -279,193 +262,110 @@ public class MainActivity extends AppCompatActivity {
         //알림창 터치시 상단 알림상태창에서 알림이 자동으로 삭제되게 합니다.
         builder.setAutoCancel(true);
         //pendingIntent를 builder에 설정 해줍니다. //알림창 터치시 인텐트가 전달할 수 있도록 해줍니다.
-        builder.setContentIntent(pendingIntent); Notification notification = builder.build();
+        builder.setContentIntent(pendingIntent);
+        Notification notification = builder.build();
         //알림창 실행
-        manager.notify(1,notification); }
+        manager.notify(1, notification);
+    }
 
 
-
-        void navigationMenu (Button button, String url){
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    drawerLayout.closeDrawer(drawerView);
-                    mWebView.loadUrl(url);
-                }
-            });
-        }
-
-
-        //  DrawerLayout drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
-
-
-        private void setFrag ( int n){
-            fm = getSupportFragmentManager();
-            ft = fm.beginTransaction();
-            switch (n) {
-                case 0:
-                    //ft.replace(R.id.webView,fragment1);
-                    //    drawerLayout.close();
-
-                    mWebView.loadUrl("https://kumas.dev/rotte_cinema");
-
-                    break;
-
-                case 1:
-                    //      drawerLayout.close();
-
-                    mWebView.loadUrl("https://kumas.dev/rotte_cinema/schedule.do");
-
-                    break;
-
-                case 2:
-                    //      drawerLayout.close();
-
-//                ft.replace(R.id.webView,fragment2);
-                    mWebView.loadUrl("https://kumas.dev/rotte_cinema/ticketing.do");
-
-                    break;
-                case 3:
-                    //     drawerLayout.close();
-
-                    mWebView.loadUrl("https://kumas.dev/rotte_cinema/login.do");
-
-                    break;
-                case 4:
-                    drawerLayout.closeDrawer(drawerView);
-
-                    drawerLayout.openDrawer(drawerView);
-
-//                 NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main3);
-//               // NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
-//                NavigationUI.setupWithNavController(mBottomNV,navController);
-//                  NavigationUI.setupWithNavController(navigationView, navController);
-//                // binding.drawerLayout.closeDrawer(Gravity.RIGHT);
-//                // binding.drawerLayout.openDrawer(Gravity.RIGHT);
-//               onSupportNavigateUp();
-////                main3Activity.onSupportNavigateUp();
-
-                    break;
-
-
-                // Intent intent = new Intent(MainActivity.this,MainActivity2.class);
-                //  startActivity(intent);
-
-
-                // drawerLayout.open();
-
-
-            }
-        }
-
-//            @Override
-//            public boolean onNavigationItemSelected(@NonNull @NotNull MenuItem item) {
-//            Log.v("test","test");
-//                switch (item.getItemId()){
-//                    case R.id.nav_homee:
-//                        Toast.makeText(this, "item1 clicked..", Toast.LENGTH_SHORT).show();
-//
-//
-//                        mWebView.loadUrl("https://duzi077.tistory.com/167");
-//                        break;
-//
-//
-//                }
-//
-//                return false;
-//            }
-
-
-        public class SslWebViewConnect extends WebViewClient {
-
+    void navigationMenu(Button button, String url) {
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
-                handler.proceed(); // SSL 에러가 발생해도 계속 진행!
+            public void onClick(View v) {
+                drawerLayout.closeDrawer(drawerView);
+                mWebView.loadUrl(url);
             }
-
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                view.loadUrl(url);
-                return true;//응용프로그램이 직접 url를 처리함
-            }
-        }
+        });
+    }
 
 
-        private class WebViewClientClass extends WebViewClient {//페이지 이동
-
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                view.loadUrl(url);
-                return true;
-            }
-
-
-        }
-
-
-        //webView 뒤로가기버튼 - 더이상 뒤로 갈 페이지가 없을 때 2초이내에 뒤로가기를 누르면 앱 종료
-        private long backBtnTime = 0;
-
+    public class SslWebViewConnect extends WebViewClient {
 
         @Override
-        public void onBackPressed () {
-
-
-            long curTime = System.currentTimeMillis();
-            long gapTime = curTime - backBtnTime;
-            if (mWebView.canGoBack()) {
-                mWebView.goBack();
-            } else if (0 <= gapTime && 2000 >= gapTime) super.onBackPressed();
-
-            else {
-                backBtnTime = curTime;
-                Toast.makeText(getApplicationContext(), "한번 더 누르면 앱이 종료됩니다.", Toast.LENGTH_SHORT).show();
-            }
-
-
+        public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+            handler.proceed(); // SSL 에러가 발생해도 계속 진행!
         }
 
-
-        public void AutoSinIn () {
-
-            if (TextUtils.isEmpty(et_id.getText()) || TextUtils.isEmpty(et_pw.getText())) {
-                //아이디나 암호 둘 중 하나가 비어있으면 토스트메시지를 띄운다
-                Toast.makeText(MainActivity.this, "이메일/암호를 입력해주세요", Toast.LENGTH_SHORT).show();
-            }
-
-
-            //아이디 비번이 다 입력 되었을 때, 첫 로그인
-            if ((!TextUtils.isEmpty(et_id.getText()) && !TextUtils.isEmpty(et_pw.getText())) && loginId.equals("") && loginPwd.equals("")) {
-                et_id.setVisibility(View.GONE);
-                et_pw.setVisibility(View.GONE);
-                cb_save.setVisibility(View.GONE);
-                btnsignup.setVisibility(View.GONE);
-
-                btn_login.setText("로그아웃");
-                loginText.setText(loginId + "님 환영합니다");
-                Toast.makeText(MainActivity.this, loginId + "님 자동로그인설정완료", Toast.LENGTH_SHORT).show();
-
-                boolean boo = cb_save.isChecked(); //자동로그인 체크 유무 확인
-                if (boo) { //자동로그인 체크 되어 있으면
-                    //입력한 아이디와 비밀번호를 SharedPreferences.Editor를 통해
-                    //auto파일의 loginId와 loginPwd에 값을 저장해 줍니다.
-
-                    autoLogin.putString("inputId", et_id.getText().toString());
-                    autoLogin.putString("inputPwd", et_pw.getText().toString());
-                    autoLogin.putBoolean("SAVE_LOGIN_DATA", cb_save.isChecked()); //현재 체크박스 상태 값 저장
-                    //꼭 commit()을 해줘야 값이 저장됩니다 ㅎㅎ
-                    autoLogin.commit();
-
-                }
-
-            }
-
-            //   @Override
-//    public boolean onSupportNavigateUp() {
-//        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main3);
-//        return NavigationUI.navigateUp(navController, mAppBarConfiguration)
-//                || super.onSupportNavigateUp();
-//    }
-
-
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            view.loadUrl(url);
+            return true;//응용프로그램이 직접 url를 처리함
         }
     }
+
+
+    private class WebViewClientClass extends WebViewClient {//페이지 이동
+
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            view.loadUrl(url);
+            return true;
+        }
+
+
+    }
+
+
+    //webView 뒤로가기버튼 - 더이상 뒤로 갈 페이지가 없을 때 2초이내에 뒤로가기를 누르면 앱 종료
+    private long backBtnTime = 0;
+
+
+    @Override
+    public void onBackPressed() {
+
+
+        long curTime = System.currentTimeMillis();
+        long gapTime = curTime - backBtnTime;
+        if (mWebView.canGoBack()) {
+            mWebView.goBack();
+        } else if (0 <= gapTime && 2000 >= gapTime) super.onBackPressed();
+
+        else {
+            backBtnTime = curTime;
+            Toast.makeText(getApplicationContext(), "한번 더 누르면 앱이 종료됩니다.", Toast.LENGTH_SHORT).show();
+        }
+
+
+    }
+
+
+    public void AutoSinIn() {
+
+        if (TextUtils.isEmpty(et_id.getText()) || TextUtils.isEmpty(et_pw.getText())) {
+            //아이디나 암호 둘 중 하나가 비어있으면 토스트메시지를 띄운다
+            Toast.makeText(MainActivity.this, "이메일/암호를 입력해주세요", Toast.LENGTH_SHORT).show();
+        }
+
+
+        //아이디 비번이 다 입력 되었을 때, 첫 로그인
+        if ((!TextUtils.isEmpty(et_id.getText()) && !TextUtils.isEmpty(et_pw.getText())) && loginId.equals("") && loginPwd.equals("")) {
+            et_id.setVisibility(View.GONE);
+            et_pw.setVisibility(View.INVISIBLE);
+            cb_save.setVisibility(View.GONE);
+            btnsignup.setVisibility(View.GONE);
+
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            params.setMargins(260,00,0,0);  // 왼쪽, 위, 오른쪽, 아래 순서입니다.
+            btn_login.setLayoutParams(params);
+
+            btn_login.setText("로그아웃");
+            loginText.setText(loginId + "님 환영합니다");
+            Toast.makeText(MainActivity.this, loginId + "님 자동로그인설정완료", Toast.LENGTH_SHORT).show();
+
+            boolean boo = cb_save.isChecked(); //자동로그인 체크 유무 확인
+            if (boo) { //자동로그인 체크 되어 있으면
+                //입력한 아이디와 비밀번호를 SharedPreferences.Editor를 통해
+                //auto파일의 loginId와 loginPwd에 값을 저장해 줍니다.
+
+                autoLogin.putString("inputId", et_id.getText().toString());
+                autoLogin.putString("inputPwd", et_pw.getText().toString());
+                autoLogin.putBoolean("SAVE_LOGIN_DATA", cb_save.isChecked()); //현재 체크박스 상태 값 저장
+                //꼭 commit()을 해줘야 값이 저장됩니다 ㅎㅎ
+                autoLogin.commit();
+
+            }
+
+        }
+
+    }
+}
