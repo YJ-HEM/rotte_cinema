@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
             return new JSONObject(response.body().string()).getString("movies");
         }
         catch (Exception e){
-            Log.v("log2", e.toString());
+            Log.v("error", e.toString());
         }
         return null;
     }
@@ -148,23 +148,17 @@ public class MainActivity extends AppCompatActivity {
                 });
 
 
-
+        //서버에 있는 값 읽어오기
         new Thread() {
-
             public void run() {
                 try{
                     JSONArray jsonObjects = new JSONArray(post("http://kumas.dev/rotte_cinema/moviesobject.do"));
-
                     for(int i = 0; i < jsonObjects.length(); i++) {
                         Log.v("error", jsonObjects.get(i).toString());
                     }}
-
                     catch(Exception e){
                         Log.v("error", e.toString());
                     }
-
-
-
                 }
             }.start();
 
@@ -326,8 +320,6 @@ public class MainActivity extends AppCompatActivity {
 
                         drawerLayout.openDrawer(drawerView);
                         break;
-
-
                 }
                 return true;
             }
