@@ -37,24 +37,23 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.ui.AppBarConfiguration;
 
-import com.google.android.gms.common.internal.ApiExceptionUtil;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.messaging.FirebaseMessaging;
 
-import java.io.BufferedWriter;
-import java.io.OutputStreamWriter;
-import java.net.URLEncoder;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.URL;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -63,6 +62,7 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -101,13 +101,24 @@ public class MainActivity extends AppCompatActivity {
     private EditText etMessage;
 
     OkHttpClient client = new OkHttpClient();
-    public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
-    String post(String url, String json) throws IOException {
-        RequestBody body = RequestBody.create(JSON, json);
-        Request request = new Request.Builder().url(url).post(body).build();
+     String post(String url) throws IOException {
+        RequestBody formBody = new FormBody.Builder()
+                .add("", "")
+                .build();
+
+        Request request = new Request.Builder()
+                .url(url)
+                .post(formBody)
+                .build();
         Response response = client.newCall(request).execute();
-        return response.body().string();
+        try {
+            return new JSONObject(response.body().string()).getString("movies");
+        }
+        catch (Exception e){
+            Log.v("log2", e.toString());
+        }
+        return null;
     }
 
 
@@ -116,27 +127,46 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        MainActivity ex = new MainActivity();
 
+            //토큰값가져오기
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w("FIREBASE", "Fetching FCM registration token failed", task.getException());
+                            return;
+                        }
 
-        String rootAddr = "https://kumas.dev/rotte_cinema/test.do";
-        final String Queuesource = rootAddr;
+                        // Get new FCM registration token
+                        String token = task.getResult();
+
+                        // Log and toast
+                        //  String msg = getString(R.string.msg_token_fmt, token);
+                        Log.d("FIREBASE", token);
+                    }
+                });
+
 
 
         new Thread() {
 
             public void run() {
-                SSLConnect ssl = new SSLConnect();
-                String response = null;
-                try {
-                    response = ex.post(ssl.httpsGet(rootAddr),null);
-                    Log.v("log2", response);
+                try{
+                    JSONArray jsonObjects = new JSONArray(post("http://kumas.dev/rotte_cinema/moviesobject.do"));
 
-                } catch (Exception e) {
-                    Log.v("log2", e.toString());
+                    for(int i = 0; i < jsonObjects.length(); i++) {
+                        Log.v("error", jsonObjects.get(i).toString());
+                    }}
+
+                    catch(Exception e){
+                        Log.v("error", e.toString());
+                    }
+
+
+
                 }
-            }
-        }.start;
+            }.start();
 
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -440,86 +470,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-}
-
-
-class SSLConnect {
-    public static String httpsGet(String strURL) throws Exception {
-        URL url = null;
-        HttpsURLConnection con = null;
-        String ret = new String();
-
-        try {
-            url = new URL(strURL);
-            ignoreSsl();
-            con = (HttpsURLConnection) url.openConnection();
-
-
-            BufferedReader br = null;
-            br = new BufferedReader(new InputStreamReader(con.getInputStream()));
-
-            String input = null;
-
-            while ((input = br.readLine()) != null) {
-                ret += input;
-            }
-
-            br.close();
-        } catch (IOException e) {
-            e.getStackTrace();
-        } finally {
-            if (con != null) {
-                con.disconnect();
-            }
-        }
-
-        return ret;
-
-    }
-
-    public static void ignoreSsl() throws Exception {
-        HostnameVerifier hv = new HostnameVerifier() {
-            public boolean verify(String urlHostName, SSLSession session) {
-                return true;
-            }
-        };
-        trustAllHttpsCertificates();
-        HttpsURLConnection.setDefaultHostnameVerifier(hv);
-    }
-
-
-    private static void trustAllHttpsCertificates() throws Exception {
-        TrustManager[] trustAllCerts = new TrustManager[1];
-        TrustManager tm = new miTM();
-        trustAllCerts[0] = tm;
-        SSLContext sc = SSLContext.getInstance("SSL");
-        sc.init(null, trustAllCerts, null);
-        HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
-    }
-
-    static class miTM implements TrustManager, X509TrustManager {
-        public X509Certificate[] getAcceptedIssuers() {
-            return null;
-        }
-
-        public boolean isServerTrusted(X509Certificate[] certs) {
-            return true;
-        }
-
-        public boolean isClientTrusted(X509Certificate[] certs) {
-            return true;
-        }
-
-        public void checkServerTrusted(X509Certificate[] certs, String authType)
-                throws CertificateException {
-            return;
-        }
-
-        public void checkClientTrusted(X509Certificate[] certs, String authType)
-                throws CertificateException {
-            return;
-        }
-    }
 
 
 }
