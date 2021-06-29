@@ -181,9 +181,9 @@ public class MainActivity extends AppCompatActivity {
         loginPwd = auto.getString("inputPwd", "");
 
 
-        if (btn_login.getText().equals("로그인")) {
+      //  if (btn_login.getText().equals("로그인")) {
             //자동로그인 된 상태로 앱을 켰을 때
-            if ((!loginId.equals("") && !loginPwd.equals(""))) {
+            if (auto.getBoolean("SAVE_LOGIN_DATA",false)) {
                 et_id.setVisibility(View.GONE);
                 et_pw.setVisibility(View.INVISIBLE);
                 cb_save.setVisibility(View.INVISIBLE);
@@ -198,28 +198,33 @@ public class MainActivity extends AppCompatActivity {
                 btn_login.setText("로그아웃");
                 loginText.setText(loginId + "님 환영합니다");
                 Toast.makeText(MainActivity.this, loginId + "님 자동로그인완료", Toast.LENGTH_SHORT).show();
-            }
+                //  }
+
+                if (btn_login.getText().equals("로그인")) {
+                    //첫로그인
+                    btn_login.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
 
 
-            //첫로그인
-            btn_login.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+                            if ((loginId.equals("") && loginPwd.equals(""))) {
+                                AutoSinIn();
 
-
-                    if ((loginId.equals("") && loginPwd.equals(""))) {
-                        AutoSinIn();
-
-                    }
+                            }
+                        }
+                    });
                 }
-            });
-        }
+            }
 
         //로그아웃 했을 때
         if (btn_login.getText().equals("로그아웃")) {
             btn_login.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    //저장된 정보를 지운다.
+                    autoLogin.clear();
+                    autoLogin.commit();
+
                     autoLogin.clear();
                     autoLogin.commit();
                     et_id.setVisibility(View.VISIBLE);
@@ -410,36 +415,41 @@ public class MainActivity extends AppCompatActivity {
             //아이디나 암호 둘 중 하나가 비어있으면 토스트메시지를 띄운다
             Toast.makeText(MainActivity.this, "이메일/암호를 입력해주세요", Toast.LENGTH_SHORT).show();
         }
-        boolean boo = cb_save.isChecked(); //자동로그인 체크 유무 확인
-        if (boo) { //자동로그인 체크 되어 있으면
-            //입력한 아이디와 비밀번호를 SharedPreferences.Editor를 통해
-            //auto파일의 loginId와 loginPwd에 값을 저장해 줍니다.
 
-            autoLogin.putString("inputId", et_id.getText().toString());
-            autoLogin.putString("inputPwd", et_pw.getText().toString());
-            autoLogin.putBoolean("SAVE_LOGIN_DATA", cb_save.isChecked()); //현재 체크박스 상태 값 저장
-            //꼭 commit()을 해줘야 값이 저장됩니다 ㅎㅎ
-            autoLogin.commit();
-
-            //로그인 정보 서버에 보내기
-
-
-        }
 
         //아이디 비번이 다 입력 되었을 때, 첫 로그인
         if ((!TextUtils.isEmpty(et_id.getText()) && !TextUtils.isEmpty(et_pw.getText())) && loginId.equals("") && loginPwd.equals("")) {
+
+            boolean boo = cb_save.isChecked(); //자동로그인 체크 유무 확인
+            if (boo) { //자동로그인 체크 되어 있으면
+                //입력한 아이디와 비밀번호를 SharedPreferences.Editor를 통해
+                //auto파일의 loginId와 loginPwd에 값을 저장해 줍니다.
+
+                autoLogin.putString("inputId", et_id.getText().toString());
+                autoLogin.putString("inputPwd", et_pw.getText().toString());
+                autoLogin.putBoolean("SAVE_LOGIN_DATA", cb_save.isChecked()); //현재 체크박스 상태 값 저장
+                //꼭 commit()을 해줘야 값이 저장됩니다 ㅎㅎ
+                autoLogin.commit();
+
+
+                Toast.makeText(MainActivity.this, loginId + "님 자동로그인설정완료", Toast.LENGTH_SHORT).show();
+
+
+            }
+
             et_id.setVisibility(View.GONE);
             et_pw.setVisibility(View.INVISIBLE);
             cb_save.setVisibility(View.GONE);
             btnsignup.setVisibility(View.GONE);
 
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            params.setMargins(130, 00, 0, 0);  // 왼쪽, 위, 오른쪽, 아래 순서입니다.
+            params.setMargins(130, 0, 0, 0);  // 왼쪽, 위, 오른쪽, 아래 순서입니다.
             btn_login.setLayoutParams(params);
 
             btn_login.setText("로그아웃");
             loginText.setText(loginId + "님 환영합니다");
-            Toast.makeText(MainActivity.this, loginId + "님 자동로그인설정완료", Toast.LENGTH_SHORT).show();
+
+
 
 
 
