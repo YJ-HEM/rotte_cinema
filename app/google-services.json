@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "336623751844",
+    "project_id": "lottecinema-de4b5",
+    "storage_bucket": "lottecinema-de4b5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:336623751844:android:7e33f81881be77d1248c31",
+        "android_client_info": {
+          "package_name": "com.example.lottecinema"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "336623751844-b3kenb3a9v9sda9l7j3diff0g5d6jbcq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC2OojpkCxGMHq2pVyipu9hRGd2nY1GO1M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "336623751844-b3kenb3a9v9sda9l7j3diff0g5d6jbcq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

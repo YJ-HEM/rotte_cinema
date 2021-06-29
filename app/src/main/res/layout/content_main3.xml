@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer"
+    android:layout_width="280dp"
+    android:layout_height="match_parent"
+    android:layout_gravity="end"
+    android:background="#252451"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="310dp"
+        android:orientation="vertical"
+        android:background="@color/white"
+        android:paddingBottom="0dp"
+        android:id="@+id/topLayout">
+
+        <EditText
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:textColor="#000"
+            android:textSize="20dp"
+            android:id="@+id/inputId"
+            android:hint="이메일"
+            android:textColorHint="#c9c9c9"
+            android:inputType="text"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="30dp"
+            />
+        <EditText
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:textColor="#000"
+            android:textSize="20dp"
+            android:id="@+id/inputPwd"
+            android:hint="비밀번호"
+            android:textColorHint="#c9c9c9"
+            android:inputType="textPassword"
+            android:layout_gravity="center_horizontal"/>
+
+        <CheckBox
+            android:layout_width="250dp"
+            android:layout_height="30dp"
+            android:text="자동로그인"
+            android:id="@+id/check1"
+            android:textColor="@color/black"
+            android:checked="true"
+            android:layout_gravity="center"
+
+            />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
+            <Button
+                android:id="@+id/btn_signin"
+                android:layout_width="100dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/roundshape"
+                android:text="로그인"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginLeft="30dp"
+                />
+
+            <Button
+                android:layout_marginLeft="30dp"
+                android:id="@+id/btn_signup"
+                android:layout_width="100dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/roundshape"
+                android:text="회원가입"
+                android:textColor="@color/white"
+                android:textSize="20dp"
+                android:textStyle="bold"
+
+                />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:text="로그인 하시고 다양한 혜택을 받아가세요"
+            android:textColor="@color/black"
+            android:id="@+id/textviewlogin"/>
+
+
+        <Button
+            android:id="@+id/btn_reserve"
+            android:layout_width="220dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="30dp"
+
+            android:background="@drawable/redroundshape"
+            android:text="영화별 예매 ㅣ영화관별 예매 "
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnMypage"
+            android:layout_width="100dp"
+            android:layout_height="70dp"
+            android:layout_marginLeft="35dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/sidebarback"
+            android:drawableTop="@drawable/whiteprofile"
+            android:drawablePadding="5px"
+            android:singleLine="true"
+            android:text="마이페이지"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="36px"
+            tools:ignore="RtlCompat" />
+
+        <Button
+            android:id="@+id/btnReview"
+            android:layout_width="100dp"
+            android:layout_height="70dp"
+            android:layout_marginLeft="30px"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/sidebarback"
+            android:drawableTop="@drawable/ic_rating"
+            android:drawablePadding="5px"
+            android:singleLine="true"
+            android:text="리뷰작성"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="36px"
+            tools:ignore="RtlCompat" />
+
+
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="0dp">
+
+        <Button
+            android:id="@+id/btnMovie"
+            android:layout_width="100dp"
+            android:layout_height="70dp"
+            android:layout_marginLeft="35dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/sidebarback"
+            android:drawableTop="@drawable/ic_baseline_play_circle_filled_24"
+            android:drawablePadding="5px"
+            android:singleLine="true"
+            android:text="영화"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="36px"
+            tools:ignore="RtlCompat"
+
+
+            />
+
+        <Button
+            android:id="@+id/btnReserve"
+            android:layout_width="100dp"
+            android:layout_height="70dp"
+            android:layout_marginLeft="30px"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/sidebarback"
+            android:drawableTop="@drawable/ic_baseline_local_movies_24"
+            android:drawablePadding="5px"
+            android:singleLine="true"
+            android:text="영화예매"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="36px"
+            tools:ignore="RtlCompat" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnSchedule"
+            android:layout_width="100dp"
+            android:layout_height="70dp"
+            android:layout_marginLeft="35dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/sidebarback"
+            android:drawableTop="@drawable/ic_baseline_schedule_24"
+            android:drawablePadding="5px"
+            android:singleLine="true"
+            android:text="상영시간표"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="36px"
+            tools:ignore="RtlCompat" />
+
+        <Button
+            android:id="@+id/btnCuration"
+            android:layout_width="100dp"
+            android:layout_height="70dp"
+            android:layout_marginLeft="30px"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/sidebarback"
+            android:drawableTop="@drawable/ic_baseline_movie_filter_24"
+            android:drawablePadding="5px"
+            android:singleLine="true"
+            android:text="큐레이션"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="36px"
+            tools:ignore="RtlCompat" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnEvent"
+            android:layout_width="100dp"
+            android:layout_height="70dp"
+            android:layout_marginLeft="35dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/sidebarback"
+            android:drawableTop="@drawable/ic_baseline_emoji_events_24"
+            android:drawablePadding="5px"
+            android:singleLine="true"
+            android:text="이벤트"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="36px"
+            tools:ignore="RtlCompat" />
+
+        <Button
+            android:id="@+id/btnCinemaInfo"
+            android:layout_width="100dp"
+            android:layout_height="70dp"
+            android:layout_marginLeft="30px"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/sidebarback"
+            android:drawableTop="@drawable/ic_baseline_account_balance_24"
+            android:drawablePadding="5px"
+            android:singleLine="true"
+            android:text="극장소개"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="36px"
+            tools:ignore="RtlCompat" />
+
+
+
+
+    </LinearLayout>
+
+
+
+
+</LinearLayout>
