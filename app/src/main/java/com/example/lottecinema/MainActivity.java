@@ -104,7 +104,8 @@ public class MainActivity extends AppCompatActivity {
             return new JSONObject(response.body().string()).getString("");
         }
         catch (Exception e){
-            Log.v("error", e.toString());
+            Log.v("error","1"+ e.toString());
+
         }
         return null;
     }
@@ -218,11 +219,6 @@ public class MainActivity extends AppCompatActivity {
             });
 
 
-
-
-
-
-
         long now = System.currentTimeMillis();
         Date mDate = new Date(now);
         SimpleDateFormat simpleDate = new SimpleDateFormat("MM-dd");
@@ -245,8 +241,6 @@ public class MainActivity extends AppCompatActivity {
         navigationMenu(btnCinemaInfo, "https://kumas.dev/rotte_cinema/about.do");
         navigationMenu(btn_reserve, "https://kumas.dev/rotte_cinema/ticketing.do");
         navigationMenu(btn_signup, "https://kumas.dev/rotte_cinema/registration.do");
-
-        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!마이페이지와 리뷰 로그인 했을때와 안했을 때로 나눠서 다시 링크적어주기!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         navigationMenu(btn_myPage, "https://kumas.dev/rotte_cinema/login.do");
         navigationMenu(btnReview, "https://kumas.dev/rotte_cinema/login.do");
 
@@ -392,7 +386,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (autoLoginChecked==false&&(TextUtils.isEmpty(et_id.getText()) || TextUtils.isEmpty(et_pw.getText()))) {
             //아이디나 암호 둘 중 하나가 비어있으면 토스트메시지를 띄운다
-            Toast.makeText(MainActivity.this, "이메일/암호를 입력해주세요", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, "이메일/비밀번호를 입력해주세요", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -457,7 +451,7 @@ public class MainActivity extends AppCompatActivity {
                     btnsignup.setVisibility(View.VISIBLE);
 
                     LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                    params.setMargins(40, 00, 0, 0);  // 왼쪽, 위, 오른쪽, 아래 순서입니다.
+                    params.setMargins(100, 00, 0, 0);  // 왼쪽, 위, 오른쪽, 아래 순서입니다.
                     btn_login.setLayoutParams(params);
 
                     btn_login.setText("로그인");
