@@ -1,13 +1,16 @@
 package com.example.lottecinema;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.http.SslError;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -15,9 +18,12 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
 import android.webkit.PermissionRequest;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
@@ -43,13 +49,36 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.messaging.FirebaseMessaging;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpCookie;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
+import okhttp3.Cookie;
+import okhttp3.CookieJar;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -57,6 +86,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
+    public static CookieJar cookieJar = null;
 
     NotificationManager manager;
     NotificationCompat.Builder builder;
@@ -87,12 +117,12 @@ public class MainActivity extends AppCompatActivity {
     private EditText etMessage;
     SharedPreferences auto;
     OkHttpClient client = new OkHttpClient();
-    boolean autoLoginChecked ;
+    boolean autoLoginChecked;
 
     String post(String url) throws IOException {
         RequestBody formBody = new FormBody.Builder()
                 .add("email", "admin@kumas.dev")
-                .add("password","admin")
+                .add("password", "admin")
                 .build();
 
         Request request = new Request.Builder()
@@ -102,9 +132,8 @@ public class MainActivity extends AppCompatActivity {
         Response response = client.newCall(request).execute();
         try {
             return new JSONObject(response.body().string()).getString("");
-        }
-        catch (Exception e){
-            Log.v("error","1"+ e.toString());
+        } catch (Exception e) {
+            Log.v("error", "error1" + e.toString());
 
         }
         return null;
@@ -140,12 +169,12 @@ public class MainActivity extends AppCompatActivity {
         //서버에 있는 값 읽어오기
         new Thread() {
             public void run() {
-                try{
+                try {
                     JSONArray jsonObjects = new JSONArray(post("http://kumas.dev/rotte_cinema/loginobject.do"));
-                    for(int i = 0; i < jsonObjects.length(); i++) {
+                    for (int i = 0; i < jsonObjects.length(); i++) {
                         Log.v("error", jsonObjects.get(i).toString());
-                    }}
-                catch(Exception e){
+                    }
+                } catch (Exception e) {
                     Log.v("error", e.toString());
                 }
             }
@@ -175,48 +204,48 @@ public class MainActivity extends AppCompatActivity {
         loginText = (TextView) findViewById(R.id.textviewlogin);
         btnsignup = (Button) findViewById(R.id.btn_signup);
 
-         auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
+        auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
         autoLogin = auto.edit();
         //처음에는 SharedPreferences에 아무런 정보도 없으므로 값을 저장할 키들을 생성한다.
         // getString의 첫 번째 인자는 저장될 키, 두 번쨰 인자는 값입니다.
         // 첨엔 값이 없으므로 키값은 원하는 것으로 하시고 값을 ""을 줍니다.
-       loginId = auto.getString("inputId", "");
-       loginPwd = auto.getString("inputPwd", "");
-        autoLoginChecked = auto.getBoolean("SAVE_LOGIN_DATA",false);
+        loginId = auto.getString("inputId", "");
+        loginPwd = auto.getString("inputPwd", "");
+        autoLoginChecked = auto.getBoolean("SAVE_LOGIN_DATA", false);
 
         if (autoLoginChecked) {
             //자동로그인 된 상태로 앱을 켰을 때 - 체크박스의 값이 true로 저장되어있을 때
 
-                et_id.setVisibility(View.GONE);
-                et_pw.setVisibility(View.INVISIBLE);
-                cb_save.setVisibility(View.INVISIBLE);
-                btnsignup.setVisibility(View.INVISIBLE);
+            et_id.setVisibility(View.GONE);
+            et_pw.setVisibility(View.INVISIBLE);
+            cb_save.setVisibility(View.INVISIBLE);
+            btnsignup.setVisibility(View.INVISIBLE);
 
 
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                params.setMargins(260, 00, 0, 0);  // 왼쪽, 위, 오른쪽, 아래 순서입니다.
-                btn_login.setLayoutParams(params);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            params.setMargins(260, 00, 0, 0);  // 왼쪽, 위, 오른쪽, 아래 순서입니다.
+            btn_login.setLayoutParams(params);
 
 
-                btn_login.setText("로그아웃");
-                loginText.setText(loginId + "님 환영합니다");
-                Toast.makeText(MainActivity.this, loginId + "님 자동로그인완료", Toast.LENGTH_SHORT).show();
+            btn_login.setText("로그아웃");
+            loginText.setText(loginId + "님 환영합니다");
+            Toast.makeText(MainActivity.this, loginId + "님 자동로그인완료", Toast.LENGTH_SHORT).show();
+
+        }
+
+
+        //첫로그인
+        btn_login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loginId = auto.getString("inputId", "");
+                loginPwd = auto.getString("inputPwd", "");
+                autoLoginChecked = auto.getBoolean("SAVE_LOGIN_DATA", false);
+
+                AutoSinIn();
 
             }
-
-
-            //첫로그인
-            btn_login.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    loginId = auto.getString("inputId", "");
-                    loginPwd = auto.getString("inputPwd", "");
-                    autoLoginChecked = auto.getBoolean("SAVE_LOGIN_DATA",false);
-
-                        AutoSinIn();
-
-                }
-            });
+        });
 
 
         long now = System.currentTimeMillis();
@@ -384,7 +413,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void AutoSinIn() {
 
-        if (autoLoginChecked==false&&(TextUtils.isEmpty(et_id.getText()) || TextUtils.isEmpty(et_pw.getText()))) {
+        if (autoLoginChecked == false && (TextUtils.isEmpty(et_id.getText()) || TextUtils.isEmpty(et_pw.getText()))) {
             //아이디나 암호 둘 중 하나가 비어있으면 토스트메시지를 띄운다
             Toast.makeText(MainActivity.this, "이메일/비밀번호를 입력해주세요", Toast.LENGTH_SHORT).show();
             return;
@@ -405,10 +434,9 @@ public class MainActivity extends AppCompatActivity {
                 autoLogin.commit();
                 loginId = auto.getString("inputId", "");
                 loginPwd = auto.getString("inputPwd", "");
-                autoLoginChecked = auto.getBoolean("SAVE_LOGIN_DATA",false);
+                autoLoginChecked = auto.getBoolean("SAVE_LOGIN_DATA", false);
                 Toast.makeText(MainActivity.this, loginId + "님 자동로그인설정완료", Toast.LENGTH_SHORT).show();
-            }
-            else{
+            } else {
                 Toast.makeText(MainActivity.this, et_id.getText().toString() + "님 자동로그인설정완료", Toast.LENGTH_SHORT).show();
             }
 
@@ -422,12 +450,29 @@ public class MainActivity extends AppCompatActivity {
             btn_login.setLayoutParams(params);
 
             btn_login.setText("로그아웃");
-            loginText.setText(et_id.getText()  + "님 환영합니다");
-            ///////////////////////////////////////////////나중에 지워주세요//////////////////////////////////////////////////////////////////////////////
-            Log.v("login","저장확인"+loginId);
-            Log.v("login","저장확인"+loginPwd);
-            Log.v("login","저장확인"+ autoLoginChecked);
-            Log.v("login","버튼텍스트확인"+ btn_login.getText());
+            loginText.setText(et_id.getText() + "님 환영합니다");
+            Log.v("login", "저장확인" + loginId);
+            Log.v("login", "저장확인" + loginPwd);
+            Log.v("login", "저장확인" + autoLoginChecked);
+            Log.v("login", "버튼텍스트확인" + btn_login.getText());
+
+            CustomTask task = new CustomTask();
+            //execute의 매개값은
+            //sendMsg = "id="+strings[0]+"&pwd="+strings[1];
+            //doInBackround에서 사용된 문자열 배열에 필요한 값을 넣습니다.
+            //task.execute(loginId,loginPwd);
+            // 그리고 jsp로 부터 리턴값을 받아야할 때는
+            try {
+                String returns = task.execute(loginId, loginPwd).get();
+                Log.v("connectlog", returns);
+            } catch (Exception e) {
+                Log.v("connectlog", "catch" + e.toString());
+
+            }
+            //처럼 사용하시면 되는데요. get()에서 에러가 발생할 수 있어서 try catch문으로
+            //감싸야에러가 나지 않습니다.
+            task.cookie();
+
             return;
 
 
@@ -436,42 +481,103 @@ public class MainActivity extends AppCompatActivity {
         // 로그아웃 버튼 눌렀을 때
         if (btn_login.getText().equals("로그아웃")) {
 
-                    //저장된 정보를 지운다.
-                    autoLogin.clear();
-                    autoLogin.commit();
+            //저장된 정보를 지운다.
+            autoLogin.clear();
+            autoLogin.commit();
 
-                    loginId = auto.getString("inputId", "");
-                    loginPwd = auto.getString("inputPwd", "");
-                    autoLoginChecked = auto.getBoolean("SAVE_LOGIN_DATA",false);
+            loginId = auto.getString("inputId", "");
+            loginPwd = auto.getString("inputPwd", "");
+            autoLoginChecked = auto.getBoolean("SAVE_LOGIN_DATA", false);
 
 
-                    et_id.setVisibility(View.VISIBLE);
-                    et_pw.setVisibility(View.VISIBLE);
-                    cb_save.setVisibility(View.VISIBLE);
-                    btnsignup.setVisibility(View.VISIBLE);
+            et_id.setVisibility(View.VISIBLE);
+            et_pw.setVisibility(View.VISIBLE);
+            cb_save.setVisibility(View.VISIBLE);
+            btnsignup.setVisibility(View.VISIBLE);
 
-                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                    params.setMargins(100, 00, 0, 0);  // 왼쪽, 위, 오른쪽, 아래 순서입니다.
-                    btn_login.setLayoutParams(params);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            params.setMargins(100, 00, 0, 0);  // 왼쪽, 위, 오른쪽, 아래 순서입니다.
+            btn_login.setLayoutParams(params);
 
-                    btn_login.setText("로그인");
-                    loginText.setText("로그인 하시고 다양한 혜택을 확인하세요");
-                    Toast.makeText(MainActivity.this, "로그아웃", Toast.LENGTH_SHORT).show();
-                    ///////////////////////////////////////////////나중에 지워주세요//////////////////////////////////////////////////////////////////////////////
-                    Log.v("login","로그아웃시저장확인"+loginId);
-                    Log.v("login","로그아웃시저장확인"+loginPwd);
-                    Log.v("login","로그아웃시저장확인"+ autoLoginChecked);
-                    Log.v("login","버튼텍스트확인"+ btn_login.getText());
+            btn_login.setText("로그인");
+            loginText.setText("로그인 하시고 다양한 혜택을 확인하세요");
+            Toast.makeText(MainActivity.this, "로그아웃", Toast.LENGTH_SHORT).show();
+            Log.v("login", "로그아웃시저장확인" + loginId);
+            Log.v("login", "로그아웃시저장확인" + loginPwd);
+            Log.v("login", "로그아웃시저장확인" + autoLoginChecked);
+            Log.v("login", "버튼텍스트확인" + btn_login.getText());
             return;
-
 
 
         }
 
     }
 
+    HttpURLConnection conn;
 
 
+    class CustomTask extends AsyncTask<String, Void, String> {
+        String sendMsg, receiveMsg;
+
+        @Override
+        // doInBackground의 매개값이 문자열 배열인데요. 보낼 값이 여러개일 경우를 위해 배열로 합니다.
+        protected String doInBackground(String... strings) {
+            try {
+                String str;
+                URL url = new URL("http://kumas.dev/rotte_cinema/loginobject.do");//보낼 jsp 주소를 ""안에 작성합니다.
+                conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+                conn.setRequestMethod("POST");//데이터를 POST 방식으로 전송합니다.
+                OutputStreamWriter osw = new OutputStreamWriter(conn.getOutputStream());
+                sendMsg = "email=" + strings[0] + "&password=" + strings[1];//보낼 정보인데요. GET방식으로 작성합니다. ex) "id=rain483&pwd=1234";
+                //회원가입처럼 보낼 데이터가 여러 개일 경우 &로 구분하여 작성합니다.
+                osw.write(sendMsg);//OutputStreamWriter에 담아 전송합니다.
+                osw.flush();
+                //jsp와 통신이 정상적으로 되었을 때 할 코드들입니다.
+                if (conn.getResponseCode() == conn.HTTP_OK) {
+                    InputStreamReader tmp = new InputStreamReader(conn.getInputStream(), "UTF-8");
+                    BufferedReader reader = new BufferedReader(tmp);
+                    StringBuffer buffer = new StringBuffer();
+                    //jsp에서 보낸 값을 받겠죠?
+                    while ((str = reader.readLine()) != null) {
+                        buffer.append(str);
+                    }
+                    receiveMsg = buffer.toString();
+
+                } else {
+                    Log.i("connectlog", conn.getResponseCode() + "에러1");
+                    // 통신이 실패했을 때 실패한 이유를 알기 위해 로그를 찍습니다.
+                }
+
+            } catch (MalformedURLException e) {
+
+                Log.i("connectlog", e.toString() + "에러2");
+
+            } catch (IOException e) {
+                Log.i("connectlog", e.toString() + "에러3");
+
+            }
+            //jsp로부터 받은 리턴 값입니다.
+            return receiveMsg;
+        }
+
+
+    }
+
+    public static void cookie() {
+        MainActivity mainActivity = new MainActivity();
+        //전역 선언
+        String URL = "http://www.srctree.co.kr/myserver/";//base url
+//---웹뷰 로딩시 쿠키 동기화------
+//기존 쿠키 Clear
+        CookieManager cookieManager = CookieManager.getInstance();
+        cookieManager.setAcceptCookie(true);
+        cookieManager.setAcceptThirdPartyCookies(mWebView, true);
+        cookieManager.removeAllCookies(null);
+        cookieManager.flush();
+    }
 
 }
+
+
 

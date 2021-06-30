@@ -7,6 +7,7 @@ plugins {
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
+    useLibrary 'org.apache.http.legacy'
 
     defaultConfig {
         applicationId "com.example.lottecinema"
@@ -52,6 +53,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics'
 //FirebaseJobDispatcher
     implementation 'com.firebase:firebase-jobdispatcher:0.6.0'
+    implementation 'com.github.franmontiel:PersistentCookieJar:v1.0.1'
 
 
 }
