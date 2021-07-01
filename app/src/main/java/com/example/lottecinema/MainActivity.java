@@ -48,18 +48,19 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.net.HttpCookie;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import okhttp3.CookieJar;
 import okhttp3.FormBody;
@@ -100,9 +101,15 @@ public class MainActivity extends AppCompatActivity {
     private EditText etMessage;
     SharedPreferences auto;
     OkHttpClient client = new OkHttpClient();
+    WebViewClient webViewClient = new WebViewClient();
+    OkHttpClient.Builder client2 = new OkHttpClient.Builder();
     boolean autoLoginChecked;
+    static WebkitCookieManagerProxy webkitCookieManager = new WebkitCookieManagerProxy();
 
     String post(String url) throws IOException {
+
+        OkHttpClient client = new OkHttpClient.Builder().cookieJar(webkitCookieManager).build();
+
         RequestBody formBody = new FormBody.Builder()
                 .add("email", "admin@kumas.dev")
                 .add("password", "admin")
@@ -114,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
                 .build();
         Response response = client.newCall(request).execute();
         try {
-            return new JSONObject(response.body().string()).getString("");
+            return response.body().string();
         } catch (Exception e) {
             Log.v("error", "error1" + e.toString());
 
@@ -123,10 +130,29 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+
+        //서버에 있는 값 읽어오기
+        new Thread() {
+            public void run() {
+                try {
+                    JSONArray jsonObjects = new JSONArray(post("http://kumas.dev/rotte_cinema/loginobject.do"));
+
+                    for (int i = 0; i < jsonObjects.length(); i++) {
+                        Log.v("okhttp3", jsonObjects.get(i).toString());
+                    }
+                } catch (Exception e) {
+                    Log.v("okhttp3", e.toString());
+                }
+            }
+        }.start();
+
 
 
         //토큰값가져오기
@@ -149,19 +175,8 @@ public class MainActivity extends AppCompatActivity {
                 });
 
 
-        //서버에 있는 값 읽어오기
-        new Thread() {
-            public void run() {
-                try {
-                    JSONArray jsonObjects = new JSONArray(post("http://kumas.dev/rotte_cinema/loginobject.do"));
-                    for (int i = 0; i < jsonObjects.length(); i++) {
-                        Log.v("error", jsonObjects.get(i).toString());
-                    }
-                } catch (Exception e) {
-                    Log.v("error", e.toString());
-                }
-            }
-        }.start();
+
+
 
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -256,8 +271,19 @@ public class MainActivity extends AppCompatActivity {
         navigationMenu(btn_myPage, "https://kumas.dev/rotte_cinema/login.do");
         navigationMenu(btnReview, "https://kumas.dev/rotte_cinema/login.do");
 
+//        CookieSyncManager.createInstance(this);
+//        CookieManager.getInstance().removeAllCookie();
+//        CookieSyncManager.getInstance().startSync();
+//
+//        android.webkit.CookieSyncManager.createInstance(this);
+//// unrelated, just make sure cookies are generally allowed
+//        android.webkit.CookieManager.getInstance().setAcceptCookie(true);
 
-        // 웹뷰 셋팅
+// magic starts here
+        java.net.CookieHandler.setDefault(webkitCookieManager);
+
+
+
         mWebView = (WebView) findViewById(R.id.webView);//xml 자바코드 연결
         mWebView.getSettings().setJavaScriptEnabled(true);//자바스크립트 허용
 
@@ -270,6 +296,7 @@ public class MainActivity extends AppCompatActivity {
                                          if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
                                              CookieSyncManager.getInstance().sync();
                                          } else {
+
                                              CookieManager.getInstance().flush();
                                          }
                                      }
@@ -281,6 +308,11 @@ public class MainActivity extends AppCompatActivity {
                 request.grant(request.getResources());
             }
         });
+
+
+
+
+
 
 
         mBottomNV = findViewById(R.id.bottom);
@@ -562,20 +594,23 @@ public class MainActivity extends AppCompatActivity {
         }
 
         private void getCookieHeader() {//Set-Cookie에 배열로 돼있는 쿠키들을 스트링 한줄로 변환
-            List<String> cookies = conn.getHeaderFields().get("Set-Cookie");
-            //cookies -> [JSESSIONID=D3F829CE262BC65853F851F6549C7F3E; Path=/smartudy; HttpOnly] -> []가 쿠키1개임.
-            //Path -> 쿠키가 유효한 경로 ,/smartudy의 하위 경로에 위의 쿠키를 사용 가능.
-            if (cookies != null) {
-                for (String cookie : cookies) {
-                    String sessionid = cookie.split(";\\s*")[0];
-                    //JSESSIONID=FB42C80FC3428ABBEF185C24DBBF6C40를 얻음.
-                    //세션아이디가 포함된 쿠키를 얻었음.
-                    setSessionIdInSharedPref(sessionid);
-                    CookieManager.getInstance().setCookie("http://kumas.dev/rotte_cinema", sessionid);
+            Map<String, List<String>> headerFields = conn.getHeaderFields();
+            List<String> cookiesHeader = headerFields.get("Set-Cookie");
+
+            if (cookiesHeader != null) {
+                for (String cookie : cookiesHeader) {
+                    String cookieName = HttpCookie.parse(cookie).get(0).getName();
+                    String cookieValue = HttpCookie.parse(cookie).get(0).getValue();
+
+                    String cookieString = cookieName + "=" + cookieValue;
+
+                    CookieManager.getInstance().setCookie("https://example.co.kr", cookieString);
+                    Log.d("LOG", cookieString);
+
 
                 }
+                return;
             }
-            return;
         }
 
         private void setSessionIdInSharedPref(String sessionid) {
@@ -668,6 +703,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+
 }
 
 
