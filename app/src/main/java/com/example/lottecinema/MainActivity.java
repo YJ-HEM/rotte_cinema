@@ -5,11 +5,9 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.http.SslError;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -32,37 +30,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.NotificationCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.navigation.ui.AppBarConfiguration;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONArray;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.HttpCookie;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
-import java.util.Map;
 
-import okhttp3.CookieJar;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -70,7 +52,6 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
-    public static CookieJar cookieJar = null;
 
     NotificationManager manager;
     NotificationCompat.Builder builder;
@@ -80,14 +61,11 @@ public class MainActivity extends AppCompatActivity {
 
     private WebView mWebView;
     BottomNavigationView mBottomNV;
-    private FragmentManager fm;
-    private FragmentTransaction ft;
+
     static Button btn_login;
 
     DrawerLayout drawerLayout;
-    NavigationView navigationView;
-    ActionBarDrawerToggle drawerToggle;
-    Toolbar toolbar;
+
     private View drawerView;
     static String loginId, loginPwd;
     EditText et_id;
@@ -97,22 +75,20 @@ public class MainActivity extends AppCompatActivity {
     Button btnsignup;
     SharedPreferences.Editor autoLogin;
     TextView loginText;
-    private AppBarConfiguration mAppBarConfiguration;
-    private EditText etMessage;
+
     SharedPreferences auto;
-    OkHttpClient client = new OkHttpClient();
-    WebViewClient webViewClient = new WebViewClient();
-    OkHttpClient.Builder client2 = new OkHttpClient.Builder();
     boolean autoLoginChecked;
     static WebkitCookieManagerProxy webkitCookieManager = new WebkitCookieManagerProxy();
 
-    String post(String url) throws IOException {
+    //로그인 http연동
+    static String post(String url,String Id, String password, String token) throws IOException {
 
         OkHttpClient client = new OkHttpClient.Builder().cookieJar(webkitCookieManager).build();
 
         RequestBody formBody = new FormBody.Builder()
-                .add("email", "admin@kumas.dev")
-                .add("password", "admin")
+                .add("email", Id)
+                .add("password", password)
+                .add("token",token)
                 .build();
 
         Request request = new Request.Builder()
@@ -138,20 +114,8 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        //서버에 있는 값 읽어오기
-        new Thread() {
-            public void run() {
-                try {
-                    JSONArray jsonObjects = new JSONArray(post("http://kumas.dev/rotte_cinema/loginobject.do"));
 
-                    for (int i = 0; i < jsonObjects.length(); i++) {
-                        Log.v("okhttp3", jsonObjects.get(i).toString());
-                    }
-                } catch (Exception e) {
-                    Log.v("okhttp3", e.toString());
-                }
-            }
-        }.start();
+
 
 
 
@@ -167,6 +131,21 @@ public class MainActivity extends AppCompatActivity {
 
                         // Get new FCM registration token
                         String token = task.getResult();
+                        autoLogin.putString("token", token);
+                        //웹 있는 값 읽어오기
+                        new Thread() {
+                            public void run() {
+                                try {
+                                    JSONArray jsonObjects = new JSONArray(post("http://kumas.dev/rotte_cinema/loginobject.do","admin@kumas.dev","admin",token));
+
+                                    for (int i = 0; i < jsonObjects.length(); i++) {
+                                        Log.v("okhttp3", jsonObjects.get(i).toString());
+                                    }
+                                } catch (Exception e) {
+                                    Log.v("okhttp3", e.toString());
+                                }
+                            }
+                        }.start();
 
                         // Log and toast
                         //  String msg = getString(R.string.msg_token_fmt, token);
@@ -271,15 +250,8 @@ public class MainActivity extends AppCompatActivity {
         navigationMenu(btn_myPage, "https://kumas.dev/rotte_cinema/login.do");
         navigationMenu(btnReview, "https://kumas.dev/rotte_cinema/login.do");
 
-//        CookieSyncManager.createInstance(this);
-//        CookieManager.getInstance().removeAllCookie();
-//        CookieSyncManager.getInstance().startSync();
-//
-//        android.webkit.CookieSyncManager.createInstance(this);
-//// unrelated, just make sure cookies are generally allowed
-//        android.webkit.CookieManager.getInstance().setAcceptCookie(true);
 
-// magic starts here
+        //로그인성공하면 이거를??
         java.net.CookieHandler.setDefault(webkitCookieManager);
 
 
@@ -308,11 +280,6 @@ public class MainActivity extends AppCompatActivity {
                 request.grant(request.getResources());
             }
         });
-
-
-
-
-
 
 
         mBottomNV = findViewById(R.id.bottom);
@@ -460,6 +427,15 @@ public class MainActivity extends AppCompatActivity {
                 loginId = auto.getString("inputId", "");
                 loginPwd = auto.getString("inputPwd", "");
                 autoLoginChecked = auto.getBoolean("SAVE_LOGIN_DATA", false);
+
+
+//                //아이디 비번이 다 입력되면, loginobeject 웹에 아이디비번을 보내서 음..
+//                HttpLoginThread httpLoginThread = new HttpLoginThread();
+//                httpLoginThread.run(loginId,loginPwd);
+//             //   jsonObjects.get(i).toString();
+
+
+
                 Toast.makeText(MainActivity.this, loginId + "님 자동로그인설정완료", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(MainActivity.this, et_id.getText().toString() + "님 자동로그인설정완료", Toast.LENGTH_SHORT).show();
@@ -481,21 +457,7 @@ public class MainActivity extends AppCompatActivity {
             Log.v("login", "저장확인" + autoLoginChecked);
             Log.v("login", "버튼텍스트확인" + btn_login.getText());
 
-            CustomTask task = new CustomTask();
-            //execute의 매개값은
-            //sendMsg = "id="+strings[0]+"&pwd="+strings[1];
-            //doInBackround에서 사용된 문자열 배열에 필요한 값을 넣습니다.
-            //task.execute(loginId,loginPwd);
-            // 그리고 jsp로 부터 리턴값을 받아야할 때는
-            try {
-                String returns = task.execute(loginId, loginPwd).get();
-                Log.v("connectlog", returns);
-            } catch (Exception e) {
-                Log.v("connectlog", "catch" + e.toString());
 
-            }
-            //처럼 사용하시면 되는데요. get()에서 에러가 발생할 수 있어서 try catch문으로
-            //감싸야에러가 나지 않습니다.
 
             return;
 
@@ -537,175 +499,20 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    HttpURLConnection conn;
-    HttpURLConnection conn2;
-
-    class CustomTask extends AsyncTask<String, Void, String> {
-        String sendMsg, receiveMsg;
-
-        @Override
-        // doInBackground의 매개값이 문자열 배열인데요. 보낼 값이 여러개일 경우를 위해 배열로 합니다.
-        protected String doInBackground(String... strings) {
-            try {
-                String str;
-                URL url = new URL("http://kumas.dev/rotte_cinema/loginobject.do");//보낼 jsp 주소를 ""안에 작성합니다.
-                conn = (HttpURLConnection) url.openConnection();
-                conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-                conn.setRequestMethod("POST");//데이터를 POST 방식으로 전송합니다.
-                conn.setDefaultUseCaches(false);
-                conn.setUseCaches(false);
-                conn.setDoInput(true);
-                conn.setDoOutput(true);
-                setCookieHeader();
-                OutputStreamWriter osw = new OutputStreamWriter(conn.getOutputStream());
-//                osw.flush();
-//                osw.close();
-                sendMsg = "email=" + strings[0] + "&password=" + strings[1];//보낼 정보인데요. GET방식으로 작성합니다. ex) "id=rain483&pwd=1234";
-                //회원가입처럼 보낼 데이터가 여러 개일 경우 &로 구분하여 작성합니다.
-                osw.write(sendMsg);//OutputStreamWriter에 담아 전송합니다.
-                osw.flush();
-                osw.close();
-                //jsp와 통신이 정상적으로 되었을 때 할 코드들입니다.
-                if (conn.getResponseCode() == conn.HTTP_OK) {
-                    InputStreamReader tmp = new InputStreamReader(conn.getInputStream(), "UTF-8");
-                    BufferedReader reader = new BufferedReader(tmp);
-                    StringBuffer buffer = new StringBuffer();
-                    //jsp에서 보낸 값을 받겠죠?
-                    while ((str = reader.readLine()) != null) {
-                        buffer.append(str);
-                    }
-                    receiveMsg = buffer.toString();
-                    getCookieHeader();
-                } else {
-                    Log.i("connectlog", conn.getResponseCode() + "에러1");
-                    // 통신이 실패했을 때 실패한 이유를 알기 위해 로그를 찍습니다.
-                }
-
-            } catch (MalformedURLException e) {
-
-                Log.i("connectlog", e.toString() + "에러2");
-
-            } catch (IOException e) {
-                Log.i("connectlog", e.toString() + "에러3");
-
-            }
-            //jsp로부터 받은 리턴 값입니다.
-            return receiveMsg;
-        }
-
-        private void getCookieHeader() {//Set-Cookie에 배열로 돼있는 쿠키들을 스트링 한줄로 변환
-            Map<String, List<String>> headerFields = conn.getHeaderFields();
-            List<String> cookiesHeader = headerFields.get("Set-Cookie");
-
-            if (cookiesHeader != null) {
-                for (String cookie : cookiesHeader) {
-                    String cookieName = HttpCookie.parse(cookie).get(0).getName();
-                    String cookieValue = HttpCookie.parse(cookie).get(0).getValue();
-
-                    String cookieString = cookieName + "=" + cookieValue;
-
-                    CookieManager.getInstance().setCookie("https://example.co.kr", cookieString);
-                    Log.d("LOG", cookieString);
-
-
-                }
-                return;
-            }
-        }
-
-        private void setSessionIdInSharedPref(String sessionid) {
-            SharedPreferences pref = getSharedPreferences("sessionCookie", Context.MODE_PRIVATE);
-            SharedPreferences.Editor edit = pref.edit();
-            if (pref.getString("sessionid", null) == null) { //처음 로그인하여 세션아이디를 받은 경우
-                Log.d("LOG", "처음 로그인하여 세션 아이디를 pref에 넣었습니다." + sessionid);
-            } else if (!pref.getString("sessionid", null).equals(sessionid)) { //서버의 세션 아이디 만료 후 갱신된 아이디가 수신된경우
-                Log.d("LOG", "기존의 세션 아이디" + pref.getString("sessionid", null) + "가 만료 되어서 "
-                        + "서버의 세션 아이디 " + sessionid + " 로 교체 되었습니다.");
-            }
-            edit.putString("sessionid", sessionid);
-            edit.apply(); //비동기 처리
-        }
-
-
-        private void setCookieHeader() {
-            SharedPreferences pref = getSharedPreferences("sessionCookie", Context.MODE_PRIVATE);
-            String sessionid = pref.getString("sessionid", null);
-            if (sessionid != null) {
-                Log.d("LOG", "세션 아이디" + sessionid + "가 요청 헤더에 포함 되었습니다.");
-                try {
-                    URL url = new URL("http://kumas.dev/rotte_cinema/login.do");//보낼 jsp 주소를 ""안에 작성합니다.
-                    conn2 = (HttpURLConnection) url.openConnection();
-                    conn2.setRequestProperty("Cookie", sessionid);
-                } catch (Exception e) {
-                }
-
-            }
-
-//        class CustomTask2 extends AsyncTask<String, Void, String> {
-//            String sendMsg, receiveMsg;
-//
-//            @Override
-//            // doInBackground의 매개값이 문자열 배열인데요. 보낼 값이 여러개일 경우를 위해 배열로 합니다.
-//            protected String doInBackground(String... strings) {
-//                try {
-//                    String str;
-//                    URL url = new URL("http://kumas.dev/rotte_cinema/login.do");//보낼 jsp 주소를 ""안에 작성합니다.
-//                    conn2 = (HttpURLConnection) url.openConnection();
-//                    conn2.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-//                    conn2.setRequestMethod("POST");//데이터를 POST 방식으로 전송합니다.
-//                    conn2.setDefaultUseCaches(false);
-//                    conn2.setUseCaches(false);
-//                    conn2.setDoInput(true);
-//                    conn2.setDoOutput(true);
-//                    setCookieHeader();
-//               //     OutputStreamWriter osw = new OutputStreamWriter(conn.getOutputStream());
-////                osw.flush();
-////                osw.close();
-//                   // sendMsg = "email=" + strings[0] + "&password=" + strings[1];//보낼 정보인데요. GET방식으로 작성합니다. ex) "id=rain483&pwd=1234";
-//                    //회원가입처럼 보낼 데이터가 여러 개일 경우 &로 구분하여 작성합니다.
-////                    osw.write(sendMsg);//OutputStreamWriter에 담아 전송합니다.
-////                    osw.flush();
-////                    osw.close();
-//                    //jsp와 통신이 정상적으로 되었을 때 할 코드들입니다.
-//                    if (conn.getResponseCode() == conn.HTTP_OK) {
-//                        Log.i("connectlog", "아마쿠키들어감?");
-//
-////                        InputStreamReader tmp = new InputStreamReader(conn.getInputStream(), "UTF-8");
-////                        BufferedReader reader = new BufferedReader(tmp);
-////                        StringBuffer buffer = new StringBuffer();
-////                        //jsp에서 보낸 값을 받겠죠?
-////                        while ((str = reader.readLine()) != null) {
-////                            buffer.append(str);
-////                        }
-////                        receiveMsg = buffer.toString();
-//                    //    getCookieHeader();
-//                    } else {
-//                        Log.i("connectlog", conn.getResponseCode() + "에러1");
-//                        // 통신이 실패했을 때 실패한 이유를 알기 위해 로그를 찍습니다.
-//                    }
-//
-//                } catch (MalformedURLException e) {
-//
-//                    Log.i("connectlog", e.toString() + "에러2");
-//
-//                } catch (IOException e) {
-//                    Log.i("connectlog", e.toString() + "에러3");
-//
-//                }
-//                //jsp로부터 받은 리턴 값입니다.
-//              //  return receiveMsg;
-//                return null;
-//            }
-//        }
-
-
-        }
-
-
-    }
-
-
 }
 
+//class HttpLoginThread extends Thread{
+//    public void run(String httpId, String httpPassword) {
+//        try {
+//            JSONArray jsonObjects = new JSONArray(MainActivity.post("http://kumas.dev/rotte_cinema/loginobject.do",httpId,httpPassword));
+//
+//            for (int i = 0; i < jsonObjects.length(); i++) {
+//                Log.v("okhttp3", jsonObjects.get(i).toString());
+//            }
+//        } catch (Exception e) {
+//            Log.v("okhttp3", e.toString());
+//        }
+//    }
+//}
 
 
