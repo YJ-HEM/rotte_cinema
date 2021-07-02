@@ -12,11 +12,15 @@ import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
 import com.firebase.jobdispatcher.FirebaseJobDispatcher;
 import com.firebase.jobdispatcher.GooglePlayDriver;
 import com.firebase.jobdispatcher.Job;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -24,9 +28,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String TAG = "MyFirebaseMsgService";
 
     //푸시 알림 설정
-    private String title ="";
-    private String body ="";
-    private String color ="";
+    private String title = "";
+    private String body = "";
+    private String color = "";
 
 
     // [START receive_message]
@@ -57,8 +61,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         //Notification 사용했을때 data 가져오기
         if (remoteMessage.getNotification() != null) {
-            title=remoteMessage.getNotification().getTitle();
-            body=remoteMessage.getNotification().getBody();
+            title = remoteMessage.getNotification().getTitle();
+            body = remoteMessage.getNotification().getBody();
             Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getColor());
             Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getIcon());
             Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getTitle());
@@ -74,16 +78,34 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     // [START on_new_token]
 
+
+    //토큰값이 새로 만들어지면 실행되는 함수
     @Override
     public void onNewToken(String token) {
         Log.d(TAG, "Refreshed token: " + token);
-
+        MainActivity mainActivity = new MainActivity();
         // If you want to send messages to this application instance or
         // manage this apps subscriptions on the server side, send the
         // Instance ID token to your app server.
-        sendRegistrationToServer(token);
+        //토큰값가져오기
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        //토큰가져오기 실패
+                        if (!task.isSuccessful()) {
+                            Log.w("FIREBASE", "Fetching FCM registration token failed", task.getException());
+                            return;
+                        }
+                        // 토큰 가져와서 sharedpreference에 저장
+                        MainActivity.token = task.getResult();
+                        mainActivity.autoLogin.putString("token", MainActivity.token);
+                        Log.d("FIREBASE", MainActivity.token);
+                        // sendRegistrationToServer(token);
+                    }
+                    // [END on_new_token]
+                });
     }
-    // [END on_new_token]
 
     private void scheduleJob() {
         // [START dispatch_job]
@@ -99,6 +121,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private void handleNow() {
         Log.d(TAG, "Short lived task is done.");
     }
+
     private void sendRegistrationToServer(String token) {
         // TODO: Implement this method to send token to your app server.
     }
