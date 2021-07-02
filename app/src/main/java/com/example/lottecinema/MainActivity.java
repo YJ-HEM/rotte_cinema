@@ -36,8 +36,6 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import org.json.JSONObject;
-
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -50,13 +48,14 @@ import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
 
-    static  String token;
+    static String token;
 
     NotificationManager manager;
     NotificationCompat.Builder builder;
     private static String CHANNEL_ID = "channel1";
     private static String CHANEL_NAME = "Channel1";
-
+    static SharedPreferences auto;
+    static SharedPreferences.Editor autoLogin;
 
     private WebView mWebView;
     BottomNavigationView mBottomNV;
@@ -66,20 +65,19 @@ public class MainActivity extends AppCompatActivity {
     DrawerLayout drawerLayout;
 
     private View drawerView;
-    static String loginId, loginPwd;
+    static String loginId, loginPwd, storedUserName;
     EditText et_id;
     EditText et_pw;
     CheckBox cb_save;
     Button btnlogin;
     Button btnsignup;
-    SharedPreferences.Editor autoLogin;
     TextView loginText;
 
-    SharedPreferences auto;
     boolean autoLoginChecked;
     static WebkitCookieManagerProxy webkitCookieManager = new WebkitCookieManagerProxy();
+    HttpLoginThread httpLoginThread;
 
-    //로그인 http연동
+
     static String post(String url, String HttpConnectID, String HttpConnectPW, String token) throws IOException {
 
         //앱 쿠키매니저에 쿠키를 저장한다 (아마?)
@@ -108,9 +106,12 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
+        autoLogin = auto.edit();
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerView = (View) findViewById(R.id.drawer);
@@ -135,14 +136,15 @@ public class MainActivity extends AppCompatActivity {
         loginText = (TextView) findViewById(R.id.textviewlogin);
         btnsignup = (Button) findViewById(R.id.btn_signup);
 
-        auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
-        autoLogin = auto.edit();
+
         //처음에는 SharedPreferences에 아무런 정보도 없으므로 값을 저장할 키들을 생성한다.
         // getString의 첫 번째 인자는 저장될 키, 두 번쨰 인자는 값입니다.
         // 첨엔 값이 없으므로 키값은 원하는 것으로 하시고 값을 ""을 줍니다.
         loginId = auto.getString("inputId", "");
         loginPwd = auto.getString("inputPwd", "");
+        storedUserName = auto.getString("userName", "");
         autoLoginChecked = auto.getBoolean("SAVE_LOGIN_DATA", false);
+
 
         if (autoLoginChecked) {
             //자동로그인 된 상태로 앱을 켰을 때 - 체크박스의 값이 true로 저장되어있을 때
@@ -153,16 +155,15 @@ public class MainActivity extends AppCompatActivity {
             btnsignup.setVisibility(View.INVISIBLE);
 
 
+            //버튼 위치 조정
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             params.setMargins(260, 00, 0, 0);  // 왼쪽, 위, 오른쪽, 아래 순서입니다.
             btn_login.setLayoutParams(params);
 
 
             btn_login.setText("로그아웃");
-            loginText.setText(loginId + "님 환영합니다");
-            Toast.makeText(MainActivity.this, loginId + "님 자동로그인완료", Toast.LENGTH_SHORT).show();
-
-
+            loginText.setText(storedUserName + "님 환영합니다");
+            Toast.makeText(MainActivity.this, storedUserName + "님 자동로그인완료", Toast.LENGTH_SHORT).show();
         }
 
 
@@ -205,12 +206,24 @@ public class MainActivity extends AppCompatActivity {
         navigationMenu(btn_myPage, "https://kumas.dev/rotte_cinema/login.do");
         navigationMenu(btnReview, "https://kumas.dev/rotte_cinema/login.do");
 
+//        CookieSyncManager.createInstance(this);
+//        CookieManager.getInstance().removeAllCookie();
+//        CookieSyncManager.getInstance().startSync();
+//
+//        android.webkit.CookieSyncManager.createInstance(this);
+//        // unrelated, just make sure cookies are generally allowed
+//        android.webkit.CookieManager.getInstance().setAcceptCookie(true);
+//
+//        //웹에 앱의 쿠키매니저 연동하기
+//        java.net.CookieHandler.setDefault(webkitCookieManager);
+
+
         CookieSyncManager.createInstance(this);
         CookieManager.getInstance().removeAllCookie();
         CookieSyncManager.getInstance().startSync();
 
         android.webkit.CookieSyncManager.createInstance(this);
-// unrelated, just make sure cookies are generally allowed
+        // unrelated, just make sure cookies are generally allowed
         android.webkit.CookieManager.getInstance().setAcceptCookie(true);
 
         //웹에 앱의 쿠키매니저 연동하기
@@ -233,6 +246,7 @@ public class MainActivity extends AppCompatActivity {
                     CookieManager.getInstance().flush();
                 }
             }
+
         });
         //ssl 인증이 없는 경우 해결을 위한 부분
         mWebView.setWebChromeClient(new WebChromeClient() {
@@ -365,6 +379,12 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void AutoSinIn() {
+        token = auto.getString("token", "");
+        Login login = new Login();
+        login.setID(et_id.getText().toString());
+        login.setPW(et_pw.getText().toString());
+        login.setToken(token);
+        httpLoginThread = new HttpLoginThread(login);
 
         if (autoLoginChecked == false && (TextUtils.isEmpty(et_id.getText()) || TextUtils.isEmpty(et_pw.getText()))) {
             //아이디나 암호 둘 중 하나가 비어있으면 토스트메시지를 띄운다
@@ -383,22 +403,30 @@ public class MainActivity extends AppCompatActivity {
                 autoLogin.commit();
                 autoLoginChecked = auto.getBoolean("SAVE_LOGIN_DATA", false);
 
-                String userName;
+
                 String loginResult;
                 //아이디 비번이 다 입력되면, loginobeject 웹에 아이디비번토큰을 보낸다
                 //http에 데이터(토큰,아이디,비밀번호) 보내고 성공/실패 값 읽어오기
-                HttpLoginThread httpLoginThread = new HttpLoginThread(et_id.getText().toString(), et_pw.getText().toString());
                 httpLoginThread.start();
-                //만약 result가 seuccess이면
+                //httpLoginThread쓰레드 완료시까지 메인쓰레드 대기
+                try {
+                    httpLoginThread.join();
+                } catch (Exception e) {
+                }
+                ;
+                //만약 result가 connect이면
                 //입력한 아이디와 비밀번호를 SharedPreferences.Editor를 통해
-                //auto파일의 loginId와 loginPwd에 값을 저장해 줍니다.
-                if(httpLoginThread.loginResult.equals("success")){
+                //auto파일의 loginId와 loginPwd, storedUserName에 값을 저장해 줍니다.
+                if (login.getLoginResult().equals("connect")) {
                     autoLogin.putString("inputId", et_id.getText().toString());
                     autoLogin.putString("inputPwd", et_pw.getText().toString());
+                    autoLogin.putString("userName", login.getName());
                     autoLogin.commit();
                     loginId = auto.getString("inputId", "");
                     loginPwd = auto.getString("inputPwd", "");
-                    Toast.makeText(MainActivity.this, loginId + "님 자동로그인설정완료", Toast.LENGTH_SHORT).show();
+                    storedUserName = auto.getString("userName", "");
+
+                    Toast.makeText(MainActivity.this, storedUserName + "님 자동로그인설정완료", Toast.LENGTH_SHORT).show();
                 }
                 //만약 result가 fail이면
                 else {
@@ -409,18 +437,25 @@ public class MainActivity extends AppCompatActivity {
             else {
                 //아이디 비번이 다 입력되면, loginobeject 웹에 아이디비번토큰을 보낸다
                 //http에 데이터(토큰,아이디,비밀번호) 보내고 성공/실패 값 읽어오기
-                HttpLoginThread httpLoginThread = new HttpLoginThread(et_id.getText().toString(), et_pw.getText().toString());
                 httpLoginThread.start();
-                //만약 result가 seuccess이면 토스트를 띄워줍니다. sharedpreference에는 저장x
-                if (httpLoginThread.loginResult.equals("success")) {
-                    Toast.makeText(MainActivity.this, et_id.getText().toString() + "님 자동로그인설정완료", Toast.LENGTH_SHORT).show();
+                //httpLoginThread쓰레드 완료시까지 메인쓰레드 대기
+                try {
+                    httpLoginThread.join();
+                } catch (Exception e) {
+                }
+                ;
+                //만약 result가 connect이면 토스트를 띄워줍니다. sharedpreference에는 저장x
+                if (login.getLoginResult().equals("connect")) {
+                    Toast.makeText(MainActivity.this, login.getName() + "님 자동로그인설정완료", Toast.LENGTH_SHORT).show();
                 }
                 //만약 result가 fail이면
-                else{
+                else {
                     Toast.makeText(MainActivity.this, "이메일/비밀번호를 다시 확인해주세요", Toast.LENGTH_SHORT).show();
                 }
+
             }
 
+            Log.v("okhttp3", login.getLoginResult() + login.getName());
             et_id.setVisibility(View.GONE);
             et_pw.setVisibility(View.INVISIBLE);
             cb_save.setVisibility(View.GONE);
@@ -431,12 +466,17 @@ public class MainActivity extends AppCompatActivity {
             btn_login.setLayoutParams(params);
 
             btn_login.setText("로그아웃");
-            loginText.setText(et_id.getText() + "님 환영합니다");
+            loginText.setText(login.getName() + "님 환영합니다");
             Log.v("login", "저장확인" + loginId);
             Log.v("login", "저장확인" + loginPwd);
             Log.v("login", "저장확인" + autoLoginChecked);
             Log.v("login", "버튼텍스트확인" + btn_login.getText());
 
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                CookieSyncManager.getInstance().sync();
+            } else {
+                CookieManager.getInstance().flush();
+            }
 
             return;
 
@@ -445,15 +485,26 @@ public class MainActivity extends AppCompatActivity {
 
         // 로그아웃 버튼 눌렀을 때 - http에 토큰값을 넣어서 보낸다. 그러면 웹쪽에서 세션을 끊어주고, 앱.웹에서 다 로그아웃이 된다.
         if (btn_login.getText().equals("로그아웃")) {
-
-            //저장된 정보를 지운다.(아이디,비밀번호,자동로그인체크여부 만) 토큰은 앱이 삭제되지 않는이상 새로생성되지 않으니 계속저장해둔다.
+            login.setID(null);
+            login.setPW(null);
+            Log.v("okhttp3", login.getToken());
+            httpLoginThread.start();
+            //httpLoginThread쓰레드 완료시까지 메인쓰레드 대기
+            try {
+                httpLoginThread.join();
+            } catch (Exception e) {
+            }
+            ;
+            //저장된 정보를 지운다.(아이디,비밀번호, 이름, 자동로그인체크여부 만) 토큰은 앱이 삭제되지 않는이상 새로생성되지 않으니 계속저장해둔다.
             autoLogin.remove("inputID");
             autoLogin.remove("inputPwd");
+            autoLogin.remove("userName");
             autoLogin.remove("SAVE_LOGIN_DATA");
             autoLogin.commit();
 
             loginId = auto.getString("inputId", "");
             loginPwd = auto.getString("inputPwd", "");
+            storedUserName = auto.getString("userName", "");
             autoLoginChecked = auto.getBoolean("SAVE_LOGIN_DATA", false);
 
 
@@ -480,30 +531,30 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-}
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.v("test","test");
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            CookieSyncManager.getInstance().startSync();
+        }else {
+            CookieManager.getInstance().flush();}
 
-class HttpLoginThread extends Thread{
-
-    MainActivity mainActivity = new MainActivity();
-    String ID;
-    String PW;
-    String userName;
-    String loginResult;
-    public HttpLoginThread(String ID, String PW){
-        this.ID=ID;
-        this.PW=PW;
     }
-        public void run() {
-            try {
-                JSONObject jsonObject = new JSONObject(mainActivity.post("http://kumas.dev/rotte_cinema/loginobject.do", this.ID, this.PW, mainActivity.token));
-                userName = jsonObject.get("name").toString();
-                loginResult = jsonObject.get("result").toString();
-                Log.v("okhttp3", loginResult + userName + mainActivity.token);
-            } catch (Exception e) {
-                Log.v("okhttp3", "error   " + e.toString());
-            }
-        }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            CookieSyncManager.getInstance().stopSync();
+        }else {
+            CookieManager.getInstance().flush();}
+    }
+
 
 }
+
+
 
 

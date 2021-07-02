@@ -83,7 +83,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onNewToken(String token) {
         Log.d(TAG, "Refreshed token: " + token);
-        MainActivity mainActivity = new MainActivity();
         // If you want to send messages to this application instance or
         // manage this apps subscriptions on the server side, send the
         // Instance ID token to your app server.
@@ -99,7 +98,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                         }
                         // 토큰 가져와서 sharedpreference에 저장
                         MainActivity.token = task.getResult();
-                        mainActivity.autoLogin.putString("token", MainActivity.token);
+                        MainActivity.autoLogin.putString("token", MainActivity.token);
                         Log.d("FIREBASE", MainActivity.token);
                         // sendRegistrationToServer(token);
                     }
