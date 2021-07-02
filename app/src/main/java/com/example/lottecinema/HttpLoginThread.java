@@ -13,7 +13,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class HttpLoginThread extends Thread{
-
+    Login login;
    static String post(String url, String HttpId, String HttpPW, String token) throws IOException {
 
         //앱 쿠키jar에 쿠키를 저장한다 (아마?)
@@ -34,7 +34,7 @@ public class HttpLoginThread extends Thread{
 
         return response.body().string();
     }
-    Login login;
+
 
 
 
