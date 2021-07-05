@@ -217,7 +217,15 @@ public class MainActivity extends AppCompatActivity {
         navigationMenu(btn_reserve, "https://kumas.dev/rotte_cinema/ticketing.do");
         navigationMenu(btn_signup, "https://kumas.dev/rotte_cinema/registration.do");
         navigationMenu(btn_myPage, "https://kumas.dev/rotte_cinema/login.do");
-        navigationMenu(btnReview, "https://kumas.dev/rotte_cinema/login.do");
+
+        //리뷰버튼 클릭 시 리뷰 intent로
+        btnReview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), Review.class);
+                startActivity(intent);
+            }
+        });
 
 
 //        CookieSyncManager.createInstance(this);
