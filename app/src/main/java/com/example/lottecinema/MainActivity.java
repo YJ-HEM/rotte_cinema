@@ -143,6 +143,10 @@ public class MainActivity extends AppCompatActivity {
             login.setToken(token);
 
 
+            if(httpLoginThread.isAlive()){
+                httpLoginThread.interrupt();
+            }
+            httpLoginThread = new HttpLoginThread(login);
             httpLoginThread.start();
             //httpLoginThread쓰레드 완료시까지 메인쓰레드 대기
             try {
@@ -397,7 +401,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void AutoSinIn() {
-        token = auto.getString("token", "");
         login.setID(et_id.getText().toString());
         login.setPW(et_pw.getText().toString());
         login.setToken(token);
@@ -423,8 +426,12 @@ public class MainActivity extends AppCompatActivity {
                 String loginResult;
                 //아이디 비번이 다 입력되면, loginobeject 웹에 아이디비번토큰을 보낸다
                 //http에 데이터(토큰,아이디,비밀번호) 보내고 성공/실패 값 읽어오기
+                if(httpLoginThread.isAlive()){
+                    httpLoginThread.interrupt();
+                }
+                httpLoginThread = new HttpLoginThread(login);
+                httpLoginThread.start();
 
-               httpLoginThread.start();
 
                 //httpLoginThread쓰레드 완료시까지 메인쓰레드 대기
                 try {
@@ -452,12 +459,17 @@ public class MainActivity extends AppCompatActivity {
                 //만약 result가 fail이면
                 else {
                     Toast.makeText(MainActivity.this, "이메일/비밀번호를 다시 확인해주세요", Toast.LENGTH_SHORT).show();
+                    return;
                 }
 
             }//자동로그인에 체크되어 있지 않다면
             else {
                 //아이디 비번이 다 입력되면, loginobeject 웹에 아이디비번토큰을 보낸다
                 //http에 데이터(토큰,아이디,비밀번호) 보내고 성공/실패 값 읽어오기
+                if(httpLoginThread.isAlive()){
+                    httpLoginThread.interrupt();
+                }
+                httpLoginThread = new HttpLoginThread(login);
                 httpLoginThread.start();
                 //httpLoginThread쓰레드 완료시까지 메인쓰레드 대기
                 try {
@@ -472,6 +484,7 @@ public class MainActivity extends AppCompatActivity {
                 //만약 result가 fail이면
                 else {
                     Toast.makeText(MainActivity.this, "이메일/비밀번호를 다시 확인해주세요", Toast.LENGTH_SHORT).show();
+                    return;
                 }
 
             }
@@ -501,11 +514,15 @@ public class MainActivity extends AppCompatActivity {
 
         // 로그아웃 버튼 눌렀을 때 - http에 토큰값을 넣어서 보낸다. 그러면 웹쪽에서 세션을 끊어주고, 앱.웹에서 다 로그아웃이 된다.
         if (btn_login.getText().equals("로그아웃")) {
-            login.setID(null);
-            login.setPW(null);
-            login.setToken(token);
-
+            login.setID("null");
+            login.setPW("null");
+            Log.d("okhttp", ""+login.getID() + login.getPW() +token);
+            if(httpLoginThread.isAlive()){
+                httpLoginThread.interrupt();
+            }
+            httpLoginThread = new HttpLoginThread(login);
             httpLoginThread.start();
+
             //httpLoginThread쓰레드 완료시까지 메인쓰레드 대기
             try {
                 httpLoginThread.join();
