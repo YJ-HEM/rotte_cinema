@@ -31,6 +31,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.NotificationCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -115,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
         Button btn_myPage = (Button) findViewById(R.id.btnMypage);
         Button btnReview = (Button) findViewById(R.id.btnReview);
         Button btn_signup = (Button) findViewById(R.id.btn_signup);
+        CoordinatorLayout forWatchedMovies  =  (CoordinatorLayout) findViewById(R.id.forWatchedMovies);
 
         //로그인구현
         et_id = (EditText) findViewById(R.id.inputId);
@@ -214,7 +216,7 @@ public class MainActivity extends AppCompatActivity {
         navigationMenu(btnCuration, "https://kumas.dev/rotte_cinema/qration.do");
         navigationMenu(btnEvent, "https://kumas.dev/rotte_cinema/event.do");
         navigationMenu(btnCinemaInfo, "https://kumas.dev/rotte_cinema/about.do");
-        navigationMenu(btn_reserve, "https://kumas.dev/rotte_cinema/ticketing.do");
+        navigationMenu(btn_reserve, "https://kumas.dev/rotte_cinema/schedule.do");
         navigationMenu(btn_signup, "https://kumas.dev/rotte_cinema/registration.do");
         navigationMenu(btn_myPage, "https://kumas.dev/rotte_cinema/login.do");
 
