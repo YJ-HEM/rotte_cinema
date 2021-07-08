@@ -3,7 +3,9 @@ package com.example.lottecinema;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -23,6 +25,7 @@ public class Review extends AppCompatActivity {
         TextView txtRating = findViewById(R.id.txtStarRating);
         EditText editText = findViewById(R.id.etxtReview);
         TextView textLength = findViewById(R.id.textLength);
+        Button btnAccept = findViewById(R.id.btnAccept);
 
        //별 선택할때마다 그 값 읽어오기
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
@@ -60,6 +63,13 @@ public class Review extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        btnAccept.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
             }
         });
