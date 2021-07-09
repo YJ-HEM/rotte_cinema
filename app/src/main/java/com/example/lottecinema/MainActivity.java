@@ -5,6 +5,7 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.http.SslError;
@@ -34,6 +35,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.NotificationCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.franmontiel.persistentcookiejar.PersistentCookieJar;
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
@@ -51,6 +55,7 @@ import okhttp3.HttpUrl;
 public class MainActivity extends AppCompatActivity {
 
     static String token;
+    public static Context context_main;
 
     NotificationManager manager;
     NotificationCompat.Builder builder;
@@ -82,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
     public static CookieJar cookieJar = null;
     public static String URL = "http://kumas.dev/rotte_cinema/";
     static Login login = new Login();
+    Fragment fragment = new watchedMovies();
 
 
 
@@ -92,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        context_main=this;
         //쿠키 동기화용 CookieJar 생성 : 적절한 초기화 위치
         cookieJar = new PersistentCookieJar(new SetCookieCache(), new SharedPrefsCookiePersistor(this));
         auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
@@ -220,12 +226,19 @@ public class MainActivity extends AppCompatActivity {
         navigationMenu(btn_signup, "https://kumas.dev/rotte_cinema/registration.do");
         navigationMenu(btn_myPage, "https://kumas.dev/rotte_cinema/login.do");
 
-        //리뷰버튼 클릭 시 리뷰 intent로
+
+        //리뷰버튼 클릭 시 리뷰 fragment로
         btnReview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), Review.class);
-                startActivity(intent);
+//                Intent intent = new Intent(getApplicationContext(), Review.class);
+//                startActivity(intent);
+                drawerLayout.closeDrawer(drawerView);
+
+                FragmentManager fm = getSupportFragmentManager();
+                FragmentTransaction ft = fm.beginTransaction();
+                ft.replace(R.id.webView,fragment);
+                ft.commit();
             }
         });
 
@@ -296,18 +309,26 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
                     case R.id.tab1:
+                        removeFragment();
                         mWebView.loadUrl("https://kumas.dev/rotte_cinema");
                         break;
                     case R.id.tab2:
+                        removeFragment();
+
                         mWebView.loadUrl("https://kumas.dev/rotte_cinema/schedule.do");
                         break;
                     case R.id.tab3:
+                        removeFragment();
+
                         mWebView.loadUrl("https://kumas.dev/rotte_cinema/ticketing.do");
                         break;
                     case R.id.tab4:
+                        removeFragment();
+
                         mWebView.loadUrl("https://kumas.dev/rotte_cinema/login.do");
                         break;
                     case R.id.tab5:
+                        removeFragment();
                         drawerLayout.closeDrawer(drawerView);
 
                         drawerLayout.openDrawer(drawerView);
@@ -318,6 +339,15 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+
+
+    }
+
+    void removeFragment(){
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.remove(fragment);
+        ft.commit();
     }
 
     void showNoti() {
@@ -354,6 +384,7 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                removeFragment();
                 drawerLayout.closeDrawer(drawerView);
                 mWebView.loadUrl(url);
             }
