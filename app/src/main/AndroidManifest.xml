@@ -15,7 +15,8 @@
         android:theme="@style/Theme.AppCompat.NoActionBar"
         android:usesCleartextTraffic="true"
         tools:replace="android:appComponentFactory">
-        <activity android:name=".watchedMovies"></activity>
+        <activity android:name=".watchedMovies"
+            tools:ignore="Instantiatable"></activity>
         <activity android:name=".Review" />
 
         <uses-library
