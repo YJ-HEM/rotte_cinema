@@ -23,6 +23,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class watchedMovies extends Fragment {
+   private RecyclerView recyclerView;
+    private WatchedMoviesAdapter adapter;
+    ArrayList<String> list = new ArrayList<>();
 
     @Override
     public void onAttach(@NonNull @NotNull Context context) {
@@ -43,33 +46,33 @@ public class watchedMovies extends Fragment {
     @Override
     public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         // 리사이클러뷰에 표시할 데이터 리스트 생성.
-        ArrayList<String> list = new ArrayList<>();
+
         for (int i=0; i<10; i++) {
             list.add(String.format("TEXT %d", i)) ;
         }
+        ViewGroup rootView = (ViewGroup)inflater.inflate(R.layout.activity_watched_movies, container, false);
+
 
         ActivityWatchedMoviesBinding binding = ActivityWatchedMoviesBinding.inflate(inflater);
 
 
         // 리사이클러뷰에 LinearLayoutManager 객체 지정.
 
-        RecyclerView recyclerView = binding.recyclerViewWatchedList;
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+         recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view_watched_list);
+        RecyclerView.LayoutManager layoutManager=new LinearLayoutManager(this.getContext());
+        recyclerView.setHasFixedSize(true);
+
+
+        recyclerView.setLayoutManager(layoutManager);
 
         // 리사이클러뷰에 SimpleTextAdapter 객체 지정.
-        WatchedMoviesAdapter adapter = new WatchedMoviesAdapter(list) ;
+         adapter = new WatchedMoviesAdapter(getActivity(), list) ;
         recyclerView.setAdapter(adapter);
 
-        return inflater.inflate(R.layout.activity_watched_movies, container, false);
+        return rootView;
 
     }
-    void navigationMenu(Button button, String url) {
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            }
-        });
-    }
+
 
 
     @Override
