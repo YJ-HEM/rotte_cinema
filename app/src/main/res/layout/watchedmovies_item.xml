@@ -26,7 +26,10 @@
                 android:layout_marginTop="20dp"
                 android:text="영화이름"
                 android:textColor="@color/black"
-                android:textSize="35dp" />
+                android:textSize="35dp"
+                android:maxLines="1"
+                android:ellipsize="end"
+/>
 
 
         </LinearLayout>

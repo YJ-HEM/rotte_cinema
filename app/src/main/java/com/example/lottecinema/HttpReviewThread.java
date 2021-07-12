@@ -13,6 +13,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import okhttp3.Callback;
 import okhttp3.FormBody;
@@ -25,6 +26,9 @@ public class HttpReviewThread extends Thread {
     static public JsonObject result;
 
    static public int watchedMoviesNum;
+    static public  JSONArray jArray;
+   static public ArrayList<MyMovies> list = new ArrayList<>();
+
     static String post(String url) throws IOException {
 
         //앱 쿠키jar에 쿠키를 저장한다 (아마?)
@@ -55,14 +59,15 @@ public class HttpReviewThread extends Thread {
             JSONObject jsonObject = new JSONObject(post("http://kumas.dev/rotte_cinema/reservsobject.do"));
 
             //  배열을 가져옵니다.
-            JSONArray jArray = jsonObject.getJSONArray("reservs");
+             jArray = jsonObject.getJSONArray("reservs");
 
             watchedMoviesNum=jArray.length();
+            list.clear();
 
             // 배열의 모든 아이템을 출력합니다.
             for (int i = 0; i < jArray.length(); i++) {
-                JSONObject obj = jArray.getJSONObject(i);
                 MyMovies myMovies = new MyMovies();
+                JSONObject obj = jArray.getJSONObject(i);
                 myMovies.setMovie(obj.getString("movie"));
                 myMovies.setAge(obj.getString("age"));
                 myMovies.setCinema(obj.getString("cinema") + obj.getString("theater"));
@@ -70,7 +75,11 @@ public class HttpReviewThread extends Thread {
                 myMovies.setPoster(obj.getString("poster"));
                 myMovies.setSeat(obj.getString("seat"));
                 myMovies.setDate(obj.getString("date"));
+                list.add(myMovies);
+                Log.d("reviewLog",myMovies.getCinema());
             }
+
+
 
 
         } catch (Exception e) {

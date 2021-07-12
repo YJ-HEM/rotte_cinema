@@ -2,6 +2,7 @@ package com.example.lottecinema;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 
@@ -63,7 +65,7 @@ public class Review extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         setContentView(R.layout.activity_review);
-
+        TextView movieTitle = findViewById(R.id.moiveName);
         RatingBar ratingBar = findViewById(R.id.starRating);
         TextView txtRating = findViewById(R.id.txtStarRating);
         EditText editText = findViewById(R.id.etxtReview);
@@ -71,6 +73,12 @@ public class Review extends Activity {
         Button btnAccept = findViewById(R.id.btnAccept);
         Button btnCancle = findViewById(R.id.btnCancle);
         intRating = (int) ratingBar.getRating();
+
+
+        Intent intent = getIntent();
+        String movie_title = intent.getStringExtra("moiveTitle");
+        movieTitle.setText(movie_title);
+
 
         //textview 특정 글자만 스타일조정
         Spannable span = (Spannable) txtRating.getText();

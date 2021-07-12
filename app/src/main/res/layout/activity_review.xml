@@ -35,7 +35,12 @@
         android:gravity="center"
         android:text="영화제목"
         android:textColor="@color/black"
-        android:textSize="33dp" />
+        android:textSize="33dp"
+        android:maxLines="1"
+        android:ellipsize="end"
+
+
+      />
 
 
     <TextView

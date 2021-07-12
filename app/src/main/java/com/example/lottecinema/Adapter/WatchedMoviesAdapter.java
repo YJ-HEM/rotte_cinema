@@ -15,29 +15,29 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.lottecinema.BitemapConverter;
-import com.example.lottecinema.HttpReviewThread;
-import com.example.lottecinema.R;
+import com.example.lottecinema.MyMovies;
 import com.example.lottecinema.Review;
+import com.example.lottecinema.databinding.ActivityWatchedMoviesBinding;
 import com.example.lottecinema.databinding.WatchedmoviesItemBinding;
 
 import java.util.ArrayList;
 
-public class WatchedMoviesAdapter extends RecyclerView.Adapter<WatchedMoviesAdapter.ViewHolder> {
+import static com.example.lottecinema.HttpReviewThread.list;
 
-    private ArrayList<String> mData = null;
+public class WatchedMoviesAdapter extends RecyclerView.Adapter<WatchedMoviesAdapter.ViewHolder> {
+    static public int item_position;
+    private ArrayList<MyMovies> mData=list;
     private static WatchedmoviesItemBinding binding;
+    private static ActivityWatchedMoviesBinding binding2;
+    ViewHolder holder2;
     private static final String TAG = "MovieAdapter";
     private Context context;
-    Bitmap testbitmap;
-
+    Bitmap poster_bitmap;
+    Bitmap age_bitmap;
     // 생성자에서 데이터 리스트 객체를 전달받음.
-    public WatchedMoviesAdapter(Context context, ArrayList<String> list) {
-        mData = list;
-        for (String i : list) {
-            Log.d(TAG, i + "mData에 내용이담겻나");
-        }
+    public WatchedMoviesAdapter(Context context, ArrayList<MyMovies> list) {
        //  testbitmap = BitemapConverter.StringToBitmap(HttpReviewThread.Bitmap);
-
+    Log.d("reviewLog","왜두");
         this.context = context;
     }
 
@@ -53,54 +53,75 @@ public class WatchedMoviesAdapter extends RecyclerView.Adapter<WatchedMoviesAdap
         View view = binding.getRoot();
         ViewHolder holder = new ViewHolder(view);
 
-
         return holder;
     }
 
     // onBindViewHolder() - position에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시.
     @Override
     public void onBindViewHolder(WatchedMoviesAdapter.ViewHolder holder, int position) {
-        Log.d(TAG, "onBindViewHolder: " + position);
+        Log.d("onBindViewHolder", "onBindViewHolder: " + position);
 
 
-        String text = mData.get(position);
-        Log.d(TAG, "onBindViewHolder2: " + text);
 
-        holder.textView1.setText(text);
-        Log.d(TAG, "onBindViewHolder2: " + holder.textView1.getText());
+        MyMovies myMoviesOrder = mData.get(position);
+        holder.txt_date.setText(myMoviesOrder.getDate());
+        holder.txt_loca.setText(myMoviesOrder.getCinema());
+        holder.txt_peopleNum.setText(myMoviesOrder.getCustomer());
+        holder.txt_seatNum.setText(myMoviesOrder.getSeat());
+        holder.txt_movieTitle.setText(myMoviesOrder.getMovie());
 
-        holder.imageView1.setImageBitmap(testbitmap);
+        age_bitmap = BitemapConverter.StringToBitmap(myMoviesOrder.getAge());
+        poster_bitmap = BitemapConverter.StringToBitmap(myMoviesOrder.getPoster());
+        holder.img_poster.setImageBitmap(poster_bitmap);
+        holder.img_age.setImageBitmap(age_bitmap);
         holder.btn_write_review.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                Log.d("revieww","몇번 째 뷰 인지 "+holder.getAbsoluteAdapterPosition());
+                Log.d("revieww",myMoviesOrder.getMovie());
+
                 Intent intent = new Intent(context, Review.class);
+                intent.putExtra("moiveTitle",myMoviesOrder.getMovie());
                 context.startActivity(intent);
             }
         });
-
 
     }
 
     // getItemCount() - 전체 데이터 갯수 리턴.
     @Override
     public int getItemCount() {
-        Log.d(TAG, "getItemCount: ");
+        Log.d("getItemCount", mData.size()+"");
 
         return mData.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView textView1;
-        ImageView imageView1;
+        TextView txt_date;
+        TextView txt_loca;
+        TextView txt_peopleNum;
+        TextView txt_seatNum;
+        TextView txt_movieTitle;
+
+        ImageView img_poster;
+        ImageView img_age;
         Button btn_write_review;
 
         public ViewHolder(@NonNull View view) {
             super(view);
             // 뷰 객체에 대한 참조. (hold strong reference)
             //  textView1 = view.findViewById(R.id.date);
-            textView1 = binding.date;
-            imageView1 = binding.moviePoster;
+            txt_date = binding.date;
+            txt_loca = binding.theaterLocation;
+            txt_peopleNum = binding.audienceNum;
+            txt_seatNum = binding.seatNum;
+            txt_movieTitle = binding.movieNameText;
+            img_poster = binding.moviePoster;
+            img_age = binding.imageAge;
             btn_write_review = binding.btnWriteReview;
+
+
         }
 
     }
