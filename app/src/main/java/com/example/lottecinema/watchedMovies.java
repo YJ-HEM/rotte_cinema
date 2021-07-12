@@ -2,6 +2,7 @@ package com.example.lottecinema;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,6 +51,7 @@ public class watchedMovies extends Fragment {
         for (int i=0; i<10; i++) {
             list.add(String.format("TEXT %d", i)) ;
         }
+
         ViewGroup rootView = (ViewGroup)inflater.inflate(R.layout.activity_watched_movies, container, false);
 
 
@@ -59,14 +61,14 @@ public class watchedMovies extends Fragment {
         // 리사이클러뷰에 LinearLayoutManager 객체 지정.
 
          recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view_watched_list);
-        RecyclerView.LayoutManager layoutManager=new LinearLayoutManager(this.getContext());
         recyclerView.setHasFixedSize(true);
 
 
-        recyclerView.setLayoutManager(layoutManager);
 
         // 리사이클러뷰에 SimpleTextAdapter 객체 지정.
          adapter = new WatchedMoviesAdapter(getActivity(), list) ;
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
         recyclerView.setAdapter(adapter);
 
         return rootView;

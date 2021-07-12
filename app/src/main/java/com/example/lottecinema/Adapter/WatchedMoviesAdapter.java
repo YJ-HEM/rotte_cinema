@@ -17,14 +17,14 @@ import java.util.ArrayList;
 public class WatchedMoviesAdapter extends RecyclerView.Adapter<WatchedMoviesAdapter.ViewHolder> {
 
 private ArrayList<String> mData = null ;
-private static WatchedmoviesItemBinding binding = null;
+private static WatchedmoviesItemBinding binding;
     private static final String TAG = "MovieAdapter";
 private Context context;
 public  class ViewHolder extends RecyclerView.ViewHolder {
     TextView textView1 ;
 
-    public ViewHolder(@NonNull View itemView) {
-        super(itemView) ;
+    public ViewHolder(@NonNull View view) {
+        super(view) ;
 //        binding.date.setText("123");
 //        binding.hour.setText("123");
 //        binding.movieNameText.setText("123");
@@ -33,7 +33,7 @@ public  class ViewHolder extends RecyclerView.ViewHolder {
 //
 //
 //        // 뷰 객체에 대한 참조. (hold strong reference)
-        textView1 = binding.date;
+        textView1 = view.findViewById(R.id.date);
     }
 
 }
@@ -41,6 +41,9 @@ public  class ViewHolder extends RecyclerView.ViewHolder {
     // 생성자에서 데이터 리스트 객체를 전달받음.
     public WatchedMoviesAdapter(Context context, ArrayList<String> list) {
         mData = list ;
+        for(String i : list){
+        Log.d(TAG,i+"mData에 내용이담겻나");}
+
         this.context=context;
     }
 
@@ -65,8 +68,15 @@ public  class ViewHolder extends RecyclerView.ViewHolder {
     public void onBindViewHolder(WatchedMoviesAdapter.ViewHolder holder, int position) {
         Log.d(TAG, "onBindViewHolder: "+position);
 
+
+
+
         String text = mData.get(position) ;
+        Log.d(TAG, "onBindViewHolder2: "+text);
+
         holder.textView1.setText(text) ;
+        Log.d(TAG, "onBindViewHolder2: "+holder.textView1.getText());
+
     }
 
     // getItemCount() - 전체 데이터 갯수 리턴.
