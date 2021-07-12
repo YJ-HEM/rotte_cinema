@@ -1,6 +1,7 @@
 package com.example.lottecinema;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -32,7 +33,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class Review extends AppCompatActivity {
+public class Review extends Activity {
     int intRating = 0;
 
     static String post(String url, String eboxContents, String ratingNum, String indexMovie) throws IOException {

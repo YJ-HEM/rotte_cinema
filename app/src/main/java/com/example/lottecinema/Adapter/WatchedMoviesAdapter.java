@@ -1,11 +1,13 @@
 package com.example.lottecinema.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.lottecinema.BitemapConverter;
 import com.example.lottecinema.HttpReviewThread;
 import com.example.lottecinema.R;
+import com.example.lottecinema.Review;
 import com.example.lottecinema.databinding.WatchedmoviesItemBinding;
 
 import java.util.ArrayList;
@@ -67,6 +70,14 @@ public class WatchedMoviesAdapter extends RecyclerView.Adapter<WatchedMoviesAdap
         Log.d(TAG, "onBindViewHolder2: " + holder.textView1.getText());
 
         holder.imageView1.setImageBitmap(testbitmap);
+        holder.btn_write_review.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, Review.class);
+                context.startActivity(intent);
+            }
+        });
+
 
     }
 
@@ -81,6 +92,7 @@ public class WatchedMoviesAdapter extends RecyclerView.Adapter<WatchedMoviesAdap
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView textView1;
         ImageView imageView1;
+        Button btn_write_review;
 
         public ViewHolder(@NonNull View view) {
             super(view);
@@ -88,6 +100,7 @@ public class WatchedMoviesAdapter extends RecyclerView.Adapter<WatchedMoviesAdap
             //  textView1 = view.findViewById(R.id.date);
             textView1 = binding.date;
             imageView1 = binding.moviePoster;
+            btn_write_review = binding.btnWriteReview;
         }
 
     }

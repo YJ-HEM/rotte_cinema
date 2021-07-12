@@ -21,23 +21,5 @@ public class BitemapConverter {
         }
     }
 
-    /*
-     * Bitmap을 String형으로 변환
-     * */
-    public static String BitmapToString(Bitmap bitmap) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 70, baos);
-        byte[] bytes = baos.toByteArray();
-        String temp = Base64.encodeToString(bytes, Base64.DEFAULT);
-        return temp;
-    }
 
-    /*
-     * Bitmap을 byte배열로 변환
-     * */
-    public static byte[] BitmapToByteArray(Bitmap bitmap) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 70, baos);
-        return baos.toByteArray();
-    }
 }
