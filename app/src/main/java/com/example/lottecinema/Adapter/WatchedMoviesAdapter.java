@@ -1,15 +1,19 @@
 package com.example.lottecinema.Adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.lottecinema.BitemapConverter;
+import com.example.lottecinema.HttpReviewThread;
 import com.example.lottecinema.R;
 import com.example.lottecinema.databinding.WatchedmoviesItemBinding;
 
@@ -21,7 +25,7 @@ public class WatchedMoviesAdapter extends RecyclerView.Adapter<WatchedMoviesAdap
     private static WatchedmoviesItemBinding binding;
     private static final String TAG = "MovieAdapter";
     private Context context;
-
+    Bitmap testbitmap;
 
     // 생성자에서 데이터 리스트 객체를 전달받음.
     public WatchedMoviesAdapter(Context context, ArrayList<String> list) {
@@ -29,6 +33,7 @@ public class WatchedMoviesAdapter extends RecyclerView.Adapter<WatchedMoviesAdap
         for (String i : list) {
             Log.d(TAG, i + "mData에 내용이담겻나");
         }
+         testbitmap = BitemapConverter.StringToBitmap(HttpReviewThread.Bitmap);
 
         this.context = context;
     }
@@ -61,6 +66,8 @@ public class WatchedMoviesAdapter extends RecyclerView.Adapter<WatchedMoviesAdap
         holder.textView1.setText(text);
         Log.d(TAG, "onBindViewHolder2: " + holder.textView1.getText());
 
+        holder.imageView1.setImageBitmap(testbitmap);
+
     }
 
     // getItemCount() - 전체 데이터 갯수 리턴.
@@ -73,12 +80,14 @@ public class WatchedMoviesAdapter extends RecyclerView.Adapter<WatchedMoviesAdap
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView textView1;
+        ImageView imageView1;
 
         public ViewHolder(@NonNull View view) {
             super(view);
             // 뷰 객체에 대한 참조. (hold strong reference)
             //  textView1 = view.findViewById(R.id.date);
             textView1 = binding.date;
+            imageView1 = binding.moviePoster;
         }
 
     }

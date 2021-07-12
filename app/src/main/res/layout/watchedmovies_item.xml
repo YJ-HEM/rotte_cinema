@@ -52,7 +52,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
                         android:layout_marginTop="5dp"
-                        android:text="장소"
+                        android:text="관람극장/상영관"
                         android:textColor="@color/black"
                         android:textSize="20dp" />
 
@@ -80,7 +80,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
                         android:layout_marginTop="5dp"
-                        android:text="관람일"
+                        android:text="관람일시"
                         android:textColor="@color/black"
                         android:textSize="20dp" />
 
@@ -107,7 +107,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
                         android:layout_marginTop="5dp"
-                        android:text="관람시간"
+                        android:text="관람인원"
                         android:textColor="@color/black"
                         android:textSize="20dp" />
 
@@ -120,7 +120,7 @@
                         android:textColor="@color/black"
                         android:textSize="20dp"
                         android:textStyle="bold"
-                        android:id="@+id/hour"/>
+                        android:id="@+id/audienceNum"/>
 
                 </LinearLayout>
 
@@ -135,7 +135,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
                         android:layout_marginTop="5dp"
-                        android:text="관람인원"
+                        android:text="좌석번호"
                         android:textColor="@color/black"
                         android:textSize="20dp" />
 
@@ -148,7 +148,7 @@
                         android:textColor="@color/black"
                         android:textSize="20dp"
                         android:textStyle="bold"
-                        android:id="@+id/spectatorsNum"/>
+                        android:id="@+id/seatNum"/>
 
                 </LinearLayout>
 
@@ -161,6 +161,7 @@
           >
 
                 <ImageView
+                    android:id="@+id/moviePoster"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:padding="10dp"

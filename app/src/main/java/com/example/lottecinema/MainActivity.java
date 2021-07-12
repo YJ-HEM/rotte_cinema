@@ -8,6 +8,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
@@ -83,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
     boolean autoLoginChecked;
      WebkitCookieManagerProxy webkitCookieManager = new WebkitCookieManagerProxy();
     HttpLoginThread httpLoginThread;
-
+    HttpReviewThread httpReviewThread;
     public static CookieJar cookieJar = null;
     public static String URL = "http://kumas.dev/rotte_cinema/";
     static Login login = new Login();
@@ -239,6 +240,19 @@ public class MainActivity extends AppCompatActivity {
 
 
                 if (login.getLoginResult().equals("connect")) {
+                    httpReviewThread = new HttpReviewThread();
+                    if(httpReviewThread.isAlive()){
+                        httpReviewThread.interrupt();
+                    }
+                    httpReviewThread = new HttpReviewThread();
+                    httpReviewThread.start();
+                    //httpReviewThread 완료시까지 메인쓰레드 대기
+                    try {
+                        httpReviewThread.join();
+                    } catch (Exception e) {
+                    }
+
+
 
 
                     FragmentManager fm = getSupportFragmentManager();
