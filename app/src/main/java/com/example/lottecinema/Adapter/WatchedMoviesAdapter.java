@@ -36,7 +36,7 @@ public class WatchedMoviesAdapter extends RecyclerView.Adapter<WatchedMoviesAdap
         for (String i : list) {
             Log.d(TAG, i + "mData에 내용이담겻나");
         }
-         testbitmap = BitemapConverter.StringToBitmap(HttpReviewThread.Bitmap);
+       //  testbitmap = BitemapConverter.StringToBitmap(HttpReviewThread.Bitmap);
 
         this.context = context;
     }

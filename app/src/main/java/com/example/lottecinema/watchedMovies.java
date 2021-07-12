@@ -23,10 +23,12 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.lottecinema.HttpReviewThread.watchedMoviesNum;
+
 public class watchedMovies extends Fragment {
    private RecyclerView recyclerView;
     private WatchedMoviesAdapter adapter;
-    ArrayList<String> list = new ArrayList<>();
+    ArrayList<MyMovies> list = new ArrayList<>();
 
     @Override
     public void onAttach(@NonNull @NotNull Context context) {
@@ -48,7 +50,7 @@ public class watchedMovies extends Fragment {
     @Override
     public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         // 리사이클러뷰에 표시할 데이터 리스트 생성.
-        for (int i=0; i<10; i++) {
+        for (int i=0; i<watchedMoviesNum; i++) {
             list.add(String.format("TEXT %d", i)) ;
         } //여기에 포문 돌려서 자꾸 버튼 누를 때마다 10개씩 더 생기는듯. 나중에 데이터 받아올때는 다른곳에서 해봐야겟음..
 
