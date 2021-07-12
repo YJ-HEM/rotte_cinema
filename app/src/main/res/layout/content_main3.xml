@@ -118,16 +118,16 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/btnMypage"
+            android:id="@+id/btnQRcode"
             android:layout_width="100dp"
             android:layout_height="70dp"
             android:layout_marginLeft="35dp"
             android:layout_marginTop="30dp"
             android:background="@drawable/sidebarback"
-            android:drawableTop="@drawable/whiteprofile"
+            android:drawableTop="@drawable/ic_baseline_qr_code_scanner_24"
             android:drawablePadding="5px"
             android:singleLine="true"
-            android:text="마이페이지"
+            android:text="QR코드입장"
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="36px"

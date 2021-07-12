@@ -31,6 +31,7 @@ public class watchedMovies extends Fragment {
     @Override
     public void onAttach(@NonNull @NotNull Context context) {
         super.onAttach(context);
+
     }
 
     @Override
@@ -47,10 +48,10 @@ public class watchedMovies extends Fragment {
     @Override
     public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         // 리사이클러뷰에 표시할 데이터 리스트 생성.
-
         for (int i=0; i<10; i++) {
             list.add(String.format("TEXT %d", i)) ;
-        }
+        } //여기에 포문 돌려서 자꾸 버튼 누를 때마다 10개씩 더 생기는듯. 나중에 데이터 받아올때는 다른곳에서 해봐야겟음..
+
 
         ViewGroup rootView = (ViewGroup)inflater.inflate(R.layout.activity_watched_movies, container, false);
 

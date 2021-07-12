@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
         Button btnEvent = (Button) findViewById(R.id.btnEvent);
         Button btnCinemaInfo = (Button) findViewById(R.id.btnCinemaInfo);
         Button btn_reserve = (Button) findViewById(R.id.btn_reserve);
-        Button btn_myPage = (Button) findViewById(R.id.btnMypage);
+        //Button btn_myPage = (Button) findViewById(R.id.btnMypage);
         Button btnReview = (Button) findViewById(R.id.btnReview);
         Button btn_signup = (Button) findViewById(R.id.btn_signup);
         CoordinatorLayout forWatchedMovies  =  (CoordinatorLayout) findViewById(R.id.forWatchedMovies);
@@ -224,7 +224,7 @@ public class MainActivity extends AppCompatActivity {
         navigationMenu(btnCinemaInfo, "https://kumas.dev/rotte_cinema/about.do");
         navigationMenu(btn_reserve, "https://kumas.dev/rotte_cinema/schedule.do");
         navigationMenu(btn_signup, "https://kumas.dev/rotte_cinema/registration.do");
-        navigationMenu(btn_myPage, "https://kumas.dev/rotte_cinema/login.do");
+        //navigationMenu(btn_myPage, "https://kumas.dev/rotte_cinema/login.do");
 
 
         //리뷰버튼 클릭 시 리뷰 fragment로
@@ -238,7 +238,8 @@ public class MainActivity extends AppCompatActivity {
                 loginId = auto.getString("inputId", "");
 
 
-                if (!loginId.equals("")) {
+                if (login.getLoginResult().equals("connect")) {
+
 
                     FragmentManager fm = getSupportFragmentManager();
                     FragmentTransaction ft = fm.beginTransaction();
@@ -247,6 +248,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 else{
                     mWebView.loadUrl("https://kumas.dev/rotte_cinema/login.do");
+
                 }
             }
         });
