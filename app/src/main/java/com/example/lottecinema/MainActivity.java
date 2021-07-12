@@ -235,10 +235,19 @@ public class MainActivity extends AppCompatActivity {
 //                startActivity(intent);
                 drawerLayout.closeDrawer(drawerView);
 
-                FragmentManager fm = getSupportFragmentManager();
-                FragmentTransaction ft = fm.beginTransaction();
-                ft.replace(R.id.webView,fragment);
-                ft.commit();
+                loginId = auto.getString("inputId", "");
+
+
+                if (!loginId.equals("")) {
+
+                    FragmentManager fm = getSupportFragmentManager();
+                    FragmentTransaction ft = fm.beginTransaction();
+                    ft.replace(R.id.webView, fragment);
+                    ft.commit();
+                }
+                else{
+                    mWebView.loadUrl("https://kumas.dev/rotte_cinema/login.do");
+                }
             }
         });
 

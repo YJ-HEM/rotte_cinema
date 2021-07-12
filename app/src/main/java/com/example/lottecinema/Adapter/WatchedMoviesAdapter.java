@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.lottecinema.R;
 import com.example.lottecinema.databinding.WatchedmoviesItemBinding;
 
@@ -16,35 +17,20 @@ import java.util.ArrayList;
 
 public class WatchedMoviesAdapter extends RecyclerView.Adapter<WatchedMoviesAdapter.ViewHolder> {
 
-private ArrayList<String> mData = null ;
-private static WatchedmoviesItemBinding binding;
+    private ArrayList<String> mData = null;
+    private static WatchedmoviesItemBinding binding;
     private static final String TAG = "MovieAdapter";
-private Context context;
-public  class ViewHolder extends RecyclerView.ViewHolder {
-    TextView textView1 ;
+    private Context context;
 
-    public ViewHolder(@NonNull View view) {
-        super(view) ;
-//        binding.date.setText("123");
-//        binding.hour.setText("123");
-//        binding.movieNameText.setText("123");
-//        binding.theaterLocation.setText("123");
-//
-//
-//
-//        // 뷰 객체에 대한 참조. (hold strong reference)
-        textView1 = view.findViewById(R.id.date);
-    }
-
-}
 
     // 생성자에서 데이터 리스트 객체를 전달받음.
     public WatchedMoviesAdapter(Context context, ArrayList<String> list) {
-        mData = list ;
-        for(String i : list){
-        Log.d(TAG,i+"mData에 내용이담겻나");}
+        mData = list;
+        for (String i : list) {
+            Log.d(TAG, i + "mData에 내용이담겻나");
+        }
 
-        this.context=context;
+        this.context = context;
     }
 
     // onCreateViewHolder() - 아이템 뷰를 위한 뷰홀더 객체 생성하여 리턴.
@@ -53,29 +39,27 @@ public  class ViewHolder extends RecyclerView.ViewHolder {
         Log.d(TAG, "onCreateViewHolder: ");
 
         binding = WatchedmoviesItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
-        Context context = parent.getContext() ;
-        LayoutInflater inflater=LayoutInflater.from(parent.getContext());
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.watchedmovies_item, parent, false);
+        Context context = parent.getContext();
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        // View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.watchedmovies_item, parent, false);
+        View view = binding.getRoot();
         ViewHolder holder = new ViewHolder(view);
 
 
-
-        return holder ;
+        return holder;
     }
 
     // onBindViewHolder() - position에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시.
     @Override
     public void onBindViewHolder(WatchedMoviesAdapter.ViewHolder holder, int position) {
-        Log.d(TAG, "onBindViewHolder: "+position);
+        Log.d(TAG, "onBindViewHolder: " + position);
 
 
+        String text = mData.get(position);
+        Log.d(TAG, "onBindViewHolder2: " + text);
 
-
-        String text = mData.get(position) ;
-        Log.d(TAG, "onBindViewHolder2: "+text);
-
-        holder.textView1.setText(text) ;
-        Log.d(TAG, "onBindViewHolder2: "+holder.textView1.getText());
+        holder.textView1.setText(text);
+        Log.d(TAG, "onBindViewHolder2: " + holder.textView1.getText());
 
     }
 
@@ -84,6 +68,19 @@ public  class ViewHolder extends RecyclerView.ViewHolder {
     public int getItemCount() {
         Log.d(TAG, "getItemCount: ");
 
-        return mData.size() ;
+        return mData.size();
     }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        TextView textView1;
+
+        public ViewHolder(@NonNull View view) {
+            super(view);
+            // 뷰 객체에 대한 참조. (hold strong reference)
+            //  textView1 = view.findViewById(R.id.date);
+            textView1 = binding.date;
+        }
+
+    }
+
 }
