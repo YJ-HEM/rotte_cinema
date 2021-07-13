@@ -98,12 +98,15 @@ public class WatchedMoviesAdapter extends RecyclerView.Adapter<WatchedMoviesAdap
 
                 Log.d("revieww","몇번 째 뷰 인지 "+holder.getAbsoluteAdapterPosition());
                 Log.d("revieww",myMoviesOrder.getMovie());
+                Log.d("revieww", String.valueOf(myMoviesOrder.getMovie_index()));
 
                 int position_int = holder.getAbsoluteAdapterPosition();
                 String position_string = Integer.toString(position_int);
                 Intent intent = new Intent(context, Review.class);
                 intent.putExtra("moiveTitle",myMoviesOrder.getMovie());
                 intent.putExtra("position",position_int);
+                intent.putExtra("movieIndex",myMoviesOrder.getMovie_index());
+
 
                 context.startActivity(intent);
             }

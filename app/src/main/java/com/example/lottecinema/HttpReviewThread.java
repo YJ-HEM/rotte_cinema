@@ -68,9 +68,10 @@ public class HttpReviewThread extends Thread {
             for (int i = 0; i < jArray.length(); i++) {
                 MyMovies myMovies = new MyMovies();
                 JSONObject obj = jArray.getJSONObject(i);
+                myMovies.setMovie_index(obj.getInt("indexMovie"));
                 myMovies.setMovie(obj.getString("movie"));
                 myMovies.setAge(obj.getString("age"));
-                myMovies.setCinema(obj.getString("cinema") + obj.getString("theater"));
+                myMovies.setCinema(obj.getString("cinema") +" "+ obj.getString("theater"));
                 myMovies.setCustomer(obj.getString("customer"));
                 myMovies.setPoster(obj.getString("poster"));
                 myMovies.setSeat(obj.getString("seat"));

@@ -45,7 +45,7 @@ import okhttp3.Response;
 
 public class Review extends Activity {
     int intRating = 0;
-
+    Spannable span;
 
 
     static String post(String url, String eboxContents, String ratingNum, String indexMovie) throws IOException {
@@ -95,11 +95,13 @@ public class Review extends Activity {
         Intent intent = getIntent();
         String movie_title = intent.getStringExtra("moiveTitle");
         int position_int2 = intent.getIntExtra("position",-1);
+        int movie_index = intent.getIntExtra("movieIndex",-1);
+
         movieTitle.setText(movie_title);
 
 
         //textview 특정 글자만 스타일조정
-        Spannable span = (Spannable) txtRating.getText();
+        span = (Spannable) txtRating.getText();
         span.setSpan(new StyleSpan(Typeface.BOLD), 0, 2, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
         span.setSpan(new RelativeSizeSpan(1.3f), 0, 2, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
 
@@ -123,10 +125,16 @@ public class Review extends Activity {
                 intRating = (int) ratingBar.getRating();
                 txtRating.setText(intRating + "점");
 
+
+
                 if (txtRating.getText().length() == 3) {
+                    Log.d("textstlye", "3"+  String.valueOf(txtRating.getText().length()));
+                    span = (Spannable) txtRating.getText();
                     span.setSpan(new StyleSpan(Typeface.BOLD), 0, 2, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
                     span.setSpan(new RelativeSizeSpan(1.3f), 0, 2, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
                 } else if (txtRating.getText().length() == 2) {
+                    Log.d("textstlye", "2"+  String.valueOf(txtRating.getText().length()));
+                    span = (Spannable) txtRating.getText();
                     span.setSpan(new StyleSpan(Typeface.BOLD), 0, 1, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
                     span.setSpan(new RelativeSizeSpan(1.3f), 0, 1, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
                 }
@@ -181,7 +189,7 @@ public class Review extends Activity {
                             super.run();
                             try {
                                 String stringEditText = editText.getText().toString();
-                                JSONObject jsonObject = new JSONObject(post("http://kumas.dev/rotte_cinema/reviewobject.do", stringEditText, stringRating, "1"));
+                                JSONObject jsonObject = new JSONObject(post("http://kumas.dev/rotte_cinema/reviewobject.do", stringEditText, stringRating, String.valueOf(movie_index)));
                                 Log.v("okhttp33", "연결성공" + jsonObject.get("result").toString());
                                 Log.v("okhttp33", editText.getText().toString() + stringRating);
 

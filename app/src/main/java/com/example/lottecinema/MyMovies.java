@@ -10,6 +10,16 @@ public class MyMovies {
     private String poster;
     private String age;
 
+    public int getMovie_index() {
+        return movie_index;
+    }
+
+    public void setMovie_index(int movie_index) {
+        this.movie_index = movie_index;
+    }
+
+    private int movie_index;
+
     public String getMovie() {
         return movie_title;
     }

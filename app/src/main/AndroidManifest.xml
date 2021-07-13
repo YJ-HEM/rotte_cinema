@@ -15,11 +15,13 @@
         android:theme="@style/Theme.AppCompat.NoActionBar"
         android:usesCleartextTraffic="true"
         tools:replace="android:appComponentFactory">
-        <activity android:name=".watchedMovies"
-            tools:ignore="Instantiatable"></activity>
-        <activity android:name=".Review"
-            android:theme="@style/Theme.Transparent"
-            />
+        <activity android:name=".ShowMyReview"></activity>
+        <activity
+            android:name=".watchedMovies"
+            tools:ignore="Instantiatable" />
+        <activity
+            android:name=".Review"
+            android:theme="@style/Theme.Transparent" />
 
         <uses-library
             android:name="org.apache.http.legacy"
