@@ -44,13 +44,12 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:layout_marginTop="20dp"
-                    android:layout_marginBottom="10dp">
+                    android:layout_marginBottom="15dp">
 
                     <ImageView
                         android:id="@+id/imageAge"
                         android:layout_width="22dp"
                         android:layout_height="22dp"
-                        android:layout_marginTop="15dp"
                         android:layout_marginLeft="10dp"
                         android:src="@drawable/ic_menu_camera" />
 
@@ -59,7 +58,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="4dp"
-                        android:layout_marginTop="10dp"
                         android:ellipsize="end"
                         android:maxLines="1"
                         android:text="영화이름"
@@ -90,7 +88,7 @@
                         android:layout_marginLeft="5dp"
                         android:layout_marginTop="5dp"
                         android:text="장소"
-                        android:textColor="@color/black"
+                        android:textColor="#323232"
                         android:textSize="15dp"
                         android:maxLines="1"
                         android:ellipsize="end"
@@ -120,7 +118,7 @@
                         android:layout_marginLeft="5dp"
                         android:layout_marginTop="5dp"
                         android:text="YYYY-MM-DD"
-                        android:textColor="@color/black"
+                        android:textColor="#323232"
                         android:textSize="15dp"
                         android:maxLines="1"
                         android:ellipsize="end"
@@ -149,7 +147,7 @@
                         android:layout_marginLeft="5dp"
                         android:layout_marginTop="5dp"
                         android:text="HH:MM~HH:MM"
-                        android:textColor="@color/black"
+                        android:textColor="#323232"
                         android:textSize="15dp"
                         android:maxLines="1"
                         android:ellipsize="end"
@@ -178,7 +176,7 @@
                         android:layout_marginLeft="5dp"
                         android:layout_marginTop="5dp"
                         android:text="n명"
-                        android:textColor="@color/black"
+                        android:textColor="#323232"
                         android:textSize="15dp"
                         android:maxLines="1"
                         android:ellipsize="end"
@@ -196,15 +194,20 @@
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+>
 
             <Button
+                android:padding="10dp"
+                android:drawablePadding="3dp"
+                android:drawableLeft="@drawable/ic_notes"
                 android:id="@+id/btn_do_show_review"
-                android:layout_width="150dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="리뷰작성"
+                android:textSize="15dp"
                 android:textColor="@color/white"
-                android:background="#B1B1B1"/>
+                android:background="@drawable/reviewbtnback"/>
 
 
         </LinearLayout>

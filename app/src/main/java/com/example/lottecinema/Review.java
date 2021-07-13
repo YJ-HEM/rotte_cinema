@@ -103,7 +103,7 @@ public class Review extends Activity {
         //textview 특정 글자만 스타일조정
         span = (Spannable) txtRating.getText();
         span.setSpan(new StyleSpan(Typeface.BOLD), 0, 2, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
-        span.setSpan(new RelativeSizeSpan(1.3f), 0, 2, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+        span.setSpan(new RelativeSizeSpan(1.1f), 0, 2, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
 
 
         //별 선택할때마다 그 값 읽어오기
@@ -131,12 +131,12 @@ public class Review extends Activity {
                     Log.d("textstlye", "3"+  String.valueOf(txtRating.getText().length()));
                     span = (Spannable) txtRating.getText();
                     span.setSpan(new StyleSpan(Typeface.BOLD), 0, 2, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
-                    span.setSpan(new RelativeSizeSpan(1.3f), 0, 2, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+                    span.setSpan(new RelativeSizeSpan(1.1f), 0, 2, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
                 } else if (txtRating.getText().length() == 2) {
                     Log.d("textstlye", "2"+  String.valueOf(txtRating.getText().length()));
                     span = (Spannable) txtRating.getText();
                     span.setSpan(new StyleSpan(Typeface.BOLD), 0, 1, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
-                    span.setSpan(new RelativeSizeSpan(1.3f), 0, 1, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+                    span.setSpan(new RelativeSizeSpan(1.1f), 0, 1, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
                 }
             }
 

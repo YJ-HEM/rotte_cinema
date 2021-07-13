@@ -53,7 +53,7 @@
         android:layout_gravity="center_horizontal"
         android:text="10점"
         android:textColor="@color/black"
-        android:textSize="28dp"
+        android:textSize="26dp"
         android:bufferType="spannable"/>
 
     <RatingBar
