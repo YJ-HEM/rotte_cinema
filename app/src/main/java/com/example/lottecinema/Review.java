@@ -2,7 +2,9 @@ package com.example.lottecinema;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -14,15 +16,21 @@ import android.text.TextWatcher;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.lottecinema.Adapter.WatchedMoviesAdapter;
+import com.example.lottecinema.databinding.WatchedmoviesItemBinding;
 
 import org.json.JSONObject;
 import org.w3c.dom.Text;
@@ -37,6 +45,8 @@ import okhttp3.Response;
 
 public class Review extends Activity {
     int intRating = 0;
+
+
 
     static String post(String url, String eboxContents, String ratingNum, String indexMovie) throws IOException {
 
@@ -58,6 +68,8 @@ public class Review extends Activity {
         return response.body().string();
     }
 
+    static public String review_result;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,8 +87,14 @@ public class Review extends Activity {
         intRating = (int) ratingBar.getRating();
 
 
+
+
+
+
+
         Intent intent = getIntent();
         String movie_title = intent.getStringExtra("moiveTitle");
+        int position_int2 = intent.getIntExtra("position",-1);
         movieTitle.setText(movie_title);
 
 
@@ -166,6 +184,20 @@ public class Review extends Activity {
                                 JSONObject jsonObject = new JSONObject(post("http://kumas.dev/rotte_cinema/reviewobject.do", stringEditText, stringRating, "1"));
                                 Log.v("okhttp33", "연결성공" + jsonObject.get("result").toString());
                                 Log.v("okhttp33", editText.getText().toString() + stringRating);
+
+                                SharedPreferences.Editor editor = WatchedMoviesAdapter.sharedPreferences.edit();
+                                editor.putString("review_result",position_int2+"success"); // key, value를 이용하여 저장하는 형태
+                                editor.commit();
+
+
+                                if(jsonObject.get("result").toString().equals("success")){
+
+                                    finish();
+
+
+
+
+                                }
 
                             } catch (
                                     Exception e) {

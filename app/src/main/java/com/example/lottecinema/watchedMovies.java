@@ -59,7 +59,7 @@ public class watchedMovies extends Fragment {
 
         TextView watched_movies_quan;
         watched_movies_quan = rootView.findViewById(R.id.watched_movies_quan);
-        watched_movies_quan.setText("내가 본 영화 ("+HttpReviewThread.watchedMoviesNum+")");
+        watched_movies_quan.setText("▶ 관람한 영화 ("+HttpReviewThread.watchedMoviesNum+")");
         ActivityWatchedMoviesBinding binding = ActivityWatchedMoviesBinding.inflate(inflater);
 
 

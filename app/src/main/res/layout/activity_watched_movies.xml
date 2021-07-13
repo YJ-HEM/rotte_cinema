@@ -4,34 +4,37 @@
         android:id="@+id/MovieLogFragment"
         android:layout_width="match_parent"
         android:layout_height="680dp"
-        android:background="@color/white"
-        android:orientation="vertical">
+        android:background="#E8E8E8"
+        android:orientation="vertical"
+
+        >
 
         <TextView
+            android:background="#252451"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:padding="20dp"
             android:gravity="center_horizontal"
-            android:text="MY 무비로그"
-            android:textColor="@color/black"
+            android:text="나의 무비로그"
+            android:textColor="@color/white"
             android:textSize="35dp"
-            android:textStyle="bold" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="3dp"
-            android:layout_marginTop="15dp"
-            android:background="#000000" />
+            android:textStyle="bold"
+            />
+
+
 
         <TextView
             android:id="@+id/watched_movies_quan"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:gravity="center_horizontal"
-            android:text="내가 본 영화 (0)"
+            android:layout_marginTop="10dp"
+            android:gravity="left"
+            android:layout_marginLeft="10dp"
+            android:text="▶ 관람한 영화(0)"
             android:textColor="@color/black"
-            android:textSize="30dp" />
+            android:textSize="20dp"
+            android:textStyle="bold"/>
 
 
         <androidx.recyclerview.widget.RecyclerView

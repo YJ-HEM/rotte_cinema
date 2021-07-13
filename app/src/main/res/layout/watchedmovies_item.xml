@@ -4,10 +4,13 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_margin="10dp"
+        >
 
 
         <LinearLayout
+            android:background="#FFFFFF"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal">
@@ -16,14 +19,15 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="200dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                >
 
                 <ImageView
                     android:id="@+id/moviePoster"
                     android:layout_width="130dp"
                     android:layout_height="200dp"
-                    android:layout_marginLeft="10dp"
-                    android:paddingTop="10dp"
+                    android:padding="5dp"
+                    android:layout_marginLeft="5dp"
                     android:src="@drawable/ic_logo_r"></ImageView>
             </LinearLayout>
 
@@ -38,27 +42,30 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="10dp">
 
                     <ImageView
                         android:id="@+id/imageAge"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginLeft="20dp"
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginLeft="10dp"
                         android:src="@drawable/ic_menu_camera" />
 
                     <TextView
                         android:id="@+id/movieNameText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="20dp"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginTop="10dp"
                         android:ellipsize="end"
                         android:maxLines="1"
                         android:text="영화이름"
                         android:textColor="@color/black"
-                        android:textSize="25dp" />
+                        android:textSize="18dp"
+                        android:textStyle="bold"/>
                 </LinearLayout>
 
 
@@ -68,13 +75,13 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="75dp"
+                        android:layout_width="65dp"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
                         android:layout_marginTop="5dp"
-                        android:text="상영관"
+                        android:text="상영극장"
                         android:textColor="@color/black"
-                        android:textSize="20dp" />
+                        android:textSize="15dp" />
 
                     <TextView
                         android:id="@+id/theaterLocation"
@@ -84,8 +91,10 @@
                         android:layout_marginTop="5dp"
                         android:text="장소"
                         android:textColor="@color/black"
-                        android:textSize="20dp"
-                        android:textStyle="bold" />
+                        android:textSize="15dp"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        />
 
 
                 </LinearLayout>
@@ -96,13 +105,13 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="75dp"
+                        android:layout_width="65dp"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
                         android:layout_marginTop="5dp"
-                        android:text="관람일시"
+                        android:text="상영일자"
                         android:textColor="@color/black"
-                        android:textSize="20dp" />
+                        android:textSize="15dp" />
 
                     <TextView
                         android:id="@+id/date"
@@ -112,8 +121,10 @@
                         android:layout_marginTop="5dp"
                         android:text="YYYY-MM-DD"
                         android:textColor="@color/black"
-                        android:textSize="20dp"
-                        android:textStyle="bold" />
+                        android:textSize="15dp"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        />
 
                 </LinearLayout>
 
@@ -123,13 +134,13 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="75dp"
+                        android:layout_width="65dp"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
                         android:layout_marginTop="5dp"
-                        android:text="관람인원"
+                        android:text="상영시간"
                         android:textColor="@color/black"
-                        android:textSize="20dp" />
+                        android:textSize="15dp" />
 
                     <TextView
                         android:id="@+id/audienceNum"
@@ -139,8 +150,10 @@
                         android:layout_marginTop="5dp"
                         android:text="HH:MM~HH:MM"
                         android:textColor="@color/black"
-                        android:textSize="20dp"
-                        android:textStyle="bold" />
+                        android:textSize="15dp"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        />
 
                 </LinearLayout>
 
@@ -150,13 +163,13 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="75dp"
+                        android:layout_width="65dp"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
                         android:layout_marginTop="5dp"
-                        android:text="좌석번호"
+                        android:text="좌석정보"
                         android:textColor="@color/black"
-                        android:textSize="20dp" />
+                        android:textSize="15dp" />
 
                     <TextView
                         android:id="@+id/seatNum"
@@ -166,8 +179,10 @@
                         android:layout_marginTop="5dp"
                         android:text="n명"
                         android:textColor="@color/black"
-                        android:textSize="20dp"
-                        android:textStyle="bold" />
+                        android:textSize="15dp"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                         />
 
                 </LinearLayout>
 
@@ -177,22 +192,21 @@
         </LinearLayout>
 
         <LinearLayout
+            android:layout_marginTop="5dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:gravity="center"
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/btn_write_review"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="리뷰작성" />
+                android:id="@+id/btn_do_show_review"
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
+                android:text="리뷰작성"
+                android:textColor="@color/white"
+                android:background="#B1B1B1"/>
 
-            <Button
-                android:id="@+id/btn_show_my_review"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="내가 쓴 리뷰" />
+
         </LinearLayout>
     </LinearLayout>
 </layout>
