@@ -143,13 +143,11 @@
             android:drawableTop="@drawable/ic_rating"
             android:drawablePadding="5px"
             android:singleLine="true"
-            android:text="리뷰작성"
+            android:text="마이무비"
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="36px"
             tools:ignore="RtlCompat" />
-
-
 
 
     </LinearLayout>

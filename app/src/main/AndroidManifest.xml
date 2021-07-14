@@ -15,7 +15,9 @@
         android:theme="@style/Theme.AppCompat.NoActionBar"
         android:usesCleartextTraffic="true"
         tools:replace="android:appComponentFactory">
-        <activity android:name=".QRcode"></activity>
+        <activity android:name=".QRListMoives"></activity>
+        <activity android:name=".Adapter.QRListAdapter" />
+        <activity android:name=".QRcode" />
         <activity android:name=".ShowMyReview" />
         <activity
             android:name=".watchedMovies"

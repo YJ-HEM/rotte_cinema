@@ -209,6 +209,19 @@
                 android:textColor="@color/white"
                 android:background="@drawable/reviewbtnback"/>
 
+            <Button
+                android:layout_marginLeft="20dp"
+                android:padding="10dp"
+                android:drawablePadding="3dp"
+                android:drawableLeft="@drawable/ic_notes"
+                android:id="@+id/btn_qr_code"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="qr코드입장"
+                android:textSize="15dp"
+                android:textColor="@color/white"
+                android:background="@drawable/reviewbtnback"/>
+
 
         </LinearLayout>
     </LinearLayout>
