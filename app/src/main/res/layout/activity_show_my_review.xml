@@ -14,7 +14,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="74dp"
-        android:background="#252451"
+        android:background="@drawable/reviewback2"
         android:orientation="vertical">
 
         <TextView
@@ -90,8 +90,8 @@
         app:layout_constraintTop_toTopOf="parent" />
 
         <RatingBar
+            android:progressTint="#CDCDCD"
             android:layout_marginTop="5dp"
-            android:progressBackgroundTint="#DFDFDF"
             android:id="@+id/showReviewStarRating2"
             style="@style/Widget.AppCompat.RatingBar.Indicator"
             android:layout_width="wrap_content"
@@ -99,7 +99,7 @@
             android:layout_gravity="center_horizontal"
             android:isIndicator="true"
             android:numStars="10"
-            android:rating="1"
+            android:rating="0"
             android:stepSize="1"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
