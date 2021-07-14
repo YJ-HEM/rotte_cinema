@@ -46,6 +46,7 @@
         />
 
 
+
     <TextView
         android:id="@+id/showReviewTxtStarRating"
         android:layout_width="wrap_content"
@@ -56,6 +57,21 @@
         android:textSize="26dp"
         android:bufferType="spannable"/>
 
+    <TextView
+        android:id="@+id/review_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="YYYY-MM-DD"
+        android:textColor="@color/black"
+        android:textSize="13dp"
+        android:bufferType="spannable"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
     <RatingBar
         android:layout_marginTop="5dp"
         android:progressBackgroundTint="#9E9E9E"
@@ -65,7 +81,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:isIndicator="false"
+        android:isIndicator="true"
         android:numStars="10"
         android:rating="10"
         android:stepSize="1"
@@ -73,6 +89,22 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+        <RatingBar
+            android:layout_marginTop="5dp"
+            android:progressBackgroundTint="#DFDFDF"
+            android:id="@+id/showReviewStarRating2"
+            style="@style/Widget.AppCompat.RatingBar.Indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:isIndicator="true"
+            android:numStars="10"
+            android:rating="1"
+            android:stepSize="1"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </LinearLayout>
     <TextView
         android:layout_marginHorizontal="10dp"
         android:id="@+id/showReviewtxtReview"

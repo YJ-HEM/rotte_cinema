@@ -19,12 +19,17 @@ import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.lottecinema.BitemapConverter;
+import com.example.lottecinema.HttpMyReviewThread;
+import com.example.lottecinema.HttpReviewThread;
 import com.example.lottecinema.MyMovies;
+import com.example.lottecinema.MyReviews;
 import com.example.lottecinema.R;
 import com.example.lottecinema.Review;
+import com.example.lottecinema.ShowMyReview;
 import com.example.lottecinema.databinding.ActivityWatchedMoviesBinding;
 import com.example.lottecinema.databinding.WatchedmoviesItemBinding;
 
+import java.lang.reflect.Array;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -34,6 +39,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.example.lottecinema.HttpReviewThread.list;
 
@@ -69,6 +76,8 @@ public class WatchedMoviesAdapter extends RecyclerView.Adapter<WatchedMoviesAdap
         View view = binding.getRoot();
         ViewHolder holder = new ViewHolder(view);
 
+        HttpMyReviewThread httpMyReviewThread = new HttpMyReviewThread();
+        httpMyReviewThread.start();
 
         return holder;
     }
@@ -122,10 +131,24 @@ public class WatchedMoviesAdapter extends RecyclerView.Adapter<WatchedMoviesAdap
             holder.btn_qr_code.setVisibility(View.GONE);
         }
 
+        Map<String, String> reviewMap = new HashMap<String, String>();
 
 
 
-            holder.txt_loca.setText(myMoviesOrder.getCinema());
+        for(MyReviews i : HttpMyReviewThread.review_list){
+            if(
+            i.getMovieTitle().equals(myMoviesOrder.getMovie())){
+                holder.btn_write_review.setText("내가 쓴 리뷰보기");
+            }
+        }
+
+
+
+
+
+
+
+        holder.txt_loca.setText(myMoviesOrder.getCinema());
             holder.txt_peopleNum.setText(myMoviesOrder.getCustomer());
             holder.txt_seatNum.setText(myMoviesOrder.getSeat());
             holder.txt_movieTitle.setText(myMoviesOrder.getMovie());
@@ -138,9 +161,14 @@ public class WatchedMoviesAdapter extends RecyclerView.Adapter<WatchedMoviesAdap
                 @Override
                 public void onClick(View v) {
 
+
+
+
                     Log.d("revieww", "몇번 째 뷰 인지 " + holder.getAbsoluteAdapterPosition());
                     Log.d("revieww", myMoviesOrder.getMovie());
                     Log.d("revieww", String.valueOf(myMoviesOrder.getMovie_index()));
+
+                    if(holder.btn_write_review.getText().equals("리뷰작성")){
 
                     int position_int = holder.getAbsoluteAdapterPosition();
                     String position_string = Integer.toString(position_int);
@@ -150,7 +178,29 @@ public class WatchedMoviesAdapter extends RecyclerView.Adapter<WatchedMoviesAdap
                     intent.putExtra("movieIndex", myMoviesOrder.getMovie_index());
 
 
-                    context.startActivity(intent);
+                    context.startActivity(intent);}
+
+
+                    else{
+                        Intent intent = new Intent(context, ShowMyReview.class);
+
+                        for(MyReviews i : HttpMyReviewThread.review_list){
+                            if(
+                                    i.getMovieTitle().equals(myMoviesOrder.getMovie())){
+                                intent.putExtra("ratingNum",i.getRatingNum());
+                                intent.putExtra("contents",i.getReviewTxt());
+                                intent.putExtra("date",i.getDate());
+                                Log.d("reviewdate",i.getRatingNum());
+
+                            }
+                        }
+
+
+
+                        intent.putExtra("movieTitle",myMoviesOrder.getMovie());
+
+                        context.startActivity(intent);
+                    }
                 }
             });
 
