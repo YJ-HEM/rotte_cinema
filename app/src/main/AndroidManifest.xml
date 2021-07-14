@@ -15,7 +15,8 @@
         android:theme="@style/Theme.AppCompat.NoActionBar"
         android:usesCleartextTraffic="true"
         tools:replace="android:appComponentFactory">
-        <activity android:name=".ShowMyReview"></activity>
+        <activity android:name=".QRcode"></activity>
+        <activity android:name=".ShowMyReview" />
         <activity
             android:name=".watchedMovies"
             tools:ignore="Instantiatable" />

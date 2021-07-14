@@ -80,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
     Button btnlogin;
     Button btnsignup;
     TextView loginText;
+    Button btnQRcode;
 
     boolean autoLoginChecked;
      WebkitCookieManagerProxy webkitCookieManager = new WebkitCookieManagerProxy();
@@ -121,6 +122,7 @@ public class MainActivity extends AppCompatActivity {
         Button btnCinemaInfo = (Button) findViewById(R.id.btnCinemaInfo);
         Button btn_reserve = (Button) findViewById(R.id.btn_reserve);
         //Button btn_myPage = (Button) findViewById(R.id.btnMypage);
+        btnQRcode = (Button) findViewById(R.id.btnQRcode);
         Button btnReview = (Button) findViewById(R.id.btnReview);
         Button btn_signup = (Button) findViewById(R.id.btn_signup);
         CoordinatorLayout forWatchedMovies  =  (CoordinatorLayout) findViewById(R.id.forWatchedMovies);
@@ -264,6 +266,14 @@ public class MainActivity extends AppCompatActivity {
                     mWebView.loadUrl("https://kumas.dev/rotte_cinema/login.do");
 
                 }
+            }
+        });
+
+        btnQRcode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), QRcode.class);
+                startActivity(intent);
             }
         });
 
