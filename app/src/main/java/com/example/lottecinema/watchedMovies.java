@@ -34,12 +34,15 @@ public class watchedMovies extends Fragment {
     @Override
     public void onAttach(@NonNull @NotNull Context context) {
         super.onAttach(context);
-
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.detach(this).attach(this).commit();
     }
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.detach(this).attach(this).commit();
     }
 
 
@@ -55,7 +58,8 @@ public class watchedMovies extends Fragment {
 //            list.add(String.format("TEXT %d", i)) ;
 //        } //여기에 포문 돌려서 자꾸 버튼 누를 때마다 10개씩 더 생기는듯. 나중에 데이터 받아올때는 다른곳에서 해봐야겟음..
 
-
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.detach(this).attach(this).commit();
         ViewGroup rootView = (ViewGroup)inflater.inflate(R.layout.activity_watched_movies, container, false);
 
         TextView watched_movies_quan;
@@ -86,10 +90,36 @@ public class watchedMovies extends Fragment {
     @Override
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.detach(this).attach(this).commit();
     }
 
     @Override
     public void onStart() {
         super.onStart();
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.detach(this).attach(this).commit();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.detach(this).attach(this).commit();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.detach(this).attach(this).commit();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.detach(this).attach(this).commit();
     }
 }
+
