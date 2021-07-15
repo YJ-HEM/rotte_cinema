@@ -42,7 +42,6 @@ public class ShowMyReview extends Activity {
         binding.showReviewTxtStarRating.setText(ratingNum+"점");
         binding.showReviewStarRating.setNumStars(Integer.parseInt(ratingNum));
         int rating = Integer.parseInt(ratingNum);
-       binding.showReviewStarRating2.setNumStars(10-rating);
 
         Log.d("reviewrating", String.valueOf(10-rating));
 

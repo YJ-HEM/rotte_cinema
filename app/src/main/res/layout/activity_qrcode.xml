@@ -1,14 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="680dp"
+    android:background="@color/white"
+    android:orientation="vertical"
     tools:context=".QRcode">
-    <ImageView
+
+
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#252451"
+        android:gravity="center_horizontal"
+        android:padding="20dp"
+        android:text="QR코드로 입장"
+        android:textColor="@color/white"
+        android:textSize="35dp"
+
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:gravity="center"
+        android:text="상영시간이 가장 임박한 영화의 QR코드만 보여집니다"
+        android:textColor="@color/black"
+        android:textSize="16dp" />
+
+
+    <LinearLayout
+        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:orientation="horizontal"
+        >
+
+        <ImageView
+            android:id="@+id/qr_age"
+            android:layout_height="30dp"
+            android:layout_width="30dp"
+            android:layout_gravity="center"
+             />
+
+        <TextView
+            android:layout_marginLeft="5dp"
+            android:id="@+id/qr_movie_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="영화제목"
+            android:textColor="@color/black"
+            android:textSize="35dp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/qr_seat_info"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="극장상영관 n명 좌석넘버"
+        android:textColor="@color/black"
+        android:textSize="20dp" />
+
+
+    <TextView
+        android:id="@+id/qr_start_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="5dp"
+        android:text="YYYY-MM-DD HH:mm"
+        android:textColor="@color/black"
+        android:textSize="20dp" />
+
+
+    <ImageView
+        android:padding="1dp"
+        android:background="@drawable/qr_back"
         android:id="@+id/qrcode"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"/>
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_gravity="center_horizontal|center_vertical"
+        android:layout_marginTop="20dp" />
+</LinearLayout>

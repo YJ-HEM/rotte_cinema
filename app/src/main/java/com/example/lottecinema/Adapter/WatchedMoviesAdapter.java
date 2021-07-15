@@ -16,8 +16,11 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.lottecinema.AllQRCode;
 import com.example.lottecinema.BitemapConverter;
 import com.example.lottecinema.HttpMyReviewThread;
 import com.example.lottecinema.HttpReviewThread;
@@ -28,6 +31,10 @@ import com.example.lottecinema.Review;
 import com.example.lottecinema.ShowMyReview;
 import com.example.lottecinema.databinding.ActivityWatchedMoviesBinding;
 import com.example.lottecinema.databinding.WatchedmoviesItemBinding;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.common.BitMatrix;
+import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 import java.lang.reflect.Array;
 import java.text.DateFormat;
@@ -79,6 +86,10 @@ public class WatchedMoviesAdapter extends RecyclerView.Adapter<WatchedMoviesAdap
         HttpMyReviewThread httpMyReviewThread = new HttpMyReviewThread();
         httpMyReviewThread.start();
 
+        try {
+            httpMyReviewThread.join();
+        } catch (Exception e){};
+
         return holder;
     }
 
@@ -124,12 +135,29 @@ public class WatchedMoviesAdapter extends RecyclerView.Adapter<WatchedMoviesAdap
         Calendar cal = Calendar.getInstance(); //현재시간
         Log.d("time", "현재시간 : "+cal.getTime().toString());
         boolean a = cal2.before(cal);
-        Log.d("time", a+"true/false"); //현재시간이 상영시간+1시간 전이면 true반환
+        Log.d("time", a+"true/false"); //현재시간이 상영시간+1시간 전이면 false반환
 
         //현재 시간이 영화시작시간+1시간 후면 qr코드로 입장 버튼을 보여주지 않는다.
         if(cal2.before(cal)){
             holder.btn_qr_code.setVisibility(View.GONE);
         }
+
+        //qr코드 보여주기
+        else{
+            holder.btn_qr_code.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, AllQRCode.class);
+                    intent.putExtra("movieTitle",myMoviesOrder.getMovie());
+                    intent.putExtra("seat_info",myMoviesOrder.getCinema()+" "+myMoviesOrder.getCustomer()+myMoviesOrder.getSeat());
+                    intent.putExtra("date",myMoviesOrder.getDate());
+                    intent.putExtra("age_limit",myMoviesOrder.getAge());
+
+                    context.startActivity(intent);
+                }
+            });
+        }
+
 
         Map<String, String> reviewMap = new HashMap<String, String>();
 

@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
     public static String URL = "http://kumas.dev/rotte_cinema/";
     static Login login = new Login();
     Fragment fragment = new watchedMovies();
-
+    Fragment qrFragment = new QRcode();
 
 
 
@@ -269,11 +269,27 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //qr코드버튼 클릭시
         btnQRcode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), QRcode.class);
-                startActivity(intent);
+                drawerLayout.closeDrawer(drawerView);
+
+                loginId = auto.getString("inputId", "");
+
+
+                if (login.getLoginResult().equals("connect")) {
+                    FragmentManager fm = getSupportFragmentManager();
+                    FragmentTransaction ft = fm.beginTransaction();
+                    ft.replace(R.id.webView, qrFragment);
+                    ft.commit();
+                    }
+
+
+                else{
+                    mWebView.loadUrl("https://kumas.dev/rotte_cinema/login.do");
+
+                }
             }
         });
 
@@ -363,7 +379,7 @@ public class MainActivity extends AppCompatActivity {
                         mWebView.loadUrl("https://kumas.dev/rotte_cinema/login.do");
                         break;
                     case R.id.tab5:
-                        removeFragment();
+
                         drawerLayout.closeDrawer(drawerView);
 
                         drawerLayout.openDrawer(drawerView);
@@ -382,6 +398,7 @@ public class MainActivity extends AppCompatActivity {
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         ft.remove(fragment);
+        ft.remove(qrFragment);
         ft.commit();
     }
 

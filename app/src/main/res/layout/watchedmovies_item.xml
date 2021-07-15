@@ -6,6 +6,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_margin="10dp"
+
         >
 
 
@@ -190,14 +191,17 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginTop="5dp"
+            android:background="@drawable/review_button_back"
+
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:gravity="center"
             android:orientation="horizontal"
+
 >
 
             <Button
+
                 android:padding="10dp"
                 android:drawablePadding="3dp"
                 android:drawableLeft="@drawable/ic_notes"
@@ -207,7 +211,7 @@
                 android:text="리뷰작성"
                 android:textSize="15dp"
                 android:textColor="@color/white"
-                android:background="@drawable/reviewbtnback"/>
+                />
 
             <Button
                 android:layout_marginLeft="20dp"
