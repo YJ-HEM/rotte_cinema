@@ -2,7 +2,6 @@ package com.example.lottecinema;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -16,24 +15,22 @@ import android.text.TextWatcher;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.lottecinema.Adapter.WatchedMoviesAdapter;
-import com.example.lottecinema.databinding.WatchedmoviesItemBinding;
 
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.IOException;
 
@@ -43,7 +40,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class Review extends Activity {
+public class Review extends FragmentActivity {
     int intRating = 0;
     Spannable span;
 
@@ -199,7 +196,10 @@ public class Review extends Activity {
 
 
                                 if(jsonObject.get("result").toString().equals("success")){
-
+                                    Fragment f = new watchedMovies();
+                                    FragmentManager fm =getSupportFragmentManager();
+                                    FragmentTransaction ft = fm.beginTransaction();
+                                    ft.detach(f).attach(f).commit();
                                     finish();
 
 
@@ -214,6 +214,8 @@ public class Review extends Activity {
                         }
                     }.start();
                 }
+
+
             }
         });
 
@@ -222,6 +224,7 @@ public class Review extends Activity {
             @Override
             public void onClick(View v) {
                 finish();
+
             }
         });
 

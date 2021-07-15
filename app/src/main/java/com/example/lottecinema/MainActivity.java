@@ -181,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
 
             //버튼 위치 조정
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            params.setMargins(260, 00, 0, 0);  // 왼쪽, 위, 오른쪽, 아래 순서입니다.
+            params.setMargins(135, 00, 0, 0);  // 왼쪽, 위, 오른쪽, 아래 순서입니다.
             btn_login.setLayoutParams(params);
 
 
@@ -312,6 +312,11 @@ public class MainActivity extends AppCompatActivity {
 
         mWebView = (WebView) findViewById(R.id.webView);//xml 자바코드 연결
         mWebView.getSettings().setJavaScriptEnabled(true);//자바스크립트 허용
+
+        mWebView.getSettings().setUseWideViewPort(true);
+        mWebView.getSettings().setLoadWithOverviewMode(true);
+
+
 
         mWebView.loadUrl("https://kumas.dev/rotte_cinema");//웹뷰 실행
         mWebView.setWebViewClient(new WebViewClientClass());//새창열기 없이 웹뷰 내에서 다시 열기//페이지 이동 원활히 하기위해 사용
@@ -593,7 +598,7 @@ public class MainActivity extends AppCompatActivity {
             btnsignup.setVisibility(View.GONE);
 
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            params.setMargins(260, 0, 0, 0);  // 왼쪽, 위, 오른쪽, 아래 순서입니다.
+            params.setMargins(0, 0, 0, 0);  // 왼쪽, 위, 오른쪽, 아래 순서입니다.
             btn_login.setLayoutParams(params);
 
             btn_login.setText("로그아웃");
@@ -645,7 +650,7 @@ public class MainActivity extends AppCompatActivity {
             btnsignup.setVisibility(View.VISIBLE);
 
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            params.setMargins(100, 00, 0, 0);  // 왼쪽, 위, 오른쪽, 아래 순서입니다.
+            params.setMargins(00, 00, 0, 0);  // 왼쪽, 위, 오른쪽, 아래 순서입니다.
             btn_login.setLayoutParams(params);
 
             btn_login.setText("로그인");
