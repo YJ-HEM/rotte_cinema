@@ -39,6 +39,7 @@ public class ShowMyReview extends Activity {
         binding.reviewDate.setText(date);
         binding.showReviewMoiveName.setText(movie_title);
         binding.showReviewtxtReview.setText(contents);
+        binding.showReviewtxtReview.setTextSize(20);
         binding.showReviewTxtStarRating.setText(ratingNum+"점");
         binding.showReviewStarRating.setNumStars(Integer.parseInt(ratingNum));
         int rating = Integer.parseInt(ratingNum);

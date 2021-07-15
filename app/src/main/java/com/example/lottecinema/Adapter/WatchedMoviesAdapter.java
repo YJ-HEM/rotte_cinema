@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Build;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -137,9 +138,10 @@ public class WatchedMoviesAdapter extends RecyclerView.Adapter<WatchedMoviesAdap
         boolean a = cal2.before(cal);
         Log.d("time", a+"true/false"); //현재시간이 상영시간+1시간 전이면 false반환
 
-        //현재 시간이 영화시작시간+1시간 후면 qr코드로 입장 버튼을 보여주지 않는다.
+        //현재 시간이 영화시작시간+1시간 후면 qr코드로 입장 버튼을 누르지못하게한다.
         if(cal2.before(cal)){
-            holder.btn_qr_code.setVisibility(View.GONE);
+            holder.btn_qr_code.setBackgroundColor(Color.parseColor("#424242"));
+            holder.btn_qr_code.setEnabled(false);
         }
 
         //qr코드 보여주기

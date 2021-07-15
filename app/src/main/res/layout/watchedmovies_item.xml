@@ -4,31 +4,30 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_margin="10dp"
+        android:orientation="vertical"
 
         >
 
 
         <LinearLayout
-            android:background="#FFFFFF"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@drawable/whiteborder"
             android:orientation="horizontal">
 
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="200dp"
-                android:orientation="horizontal"
-                >
+                android:orientation="horizontal">
 
                 <ImageView
                     android:id="@+id/moviePoster"
                     android:layout_width="130dp"
                     android:layout_height="200dp"
-                    android:padding="5dp"
                     android:layout_marginLeft="5dp"
+                    android:padding="5dp"
                     android:src="@drawable/ic_logo_r"></ImageView>
             </LinearLayout>
 
@@ -43,9 +42,9 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:layout_marginTop="20dp"
-                    android:layout_marginBottom="15dp">
+                    android:layout_marginBottom="15dp"
+                    android:orientation="horizontal">
 
                     <ImageView
                         android:id="@+id/imageAge"
@@ -64,7 +63,7 @@
                         android:text="영화이름"
                         android:textColor="@color/black"
                         android:textSize="18dp"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
                 </LinearLayout>
 
 
@@ -88,12 +87,11 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
                         android:layout_marginTop="5dp"
+                        android:ellipsize="end"
+                        android:maxLines="1"
                         android:text="장소"
                         android:textColor="#323232"
-                        android:textSize="15dp"
-                        android:maxLines="1"
-                        android:ellipsize="end"
-                        />
+                        android:textSize="15dp" />
 
 
                 </LinearLayout>
@@ -118,12 +116,11 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
                         android:layout_marginTop="5dp"
+                        android:ellipsize="end"
+                        android:maxLines="1"
                         android:text="YYYY-MM-DD"
                         android:textColor="#323232"
-                        android:textSize="15dp"
-                        android:maxLines="1"
-                        android:ellipsize="end"
-                        />
+                        android:textSize="15dp" />
 
                 </LinearLayout>
 
@@ -147,12 +144,11 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
                         android:layout_marginTop="5dp"
+                        android:ellipsize="end"
+                        android:maxLines="1"
                         android:text="HH:MM~HH:MM"
                         android:textColor="#323232"
-                        android:textSize="15dp"
-                        android:maxLines="1"
-                        android:ellipsize="end"
-                        />
+                        android:textSize="15dp" />
 
                 </LinearLayout>
 
@@ -176,12 +172,11 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
                         android:layout_marginTop="5dp"
+                        android:ellipsize="end"
+                        android:maxLines="1"
                         android:text="n명"
                         android:textColor="#323232"
-                        android:textSize="15dp"
-                        android:maxLines="1"
-                        android:ellipsize="end"
-                         />
+                        android:textSize="15dp" />
 
                 </LinearLayout>
 
@@ -191,41 +186,45 @@
         </LinearLayout>
 
         <LinearLayout
-            android:background="@drawable/review_button_back"
-
             android:layout_width="match_parent"
+
             android:layout_height="40dp"
-            android:gravity="center"
+
+            android:background="@drawable/movielogback"
             android:orientation="horizontal"
+            android:weightSum="2"
 
->
+            >
+
 
             <Button
-
-                android:padding="10dp"
-                android:drawablePadding="3dp"
-                android:drawableLeft="@drawable/ic_notes"
                 android:id="@+id/btn_do_show_review"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/movielogback"
+                android:drawableLeft="@drawable/ic_notes"
+                android:drawablePadding="-40dp"
+                android:paddingLeft="52dp"
                 android:text="리뷰작성"
-                android:textSize="15dp"
+
                 android:textColor="@color/white"
-                />
+                android:textSize="15dp" />
 
             <Button
-                android:layout_marginLeft="20dp"
-                android:padding="10dp"
-                android:drawablePadding="3dp"
-                android:drawableLeft="@drawable/ic_notes"
                 android:id="@+id/btn_qr_code"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:text="qr코드입장"
-                android:textSize="15dp"
-                android:textColor="@color/white"
-                android:background="@drawable/reviewbtnback"/>
+                android:layout_weight="1"
+                android:background="@drawable/movielogback"
+                android:drawableLeft="@drawable/ic_baseline_qr_code_scanner_24"
+                android:foregroundGravity="center_horizontal"
+                android:drawablePadding="-36dp"
+                android:paddingLeft="45dp"
 
+                android:text="qr코드입장"
+                android:textColor="@color/white"
+                android:textSize="15dp" />
 
         </LinearLayout>
     </LinearLayout>

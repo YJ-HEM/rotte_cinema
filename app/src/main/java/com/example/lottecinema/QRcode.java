@@ -31,6 +31,8 @@ import org.jetbrains.annotations.NotNull;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
@@ -76,46 +78,37 @@ public class QRcode extends Fragment {
             httpReviewThread.join();
         } catch (Exception e){};
 
-        NameAscending nameAscending = new NameAscending();
-        Collections.sort(HttpReviewThread.list, nameAscending);
 
+        ArrayList<String> time_list = new ArrayList<>();
 
-        Log.d("ascending",HttpReviewThread.list.size()+"");
-
-        for (MyMovies temp : HttpReviewThread.list) {
-            Log.d("ascending",temp.getDate());
+        for(int i=0; i<HttpReviewThread.list.size();i++){
+            time_list.add(HttpReviewThread.list.get(i).getDate());
         }
-
-        date = HttpReviewThread.list.get(0).getDate();
-        seat_info=  HttpReviewThread.list.get(0).getCinema() +" "+ HttpReviewThread.list.get(0).getCustomer()+ HttpReviewThread.list.get(0).getSeat() ;
-        movie_title=HttpReviewThread.list.get(0).getMovie();
-        movie_age=HttpReviewThread.list.get(0).getAge();
-        start_time=HttpReviewThread.list.get(0).getDate();
-
-
-        age_bitmap = BitemapConverter.StringToBitmap(movie_age);
-
-        Calendar cal = Calendar.getInstance(); //현재시간
-
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-
-        Calendar cal2 = null;
-        try {
-            Date show_date = df.parse(date); //상영시간을 df으로 변경
-            cal2 = Calendar.getInstance();
-            cal2.setTime(show_date);
-
-            Log.d("ascending","가장임박한영화시작시간 : "+cal2.toString());
-        } catch (ParseException e) {
-            e.printStackTrace();
-            Log.d("ascending",e.toString());
-        }
-        boolean a = cal2.before(cal); //가장임박한 영화 시작 시간이 현재 시간 이전이면 false
-        Log.d("ascending",a+"");
+        Calendar cal = Calendar.getInstance(); //현재시간
+        String now = df.format(cal.getTime());
+        time_list.add(now);
         iv = (ImageView)rootView.findViewById(R.id.qrcode);
 
-        //상영시간 전
-        if(a==false){
+        Collections.sort(time_list,Collections.reverseOrder()); //  시간을 기준으로 내림차순
+        int now_index = time_list.indexOf(now);
+        //now_index -1 이 가장 임박한 영화가 된다.
+        if(now_index!=0){
+        String soon_movie_time = time_list.get(now_index-1);
+
+            for(MyMovies i : HttpReviewThread.list){
+                if(
+                i.getDate().equals(soon_movie_time)){
+
+                    date = i.getDate();
+                    seat_info=  i.getCinema() +" "+ i.getCustomer()+ i.getSeat() ;
+                    movie_title=i.getMovie();
+                    movie_age=i.getAge();
+                    start_time=i.getDate();
+                }
+            }
+            age_bitmap = BitemapConverter.StringToBitmap(movie_age);
+
             MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
             try{
                 BitMatrix bitMatrix = multiFormatWriter.encode(movie_title+date, BarcodeFormat.QR_CODE,2000,2000);
@@ -129,9 +122,8 @@ public class QRcode extends Fragment {
                 qr_seat_info.setText(seat_info);
 
             }catch (Exception e){}
-
-
         }
+
         //상영시간 후 - 보여줄 qr없음
         else{
             iv.setImageResource(R.drawable.ic_sad);
