@@ -20,6 +20,7 @@
 
 
         <!--아이템 선택 됐을때, 안됐을 때 둘다 색상 검정으로(menu_selector_color.xml)-->
+
         <WebView
             android:id="@+id/webView"
             android:layout_width="match_parent"

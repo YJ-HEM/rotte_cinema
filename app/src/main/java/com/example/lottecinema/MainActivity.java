@@ -241,7 +241,7 @@ public class MainActivity extends AppCompatActivity {
                 loginId = auto.getString("inputId", "");
 
 
-                if (login.getLoginResult().equals("connect")) {
+                if (login.getLoginResult()!=null && login.getLoginResult().equals("connect")) {
                     httpReviewThread = new HttpReviewThread();
                     if(httpReviewThread.isAlive()){
                         httpReviewThread.interrupt();
@@ -262,7 +262,9 @@ public class MainActivity extends AppCompatActivity {
                     ft.replace(R.id.webView, fragment);
                     ft.commit();
                 }
-                else{
+                else if(login.getLoginResult()==null){
+                    drawerLayout.closeDrawer(drawerView);
+
                     mWebView.loadUrl("https://kumas.dev/rotte_cinema/login.do");
 
                 }
@@ -278,7 +280,7 @@ public class MainActivity extends AppCompatActivity {
                 loginId = auto.getString("inputId", "");
 
 
-                if (login.getLoginResult().equals("connect")) {
+                if (login.getLoginResult()!=null &&login.getLoginResult().equals("connect")) {
                     FragmentManager fm = getSupportFragmentManager();
                     FragmentTransaction ft = fm.beginTransaction();
                     ft.replace(R.id.webView, qrFragment);
@@ -286,7 +288,9 @@ public class MainActivity extends AppCompatActivity {
                     }
 
 
-                else{
+                else if(login.getLoginResult()==null){
+                    drawerLayout.closeDrawer(drawerView);
+
                     mWebView.loadUrl("https://kumas.dev/rotte_cinema/login.do");
 
                 }
