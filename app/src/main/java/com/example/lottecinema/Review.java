@@ -196,13 +196,8 @@ public class Review extends FragmentActivity {
 
 
                                 if(jsonObject.get("result").toString().equals("success")){
-                                    Fragment f = new watchedMovies();
-                                    FragmentManager fm =getSupportFragmentManager();
-                                    FragmentTransaction ft = fm.beginTransaction();
-                                   // ft.detach(f).attach(f).commit();
-                                  //  ft.replace(R.id., f);
+
                                     finish();
-                                    ft.commit();
 
 
 

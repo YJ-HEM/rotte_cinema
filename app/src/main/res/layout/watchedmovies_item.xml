@@ -198,10 +198,10 @@
 
 
             <Button
-                android:paddingLeft="140dp"
+                android:paddingLeft="25dp"
 
                 android:foregroundGravity="center"
-                android:drawablePadding="-110dp"
+                android:drawablePadding="-17dp"
                 android:id="@+id/btn_do_show_review"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -220,8 +220,8 @@
                 android:background="@drawable/movielogback"
                 android:drawableLeft="@drawable/ic_baseline_qr_code_scanner_24"
                 android:foregroundGravity="center_horizontal"
-                android:drawablePadding="-110dp"
-                android:paddingLeft="120dp"
+                android:drawablePadding="-40dp"
+                android:paddingLeft="45dp"
 
                 android:text="qr코드입장"
                 android:textColor="@color/white"

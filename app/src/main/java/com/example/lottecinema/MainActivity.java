@@ -181,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
 
             //버튼 위치 조정
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            params.setMargins(135, 00, 0, 0);  // 왼쪽, 위, 오른쪽, 아래 순서입니다.
+            params.setMargins(250, 00, 0, 0);  // 왼쪽, 위, 오른쪽, 아래 순서입니다.
             btn_login.setLayoutParams(params);
 
 
